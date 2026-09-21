@@ -52,8 +52,8 @@ body {
   position: fixed;
   top: clamp(18px, 3vh, 30px);
   right: clamp(20px, 4vw, 44px);
-  width: min(300px, 40vw);
-  max-height: calc(100vh - 220px);
+  width: min(290px, 34vw);
+  max-height: calc(100vh - 130px);
   overflow: auto;
   padding: 14px 0 6px;
   border-top: 1px solid var(--line);

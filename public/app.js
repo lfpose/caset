@@ -138,11 +138,12 @@ function labelTexture(title, sub) {
   g.beginPath(); g.roundRect(60, 40, w - 120, 300, 22); g.fill();
   STRIPES.forEach((c, i) => { g.fillStyle = c; g.fillRect(60, 48 + i * 14, w - 120, 10); });
   g.fillStyle = "#17120f";
-  g.font = "700 46px Futura, 'Century Gothic', 'Avenir Next', system-ui, sans-serif";
-  g.fillText(fitText(g, title, w - 220), 100, 190);
-  g.font = "500 28px Futura, 'Century Gothic', 'Avenir Next', system-ui, sans-serif";
+  g.font = "700 40px Futura, 'Century Gothic', 'Avenir Next', system-ui, sans-serif";
+  const lines = wrapText(g, title, w - 220, 2);
+  lines.forEach((ln, i) => g.fillText(ln, 100, 165 + i * 44));
+  g.font = "500 26px Futura, 'Century Gothic', 'Avenir Next', system-ui, sans-serif";
   g.fillStyle = "#6b5f52";
-  g.fillText(sub, 100, 235);
+  g.fillText(sub, 100, 165 + lines.length * 44 + 4);
   g.globalCompositeOperation = "destination-out";
   g.beginPath(); g.roundRect(200, 245, w - 400, 160, 80); g.fill();
   g.globalCompositeOperation = "source-over";
@@ -153,11 +154,22 @@ function labelTexture(title, sub) {
   t.anisotropy = renderer.capabilities.getMaxAnisotropy();
   return t;
 }
-function fitText(g, text, max) {
-  if (g.measureText(text).width <= max) return text;
-  let s = text;
-  while (s.length > 3 && g.measureText(s + "…").width > max) s = s.slice(0, -1);
-  return s.trimEnd() + "…";
+function wrapText(g, text, max, maxLines) {
+  const words = text.split(" ");
+  const lines = [];
+  let cur = "";
+  for (const wd of words) {
+    const next = cur ? `${cur} ${wd}` : wd;
+    if (g.measureText(next).width <= max || !cur) cur = next;
+    else { lines.push(cur); cur = wd; }
+  }
+  if (cur) lines.push(cur);
+  if (lines.length > maxLines) {
+    let last = lines.slice(maxLines - 1).join(" ");
+    while (last.length > 3 && g.measureText(last + "…").width > max) last = last.slice(0, -1);
+    return [...lines.slice(0, maxLines - 1), last.trimEnd() + "…"];
+  }
+  return lines;
 }
 const faceMat = mat(0xffffff, { map: labelTexture("caset", "side A"), roughness: 0.75, transparent: true, alphaTest: 0.5 });
 const face = add(new THREE.Mesh(new THREE.PlaneGeometry(2.16, 1.0), faceMat), device, { shadow: false });
@@ -344,7 +356,9 @@ function setCurrent(i) {
   if (i === current) return;
   current = i;
   const t = tracks[i];
-  for (const b of listEl.querySelectorAll(".track")) b.toggleAttribute("aria-current", Number(b.dataset.index) === i);
+  for (const b of listEl.querySelectorAll(".track")) {
+    if (Number(b.dataset.index) === i) b.setAttribute("aria-current", "true"); else b.removeAttribute("aria-current");
+  }
   if (t) {
     nowEl.textContent = `${t.title} · ${t.year}`;
     setLabel(t.title, `${t.year} — side A, track ${String(i + 1).padStart(2, "0")}`);
@@ -483,7 +497,7 @@ function fit() {
   const d = THREE.MathUtils.clamp(Math.max((wide ? 3.2 : 2.3) / (half * camera.aspect), 1.8 / half), 6, 16);
   const el = THREE.MathUtils.degToRad(9);
   camera.position.set(0, Math.sin(el) * d, Math.cos(el) * d);
-  camera.lookAt(0, wide ? -0.25 : -0.8, 0);
+  camera.lookAt(wide ? 0.85 : 0, wide ? -0.25 : -0.8, 0);
   camera.updateProjectionMatrix();
 }
 addEventListener("resize", fit);
