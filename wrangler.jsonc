@@ -1,6 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "caset",
+  "account_id": "c4e8e15265e1a26dc6b431be7826face",
   "compatibility_date": "2026-09-01",
   "assets": { "directory": "./public" },
   "routes": [{ "pattern": "caset.cl", "custom_domain": true }]
