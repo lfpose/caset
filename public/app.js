@@ -23,7 +23,7 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFShadowMap;
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 60);
+const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 200);
 
 // ---------- palette ----------
 const C = {
@@ -32,9 +32,9 @@ const C = {
   rim: 0x4a403a,
   ivory: 0xefe4cc,
   ivoryDim: 0xbfae94,
-  black: 0x17120f,
+  black: 0x1c1613,
   shell: 0x1e1a18,
-  tape: 0x6e4d3f,
+  tape: 0x8a6650,
   hub: 0xe9dfca,
   orange: 0xe2582b,
   mustard: 0xe3b03a,
@@ -77,7 +77,7 @@ scene.add(ground);
 // ---------- device ----------
 const device = new THREE.Group();
 scene.add(device);
-const BASE_TILT = 0.42; // propped up toward the viewer
+const BASE_TILT = 0.62; // propped up toward the viewer
 
 function add(mesh, parent = device, { shadow = true } = {}) {
   mesh.castShadow = shadow;
@@ -162,7 +162,7 @@ function fitText(g, text, max) {
 const faceMat = mat(0xffffff, { map: labelTexture("caset", "side A"), roughness: 0.75, transparent: true, alphaTest: 0.5 });
 const face = add(new THREE.Mesh(new THREE.PlaneGeometry(2.16, 1.0), faceMat), device, { shadow: false });
 face.rotation.x = -Math.PI / 2;
-face.position.set(-0.35, TOP + 0.125, -0.28);
+face.position.set(-0.35, TOP + 0.135, -0.28);
 function setLabel(title, sub) {
   const old = faceMat.map;
   faceMat.map = labelTexture(title, sub);
@@ -175,11 +175,11 @@ const R_MAX = 0.34, R_MIN = 0.16;
 function makeReel(x) {
   const g = new THREE.Group();
   g.position.set(x, TOP + 0.075, -0.28 + 0.18);
-  const spool = new THREE.Mesh(new THREE.CylinderGeometry(1, 1, 0.05, 48), mat(C.tape, { roughness: 0.85 }));
-  spool.position.y = 0.02;
+  const spool = new THREE.Mesh(new THREE.CylinderGeometry(1, 1, 0.03, 48), mat(C.tape, { roughness: 0.85 }));
+  spool.position.y = 0.01;
   g.add(spool);
   const hub = new THREE.Group();
-  hub.position.y = 0.075;
+  hub.position.y = 0.08;
   hub.add(new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.16, 0.05, 32), mat(C.hub)));
   hub.add(new THREE.Mesh(new THREE.CylinderGeometry(0.085, 0.085, 0.06, 24), mat(C.black)));
   for (let i = 0; i < 6; i++) {
@@ -248,50 +248,60 @@ jack.position.set(-1.5, 0.02, 1.13);
 
 device.rotation.x = BASE_TILT;
 
-// ---------- particles ----------
-const spriteTex = (() => {
-  const s = 64, cv = document.createElement("canvas");
-  cv.width = cv.height = s;
-  const g = cv.getContext("2d");
-  const grd = g.createRadialGradient(s / 2, s / 2, 0, s / 2, s / 2, s / 2);
-  grd.addColorStop(0, "rgba(255,255,255,1)");
-  grd.addColorStop(0.4, "rgba(255,255,255,0.5)");
-  grd.addColorStop(1, "rgba(255,255,255,0)");
-  g.fillStyle = grd; g.fillRect(0, 0, s, s);
-  const t = new THREE.CanvasTexture(cv);
-  t.colorSpace = THREE.SRGBColorSpace;
-  return t;
-})();
-const PAL = [0xefe4cc, 0xe3b03a, 0xe2582b, 0x3d8d8c, 0xbfae94].map((c) => new THREE.Color(c));
-const BOX = { x: 14, y: 8, z: 10 };
-function makeParticles(count, size, opacity) {
-  const pos = new Float32Array(count * 3);
-  const col = new Float32Array(count * 3);
-  const seed = new Float32Array(count);
-  for (let i = 0; i < count; i++) {
-    pos[i * 3] = (Math.random() - 0.5) * BOX.x;
-    pos[i * 3 + 1] = (Math.random() - 0.5) * BOX.y;
-    pos[i * 3 + 2] = (Math.random() - 0.5) * BOX.z - 1;
-    const c = PAL[(Math.random() * PAL.length) | 0];
+// ---------- stars ----------
+const STAR_COUNT = 2600;
+const stars = (() => {
+  const pos = new Float32Array(STAR_COUNT * 3);
+  const col = new Float32Array(STAR_COUNT * 3);
+  const size = new Float32Array(STAR_COUNT);
+  const phase = new Float32Array(STAR_COUNT);
+  const tints = [new THREE.Color(0xffffff), new THREE.Color(0xfff1d6), new THREE.Color(0xd8e6ff), new THREE.Color(0xe3b03a)];
+  for (let i = 0; i < STAR_COUNT; i++) {
+    // uniform on a sphere, camera-facing hemisphere weighted
+    const u = Math.random() * 2 - 1, th = Math.random() * Math.PI * 2;
+    const r = Math.sqrt(1 - u * u), R = 60;
+    pos[i * 3] = R * r * Math.cos(th);
+    pos[i * 3 + 1] = R * u;
+    pos[i * 3 + 2] = R * r * Math.sin(th) - 20;
+    const c = tints[Math.random() < 0.9 ? (Math.random() * 3) | 0 : 3];
     col.set([c.r, c.g, c.b], i * 3);
-    seed[i] = Math.random() * 1000;
+    const big = Math.random();
+    size[i] = big < 0.04 ? 3.6 + Math.random() * 1.8 : big < 0.3 ? 2.0 + Math.random() : 1.1 + Math.random() * 0.7;
+    phase[i] = Math.random() * Math.PI * 2;
   }
   const geo = new THREE.BufferGeometry();
   geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
   geo.setAttribute("color", new THREE.BufferAttribute(col, 3));
-  const m = new THREE.PointsMaterial({
-    size, map: spriteTex, vertexColors: true, transparent: true, opacity,
-    depthWrite: false, blending: THREE.AdditiveBlending,
+  geo.setAttribute("aSize", new THREE.BufferAttribute(size, 1));
+  geo.setAttribute("aPhase", new THREE.BufferAttribute(phase, 1));
+  const m = new THREE.ShaderMaterial({
+    uniforms: { uTime: { value: 0 }, uPR: { value: renderer.getPixelRatio() } },
+    vertexShader: `
+      attribute float aSize; attribute float aPhase;
+      uniform float uTime, uPR;
+      varying vec3 vColor; varying float vA;
+      void main() {
+        vColor = color;
+        float tw = 0.65 + 0.35 * sin(uTime * (0.6 + fract(aPhase) * 1.4) + aPhase);
+        vA = tw;
+        vec4 mv = modelViewMatrix * vec4(position, 1.0);
+        gl_PointSize = aSize * uPR;
+        gl_Position = projectionMatrix * mv;
+      }`,
+    fragmentShader: `
+      varying vec3 vColor; varying float vA;
+      void main() {
+        vec2 d = gl_PointCoord - 0.5;
+        float r = length(d);
+        float a = smoothstep(0.5, 0.12, r) * vA;
+        gl_FragColor = vec4(vColor, a);
+      }`,
+    vertexColors: true, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
   });
   const pts = new THREE.Points(geo, m);
-  pts.userData.seed = seed;
   scene.add(pts);
   return pts;
-}
-const dustFar = makeParticles(360, 0.12, 0.45);
-const dustNear = makeParticles(110, 0.3, 0.3);
-const notes = makeParticles(90, 0.26, 0.0);
-notes.userData.life = new Float32Array(90).fill(-1);
+})();
 
 // ---------- tape + tracks ----------
 const WIND = 14;
@@ -471,9 +481,9 @@ function fit() {
   const half = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
   const wide = camera.aspect > 1.1;
   const d = THREE.MathUtils.clamp(Math.max((wide ? 3.2 : 2.3) / (half * camera.aspect), 1.8 / half), 6, 16);
-  const el = THREE.MathUtils.degToRad(18);
+  const el = THREE.MathUtils.degToRad(9);
   camera.position.set(0, Math.sin(el) * d, Math.cos(el) * d);
-  camera.lookAt(0, wide ? -0.35 : -0.9, 0);
+  camera.lookAt(0, wide ? -0.25 : -0.8, 0);
   camera.updateProjectionMatrix();
 }
 addEventListener("resize", fit);
@@ -481,7 +491,6 @@ fit();
 
 // ---------- loop ----------
 const timer = new THREE.Timer();
-const tmpV = new THREE.Vector3();
 
 function tick() {
   timer.update();
@@ -521,44 +530,8 @@ function tick() {
   device.rotation.y += (ty - device.rotation.y) * Math.min(1, dt * 3);
   if (!reduceMotion) device.position.y = Math.sin(t * 0.8) * 0.015;
 
-  if (!reduceMotion) {
-    const running = mode !== "idle";
-    for (const pts of [dustFar, dustNear]) {
-      const p = pts.geometry.attributes.position.array;
-      const seed = pts.userData.seed;
-      const rise = (running ? 0.3 : 0.06) * dt;
-      for (let i = 0; i < seed.length; i++) {
-        const k = i * 3;
-        p[k] += Math.sin(t * 0.6 + seed[i]) * 0.12 * dt;
-        p[k + 1] += rise + Math.sin(t * 0.9 + seed[i] * 1.3) * 0.05 * dt;
-        if (p[k + 1] > BOX.y / 2) { p[k + 1] = -BOX.y / 2; p[k] = (Math.random() - 0.5) * BOX.x; }
-      }
-      pts.geometry.attributes.position.needsUpdate = true;
-    }
-    const p = notes.geometry.attributes.position.array;
-    const life = notes.userData.life;
-    const seed = notes.userData.seed;
-    let alive = 0;
-    for (let i = 0; i < life.length; i++) {
-      const k = i * 3;
-      if (life[i] < 0) {
-        if (running && Math.random() < dt * 1.2) {
-          life[i] = 0;
-          tmpV.set(-0.35 + (Math.random() - 0.5) * 2.0, TOP + 0.25, -0.28 + (Math.random() - 0.5) * 0.8);
-          device.localToWorld(tmpV);
-          p[k] = tmpV.x; p[k + 1] = tmpV.y; p[k + 2] = tmpV.z;
-        } else { p[k + 1] = -99; continue; }
-      }
-      life[i] += dt;
-      p[k] += Math.sin(t * 2 + seed[i]) * 0.25 * dt;
-      p[k + 1] += 0.5 * dt;
-      p[k + 2] += Math.cos(t * 1.7 + seed[i]) * 0.15 * dt;
-      if (life[i] > 4.5) life[i] = -1;
-      alive++;
-    }
-    notes.material.opacity += ((alive ? 0.7 : 0) - notes.material.opacity) * Math.min(1, dt * 2);
-    notes.geometry.attributes.position.needsUpdate = true;
-  }
+  stars.material.uniforms.uTime.value = reduceMotion ? 0 : t;
+  if (!reduceMotion) stars.rotation.y = t * 0.004;
 
   renderer.render(scene, camera);
   requestAnimationFrame(tick);
