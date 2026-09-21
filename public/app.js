@@ -124,7 +124,7 @@ band.position.set(1.38, TOP + 0.027, 0);
 const door = add(new THREE.Mesh(new RoundedBoxGeometry(2.5, 0.12, 1.28, 4, 0.05), mat(C.rim, { roughness: 0.45, metalness: 0.3 })));
 door.position.set(-0.35, TOP + 0.02, -0.28);
 const pit = add(new THREE.Mesh(new RoundedBoxGeometry(2.28, 0.1, 1.06, 3, 0.04), mat(C.black, { roughness: 0.85 })));
-pit.position.set(-0.35, TOP + 0.07, -0.28);
+pit.position.set(-0.35, TOP + 0.02, -0.28);
 
 // cassette face (canvas texture; re-rendered per track)
 function labelTexture(title, sub) {
