@@ -27,49 +27,57 @@ const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 60);
 
 // ---------- palette ----------
 const C = {
-  cream: 0xfbf3e6,
-  creamDeep: 0xf0e4d6,
-  plum: 0x3a2e4d,
-  smoke: 0x352d44,
+  body: 0x2b2521,
+  face: 0x3b332d,
+  rim: 0x4a403a,
+  ivory: 0xefe4cc,
+  ivoryDim: 0xbfae94,
+  black: 0x17120f,
+  shell: 0x1e1a18,
   tape: 0x6e4d3f,
-  hub: 0xf7f2ea,
-  rew: 0xb9d6f2,
-  play: 0xb3e4cf,
-  stop: 0xf6c1cd,
-  ff: 0xf8e3a4,
-  lilac: 0xd9ccef,
-  glass: 0xdfe9ff,
+  hub: 0xe9dfca,
+  orange: 0xe2582b,
+  mustard: 0xe3b03a,
+  olive: 0x8a8b3b,
+  teal: 0x3d8d8c,
+  navy: 0x33506b,
+  glass: 0xcfd8d6,
 };
+const STRIPES = ["#e2582b", "#e3b03a", "#8a8b3b", "#3d8d8c", "#33506b"];
 
 const mat = (color, extra = {}) =>
-  new THREE.MeshStandardMaterial({ color, roughness: 0.55, metalness: 0.02, ...extra });
+  new THREE.MeshStandardMaterial({ color, roughness: 0.6, metalness: 0.05, ...extra });
 
 // ---------- lights ----------
-scene.add(new THREE.HemisphereLight(0xfff6ef, 0xd8c8ee, 1.1));
-const sun = new THREE.DirectionalLight(0xffffff, 1.9);
-sun.position.set(3.5, 7, 4.5);
-sun.castShadow = true;
-sun.shadow.mapSize.set(2048, 2048);
-sun.shadow.radius = 6;
-Object.assign(sun.shadow.camera, { left: -4, right: 4, top: 4, bottom: -4, near: 1, far: 20 });
-scene.add(sun);
-const fill = new THREE.DirectionalLight(0xe4f1ff, 0.6);
-fill.position.set(-5, 3, -2);
-scene.add(fill);
+scene.add(new THREE.HemisphereLight(0xfff1dc, 0x2a1f18, 1.0));
+const key = new THREE.DirectionalLight(0xffe9cc, 2.2);
+key.position.set(3, 6, 5);
+key.castShadow = true;
+key.shadow.mapSize.set(2048, 2048);
+key.shadow.radius = 5;
+Object.assign(key.shadow.camera, { left: -4, right: 4, top: 4, bottom: -4, near: 1, far: 20 });
+scene.add(key);
+const rim = new THREE.DirectionalLight(0x8fb6c8, 1.2);
+rim.position.set(-4, 3, -4);
+scene.add(rim);
+const warm = new THREE.PointLight(0xe2582b, 6, 8, 2);
+warm.position.set(2.5, 1.5, 2.5);
+scene.add(warm);
 
-// ---------- ground shadow ----------
+// ---------- ground ----------
 const ground = new THREE.Mesh(
   new THREE.PlaneGeometry(30, 30),
-  new THREE.ShadowMaterial({ opacity: 0.16, color: 0x3a2e4d })
+  new THREE.ShadowMaterial({ opacity: 0.45, color: 0x000000 })
 );
 ground.rotation.x = -Math.PI / 2;
-ground.position.y = -0.28;
+ground.position.y = -0.6;
 ground.receiveShadow = true;
 scene.add(ground);
 
 // ---------- device ----------
 const device = new THREE.Group();
 scene.add(device);
+const BASE_TILT = 0.42; // propped up toward the viewer
 
 function add(mesh, parent = device, { shadow = true } = {}) {
   mesh.castShadow = shadow;
@@ -79,50 +87,88 @@ function add(mesh, parent = device, { shadow = true } = {}) {
 }
 
 const TOP = 0.275;
-add(new THREE.Mesh(new RoundedBoxGeometry(3.6, 0.55, 2.3, 6, 0.14), mat(C.cream)));
+add(new THREE.Mesh(new RoundedBoxGeometry(3.6, 0.55, 2.3, 6, 0.12), mat(C.body, { roughness: 0.7 })));
+// faceplate
+const plate = add(new THREE.Mesh(new RoundedBoxGeometry(3.4, 0.05, 2.1, 4, 0.05), mat(C.face, { roughness: 0.5, metalness: 0.25 })));
+plate.position.y = TOP;
 
-// cassette door frame + window
-const door = add(new THREE.Mesh(new RoundedBoxGeometry(2.5, 0.12, 1.28, 4, 0.06), mat(C.creamDeep)));
-door.position.set(-0.2, TOP + 0.02, -0.28);
+// stripe band along the right side (texture)
+function stripeTexture() {
+  const w = 410, h = 1024;
+  const cv = document.createElement("canvas");
+  cv.width = w; cv.height = h;
+  const g = cv.getContext("2d");
+  const bar = 30, gap = 8, total = STRIPES.length * bar + (STRIPES.length - 1) * gap;
+  const x0 = 300 - total / 2;
+  g.lineCap = "round";
+  STRIPES.forEach((c, i) => {
+    const x = x0 + i * (bar + gap) + bar / 2;
+    g.strokeStyle = c; g.lineWidth = bar;
+    g.beginPath();
+    g.moveTo(x, -20);
+    g.lineTo(x, h * 0.62 - (STRIPES.length - 1 - i) * (bar + gap));
+    g.lineTo(x - 420, h * 0.62 + 420 - (STRIPES.length - 1 - i) * (bar + gap));
+    g.stroke();
+  });
+  const t = new THREE.CanvasTexture(cv);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = renderer.capabilities.getMaxAnisotropy();
+  return t;
+}
+const band = add(new THREE.Mesh(new THREE.PlaneGeometry(0.8, 1.9), mat(0xffffff, { map: stripeTexture(), transparent: true, roughness: 0.5 })), device, { shadow: false });
+band.rotation.x = -Math.PI / 2;
+band.rotation.z = Math.PI; // stripes run from the back edge toward the front, bending at the front
+band.position.set(1.38, TOP + 0.027, 0);
 
-const pit = add(new THREE.Mesh(new RoundedBoxGeometry(2.28, 0.1, 1.06, 3, 0.05), mat(C.smoke, { roughness: 0.8 })));
-pit.position.set(-0.2, TOP + 0.07, -0.28);
+// cassette door frame + pit
+const door = add(new THREE.Mesh(new RoundedBoxGeometry(2.5, 0.12, 1.28, 4, 0.05), mat(C.rim, { roughness: 0.45, metalness: 0.3 })));
+door.position.set(-0.35, TOP + 0.02, -0.28);
+const pit = add(new THREE.Mesh(new RoundedBoxGeometry(2.28, 0.1, 1.06, 3, 0.04), mat(C.black, { roughness: 0.85 })));
+pit.position.set(-0.35, TOP + 0.07, -0.28);
 
-// cassette face (canvas texture)
-function cassetteTexture() {
+// cassette face (canvas texture; re-rendered per track)
+function labelTexture(title, sub) {
   const w = 1024, h = 480;
   const cv = document.createElement("canvas");
   cv.width = w; cv.height = h;
   const g = cv.getContext("2d");
-  g.fillStyle = "#d9ccef";
+  g.fillStyle = "#1e1a18";
   g.fillRect(0, 0, w, h);
-  // label
-  const r = 26;
-  g.fillStyle = "#fbf3e6";
-  g.beginPath(); g.roundRect(60, 40, w - 120, 300, r); g.fill();
-  g.fillStyle = "#b3e4cf"; g.fillRect(60, 40, w - 120, 46);
-  g.fillStyle = "#f6c1cd"; g.fillRect(60, 86, w - 120, 22);
-  g.fillStyle = "#3a2e4d";
-  g.font = "600 54px ui-rounded, 'SF Pro Rounded', system-ui, sans-serif";
-  g.fillText("caset — side A", 100, 180);
-  g.font = "500 30px ui-rounded, 'SF Pro Rounded', system-ui, sans-serif";
-  g.fillStyle = "#7d6f93";
-  g.fillText("90 min · normal bias", 100, 230);
-  // pill window (cut out so the reels below show through)
+  g.fillStyle = "#efe4cc";
+  g.beginPath(); g.roundRect(60, 40, w - 120, 300, 22); g.fill();
+  STRIPES.forEach((c, i) => { g.fillStyle = c; g.fillRect(60, 48 + i * 14, w - 120, 10); });
+  g.fillStyle = "#17120f";
+  g.font = "700 46px Futura, 'Century Gothic', 'Avenir Next', system-ui, sans-serif";
+  g.fillText(fitText(g, title, w - 220), 100, 190);
+  g.font = "500 28px Futura, 'Century Gothic', 'Avenir Next', system-ui, sans-serif";
+  g.fillStyle = "#6b5f52";
+  g.fillText(sub, 100, 235);
   g.globalCompositeOperation = "destination-out";
   g.beginPath(); g.roundRect(200, 245, w - 400, 160, 80); g.fill();
   g.globalCompositeOperation = "source-over";
-  // bottom holes
-  g.fillStyle = "#2b2536";
+  g.fillStyle = "#0f0b09";
   for (const x of [200, 300, w - 340, w - 240]) { g.beginPath(); g.roundRect(x, 400, 28, 50, 8); g.fill(); }
   const t = new THREE.CanvasTexture(cv);
   t.colorSpace = THREE.SRGBColorSpace;
   t.anisotropy = renderer.capabilities.getMaxAnisotropy();
   return t;
 }
-const face = add(new THREE.Mesh(new THREE.PlaneGeometry(2.16, 1.0), mat(0xffffff, { map: cassetteTexture(), roughness: 0.7, transparent: true, alphaTest: 0.5 })), device, { shadow: false });
+function fitText(g, text, max) {
+  if (g.measureText(text).width <= max) return text;
+  let s = text;
+  while (s.length > 3 && g.measureText(s + "…").width > max) s = s.slice(0, -1);
+  return s.trimEnd() + "…";
+}
+const faceMat = mat(0xffffff, { map: labelTexture("caset", "side A"), roughness: 0.75, transparent: true, alphaTest: 0.5 });
+const face = add(new THREE.Mesh(new THREE.PlaneGeometry(2.16, 1.0), faceMat), device, { shadow: false });
 face.rotation.x = -Math.PI / 2;
-face.position.set(-0.2, TOP + 0.125, -0.28);
+face.position.set(-0.35, TOP + 0.125, -0.28);
+function setLabel(title, sub) {
+  const old = faceMat.map;
+  faceMat.map = labelTexture(title, sub);
+  faceMat.needsUpdate = true;
+  old?.dispose();
+}
 
 // reels
 const R_MAX = 0.34, R_MIN = 0.16;
@@ -135,10 +181,9 @@ function makeReel(x) {
   const hub = new THREE.Group();
   hub.position.y = 0.075;
   hub.add(new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.16, 0.05, 32), mat(C.hub)));
-  const core = new THREE.Mesh(new THREE.CylinderGeometry(0.085, 0.085, 0.06, 24), mat(C.smoke));
-  hub.add(core);
+  hub.add(new THREE.Mesh(new THREE.CylinderGeometry(0.085, 0.085, 0.06, 24), mat(C.black)));
   for (let i = 0; i < 6; i++) {
-    const tooth = new THREE.Mesh(new THREE.BoxGeometry(0.045, 0.06, 0.06), mat(C.smoke));
+    const tooth = new THREE.Mesh(new THREE.BoxGeometry(0.045, 0.06, 0.06), mat(C.black));
     const a = (i / 6) * Math.PI * 2;
     tooth.position.set(Math.cos(a) * 0.145, 0.005, Math.sin(a) * 0.145);
     tooth.rotation.y = -a;
@@ -148,58 +193,48 @@ function makeReel(x) {
   device.add(g);
   return { group: g, spool, hub };
 }
-const reelL = makeReel(-0.2 - 0.38);
-const reelR = makeReel(-0.2 + 0.38);
+const reelL = makeReel(-0.35 - 0.38);
+const reelR = makeReel(-0.35 + 0.38);
 
 // door glass
 const glass = new THREE.Mesh(
   new RoundedBoxGeometry(2.36, 0.04, 1.14, 3, 0.02),
-  new THREE.MeshPhysicalMaterial({ color: C.glass, roughness: 0.1, transparent: true, opacity: 0.14, clearcoat: 1 })
+  new THREE.MeshPhysicalMaterial({ color: C.glass, roughness: 0.08, transparent: true, opacity: 0.12, clearcoat: 1 })
 );
-glass.position.set(-0.2, TOP + 0.2, -0.28);
+glass.position.set(-0.35, TOP + 0.2, -0.28);
 device.add(glass);
 
-// screws on the door
-for (const [x, z] of [[-1.38, -0.86], [0.98, -0.86], [-1.38, 0.3], [0.98, 0.3]]) {
-  const s = add(new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.02, 16), mat(0xcdbfd8)), device, { shadow: false });
+// screws
+for (const [x, z] of [[-1.53, -0.86], [0.83, -0.86], [-1.53, 0.3], [0.83, 0.3]]) {
+  const s = add(new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.02, 16), mat(0x8d8378, { metalness: 0.6, roughness: 0.4 })), device, { shadow: false });
   s.position.set(x, TOP + 0.085, z);
 }
 
 // keys (3D)
 const keyDefs = [
-  { action: "rewind", color: C.rew },
-  { action: "play", color: C.play },
-  { action: "stop", color: C.stop },
-  { action: "forward", color: C.ff },
+  { action: "rewind", color: C.ivory },
+  { action: "play", color: C.orange },
+  { action: "stop", color: C.ivory },
+  { action: "forward", color: C.ivory },
 ];
 const KEY_UP = TOP + 0.08, KEY_DOWN = TOP + 0.02;
 const keys3d = keyDefs.map((d, i) => {
-  const m = add(new THREE.Mesh(new RoundedBoxGeometry(0.5, 0.2, 0.4, 4, 0.06), mat(d.color, { roughness: 0.45 })));
-  m.position.set(-1.25 + i * 0.58, KEY_UP, 0.72);
+  const m = add(new THREE.Mesh(new RoundedBoxGeometry(0.5, 0.2, 0.4, 4, 0.04), mat(d.color, { roughness: 0.4 })));
+  m.position.set(-1.4 + i * 0.58, KEY_UP, 0.72);
   m.userData.action = d.action;
   return m;
 });
 
-// speaker grille
-const holeGeo = new THREE.CylinderGeometry(0.032, 0.032, 0.03, 12);
-const holeMat = mat(0xd6c9df, { roughness: 0.9 });
-for (let i = 0; i < 5; i++) for (let j = 0; j < 5; j++) {
-  if ((i === 0 || i === 4) && (j === 0 || j === 4)) continue;
-  const h = new THREE.Mesh(holeGeo, holeMat);
-  h.position.set(1.15 + i * 0.13, TOP + 0.005, -0.72 + j * 0.13);
-  device.add(h);
-}
-
 // LED
-const led = add(new THREE.Mesh(new THREE.SphereGeometry(0.045, 16, 16), mat(0xe8dcef, { emissive: 0x000000 })), device, { shadow: false });
-led.position.set(1.4, TOP + 0.02, 0.35);
+const led = add(new THREE.Mesh(new THREE.SphereGeometry(0.045, 16, 16), mat(0x5a2a1a, { emissive: 0x000000 })), device, { shadow: false });
+led.position.set(1.05, TOP + 0.02, 0.72);
 
 // volume wheel
-const wheel = add(new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.24, 0.1, 40), mat(0xe9dff2, { roughness: 0.35 })));
+const wheel = add(new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.24, 0.1, 40), mat(C.rim, { roughness: 0.35, metalness: 0.3 })));
 wheel.rotation.z = Math.PI / 2;
 wheel.position.set(1.8, 0.02, 0.62);
 for (let i = 0; i < 24; i++) {
-  const rib = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.12, 0.03), mat(0xcdbfd8));
+  const rib = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.12, 0.03), mat(C.body));
   const a = (i / 24) * Math.PI * 2;
   rib.position.set(Math.cos(a) * 0.235, 0, Math.sin(a) * 0.235);
   rib.rotation.y = -a;
@@ -207,11 +242,11 @@ for (let i = 0; i < 24; i++) {
 }
 
 // headphone jack
-const jack = add(new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.1, 20), mat(C.smoke)), device, { shadow: false });
+const jack = add(new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.1, 20), mat(C.black)), device, { shadow: false });
 jack.rotation.x = Math.PI / 2;
 jack.position.set(-1.5, 0.02, 1.13);
 
-device.position.y = 0;
+device.rotation.x = BASE_TILT;
 
 // ---------- particles ----------
 const spriteTex = (() => {
@@ -220,15 +255,14 @@ const spriteTex = (() => {
   const g = cv.getContext("2d");
   const grd = g.createRadialGradient(s / 2, s / 2, 0, s / 2, s / 2, s / 2);
   grd.addColorStop(0, "rgba(255,255,255,1)");
-  grd.addColorStop(0.5, "rgba(255,255,255,0.55)");
+  grd.addColorStop(0.4, "rgba(255,255,255,0.5)");
   grd.addColorStop(1, "rgba(255,255,255,0)");
   g.fillStyle = grd; g.fillRect(0, 0, s, s);
   const t = new THREE.CanvasTexture(cv);
   t.colorSpace = THREE.SRGBColorSpace;
   return t;
 })();
-
-const PAL = [0xf6c1cd, 0xb3e4cf, 0xb9d6f2, 0xf8e3a4, 0xe6d8f5, 0xffffff].map((c) => new THREE.Color(c));
+const PAL = [0xefe4cc, 0xe3b03a, 0xe2582b, 0x3d8d8c, 0xbfae94].map((c) => new THREE.Color(c));
 const BOX = { x: 14, y: 8, z: 10 };
 function makeParticles(count, size, opacity) {
   const pos = new Float32Array(count * 3);
@@ -247,34 +281,100 @@ function makeParticles(count, size, opacity) {
   geo.setAttribute("color", new THREE.BufferAttribute(col, 3));
   const m = new THREE.PointsMaterial({
     size, map: spriteTex, vertexColors: true, transparent: true, opacity,
-    depthWrite: false, sizeAttenuation: true,
+    depthWrite: false, blending: THREE.AdditiveBlending,
   });
   const pts = new THREE.Points(geo, m);
   pts.userData.seed = seed;
   scene.add(pts);
   return pts;
 }
-const dustFar = makeParticles(420, 0.16, 0.7);
-const dustNear = makeParticles(140, 0.4, 0.5);
-const notes = makeParticles(90, 0.28, 0.0); // emitted from the player while running
+const dustFar = makeParticles(360, 0.12, 0.45);
+const dustNear = makeParticles(110, 0.3, 0.3);
+const notes = makeParticles(90, 0.26, 0.0);
 notes.userData.life = new Float32Array(90).fill(-1);
 
-// ---------- state ----------
-const TAPE_SECONDS = 240;      // full side at 1x
-const WIND = 14;               // rewind/forward multiplier
-let mode = "idle";             // idle | play | rewind | forward
-let tape = 0.12;               // fraction wound onto the right reel
+// ---------- tape + tracks ----------
+const WIND = 14;
+const audio = document.getElementById("player");
+const counterEl = document.getElementById("counter");
+const nowEl = document.getElementById("now");
+const listEl = document.getElementById("tracks");
+const htmlKeys = [...document.querySelectorAll(".key")];
+
+let tracks = [];          // { slug, title, year, duration, src }
+let offsets = [];         // cumulative start seconds
+let total = 240;          // seconds of tape on this side (fallback when no audio)
+let pos = 0;              // seconds from the start of the side
+let mode = "idle";        // idle | play | rewind | forward
 let angL = 0, angR = 0;
 let keyTargets = keys3d.map(() => KEY_UP);
+let current = -1;
 
-const counterEl = document.getElementById("counter");
-const htmlKeys = [...document.querySelectorAll(".key")];
-const keyByAction = Object.fromEntries(htmlKeys.map((b) => [b.dataset.action, b]));
+const fmt = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
+
+function trackAt(p) {
+  let i = 0;
+  while (i < tracks.length - 1 && p >= offsets[i + 1]) i++;
+  return i;
+}
+
+function renderList() {
+  listEl.replaceChildren(...tracks.map((t, i) => {
+    const li = document.createElement("li");
+    const b = document.createElement("button");
+    b.className = "track"; b.type = "button"; b.dataset.index = i;
+    b.innerHTML = `<span class="t">${t.title}<span class="y">${t.year}</span></span><span class="d">${fmt(t.duration)}</span>`;
+    b.addEventListener("click", () => { click(); pos = offsets[i]; setCurrent(i); setMode("play"); });
+    li.append(b);
+    return li;
+  }));
+}
+
+function setCurrent(i) {
+  if (i === current) return;
+  current = i;
+  const t = tracks[i];
+  for (const b of listEl.querySelectorAll(".track")) b.toggleAttribute("aria-current", Number(b.dataset.index) === i);
+  if (t) {
+    nowEl.textContent = `${t.title} · ${t.year}`;
+    setLabel(t.title, `${t.year} — side A, track ${String(i + 1).padStart(2, "0")}`);
+    if (audio.src !== t.src) audio.src = t.src;
+  }
+}
+
+async function loadTracks() {
+  try {
+    const r = await fetch("/audio/tracks.json", { cache: "no-cache" });
+    if (!r.ok) throw new Error(r.status);
+    tracks = (await r.json()).map((t) => ({ ...t, src: new URL(`/audio/${t.slug}.mp3`, location.href).href }));
+  } catch {
+    tracks = [];
+  }
+  offsets = tracks.reduce((a, t, i) => (a.push(i ? a[i - 1] + tracks[i - 1].duration : 0), a), []);
+  total = tracks.reduce((s, t) => s + t.duration, 0) || 240;
+  document.getElementById("side-empty").hidden = tracks.length > 0;
+  renderList();
+  if (tracks.length) setCurrent(0);
+}
+
+// keep audio element in sync with tape position
+function syncAudio() {
+  if (!tracks.length) return;
+  const i = trackAt(pos);
+  setCurrent(i);
+  const local = pos - offsets[i];
+  const apply = () => { if (Math.abs(audio.currentTime - local) > 0.35) audio.currentTime = local; };
+  if (audio.readyState >= 1) apply(); else audio.addEventListener("loadedmetadata", apply, { once: true });
+}
+
+audio.addEventListener("ended", () => {
+  if (current < tracks.length - 1) { pos = offsets[current + 1]; syncAudio(); audio.play(); }
+  else { pos = total; setMode("idle"); }
+});
 
 function setMode(next) {
-  if (next === "play" && tape >= 1) next = "idle";
-  if (next === "forward" && tape >= 1) next = "idle";
-  if (next === "rewind" && tape <= 0) next = "idle";
+  if ((next === "play" || next === "forward") && pos >= total) next = "idle";
+  if (next === "rewind" && pos <= 0) next = "idle";
   mode = next;
   for (const b of htmlKeys) {
     const latched = b.dataset.action === mode;
@@ -282,9 +382,11 @@ function setMode(next) {
     if (b.dataset.action === "play") b.setAttribute("aria-pressed", String(latched));
   }
   keyTargets = keys3d.map((k) => (k.userData.action === mode ? KEY_DOWN : KEY_UP));
-  led.material.emissive.set(mode === "play" ? 0x7fd9b4 : 0x000000);
-  led.material.emissiveIntensity = mode === "play" ? 1.4 : 0;
-  hiss(mode !== "idle" ? (mode === "play" ? 0.02 : 0.045) : 0);
+  led.material.emissive.set(mode === "idle" ? 0x000000 : 0xff6a30);
+  led.material.emissiveIntensity = mode === "idle" ? 0 : 2;
+  if (mode === "play" && tracks.length) { syncAudio(); audio.play().catch(() => {}); }
+  else audio.pause();
+  hiss(mode === "idle" ? 0 : mode === "play" ? 0.012 : 0.04);
 }
 
 function press(action) {
@@ -292,7 +394,6 @@ function press(action) {
   if (action === "stop") return setMode("idle");
   setMode(mode === action ? "idle" : action);
 }
-
 for (const b of htmlKeys) b.addEventListener("click", () => press(b.dataset.action));
 addEventListener("keydown", (e) => {
   if (e.target instanceof HTMLButtonElement && e.key !== "Escape") return;
@@ -317,9 +418,9 @@ canvas.addEventListener("pointermove", (e) => {
   canvas.style.cursor = ray.intersectObjects(keys3d, false).length ? "pointer" : "";
 });
 
-// ---------- sound (synthesised, tiny) ----------
+// ---------- synthesised click + hiss ----------
 let actx, hissGain;
-function audio() {
+function ctxAudio() {
   if (actx) return actx;
   actx = new (window.AudioContext || window.webkitAudioContext)();
   const len = actx.sampleRate * 2;
@@ -340,7 +441,7 @@ function hiss(level) {
   hissGain.gain.setTargetAtTime(level, actx.currentTime, 0.15);
 }
 function click() {
-  const ctx = audio();
+  const ctx = ctxAudio();
   if (ctx.state === "suspended") ctx.resume();
   const len = ctx.sampleRate * 0.04;
   const buf = ctx.createBuffer(1, len, ctx.sampleRate);
@@ -362,16 +463,17 @@ addEventListener("pointermove", (e) => {
   look.y = (e.clientY / innerHeight - 0.5) * 2;
 });
 
-// ---------- resize / camera ----------
+// ---------- camera ----------
 function fit() {
   const w = innerWidth, h = innerHeight;
   renderer.setSize(w, h, false);
   camera.aspect = w / h;
   const half = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
-  const d = THREE.MathUtils.clamp(Math.max(2.35 / (half * camera.aspect), 1.9 / half), 6, 16);
-  const el = THREE.MathUtils.degToRad(40);
+  const wide = camera.aspect > 1.1;
+  const d = THREE.MathUtils.clamp(Math.max((wide ? 3.2 : 2.3) / (half * camera.aspect), 1.8 / half), 6, 16);
+  const el = THREE.MathUtils.degToRad(18);
   camera.position.set(0, Math.sin(el) * d, Math.cos(el) * d);
-  camera.lookAt(0, camera.aspect < 0.8 ? -1.0 : -0.55, 0);
+  camera.lookAt(0, wide ? -0.35 : -0.9, 0);
   camera.updateProjectionMatrix();
 }
 addEventListener("resize", fit);
@@ -386,46 +488,45 @@ function tick() {
   const dt = Math.min(timer.getDelta(), 0.05);
   const t = timer.getElapsed();
 
-  // tape transport
+  // transport
   let v = 0;
-  if (mode === "play") v = 1 / TAPE_SECONDS;
-  if (mode === "forward") v = WIND / TAPE_SECONDS;
-  if (mode === "rewind") v = -WIND / TAPE_SECONDS;
-  if (v) {
-    tape = THREE.MathUtils.clamp(tape + v * dt, 0, 1);
-    if (tape === 0 || tape === 1) setMode("idle");
-  }
-  const rL = Math.sqrt(THREE.MathUtils.lerp(R_MAX ** 2, R_MIN ** 2, tape));
-  const rR = Math.sqrt(THREE.MathUtils.lerp(R_MIN ** 2, R_MAX ** 2, tape));
+  if (mode === "play") {
+    if (tracks.length) {
+      if (!audio.paused && !audio.seeking) pos = offsets[current] + audio.currentTime;
+      v = audio.paused ? 0 : 1;
+    } else { v = 1; pos += dt; }
+  } else if (mode === "forward") { v = WIND; pos += WIND * dt; }
+  else if (mode === "rewind") { v = -WIND; pos -= WIND * dt; }
+  pos = THREE.MathUtils.clamp(pos, 0, total);
+  if (mode !== "idle" && mode !== "play" && (pos <= 0 || pos >= total)) setMode("idle");
+  if (mode !== "play" && tracks.length && v) setCurrent(trackAt(pos));
+
+  const frac = pos / total;
+  const rL = Math.sqrt(THREE.MathUtils.lerp(R_MAX ** 2, R_MIN ** 2, frac));
+  const rR = Math.sqrt(THREE.MathUtils.lerp(R_MIN ** 2, R_MAX ** 2, frac));
   reelL.spool.scale.set(rL, 1, rL);
   reelR.spool.scale.set(rR, 1, rR);
-  const lin = v * TAPE_SECONDS * 0.9; // tape linear speed in scene units/s
+  const lin = v * 0.18; // tape linear speed, scene units/s at 1x
   angL -= (lin / rL) * dt;
   angR -= (lin / rR) * dt;
-  reelL.hub.rotation.y = angL;
-  reelR.hub.rotation.y = angR;
-  reelL.spool.rotation.y = angL;
-  reelR.spool.rotation.y = angR;
+  reelL.hub.rotation.y = reelL.spool.rotation.y = angL;
+  reelR.hub.rotation.y = reelR.spool.rotation.y = angR;
+  counterEl.textContent = String(Math.round(frac * 999)).padStart(4, "0");
 
-  counterEl.textContent = String(Math.round(tape * 2400)).padStart(4, "0");
-
-  // keys settle
   keys3d.forEach((k, i) => { k.position.y += (keyTargets[i] - k.position.y) * Math.min(1, dt * 18); });
 
-  // device attitude
-  const tx = reduceMotion ? 0 : look.y * 0.10;
-  const ty = reduceMotion ? 0 : look.x * 0.22;
+  const tx = BASE_TILT + (reduceMotion ? 0 : look.y * 0.08);
+  const ty = reduceMotion ? 0 : look.x * 0.18;
   device.rotation.x += (tx - device.rotation.x) * Math.min(1, dt * 3);
   device.rotation.y += (ty - device.rotation.y) * Math.min(1, dt * 3);
-  if (!reduceMotion) device.position.y = Math.sin(t * 0.8) * 0.02;
+  if (!reduceMotion) device.position.y = Math.sin(t * 0.8) * 0.015;
 
-  // ambient dust
   if (!reduceMotion) {
     const running = mode !== "idle";
     for (const pts of [dustFar, dustNear]) {
       const p = pts.geometry.attributes.position.array;
       const seed = pts.userData.seed;
-      const rise = (running ? 0.35 : 0.08) * dt;
+      const rise = (running ? 0.3 : 0.06) * dt;
       for (let i = 0; i < seed.length; i++) {
         const k = i * 3;
         p[k] += Math.sin(t * 0.6 + seed[i]) * 0.12 * dt;
@@ -434,7 +535,6 @@ function tick() {
       }
       pts.geometry.attributes.position.needsUpdate = true;
     }
-    // notes from the player
     const p = notes.geometry.attributes.position.array;
     const life = notes.userData.life;
     const seed = notes.userData.seed;
@@ -444,19 +544,19 @@ function tick() {
       if (life[i] < 0) {
         if (running && Math.random() < dt * 1.2) {
           life[i] = 0;
-          tmpV.set(-0.2 + (Math.random() - 0.5) * 2.0, TOP + 0.25, -0.28 + (Math.random() - 0.5) * 0.8);
+          tmpV.set(-0.35 + (Math.random() - 0.5) * 2.0, TOP + 0.25, -0.28 + (Math.random() - 0.5) * 0.8);
           device.localToWorld(tmpV);
           p[k] = tmpV.x; p[k + 1] = tmpV.y; p[k + 2] = tmpV.z;
         } else { p[k + 1] = -99; continue; }
       }
       life[i] += dt;
       p[k] += Math.sin(t * 2 + seed[i]) * 0.25 * dt;
-      p[k + 1] += 0.55 * dt;
+      p[k + 1] += 0.5 * dt;
       p[k + 2] += Math.cos(t * 1.7 + seed[i]) * 0.15 * dt;
       if (life[i] > 4.5) life[i] = -1;
       alive++;
     }
-    notes.material.opacity += ((alive ? 0.8 : 0) - notes.material.opacity) * Math.min(1, dt * 2);
+    notes.material.opacity += ((alive ? 0.7 : 0) - notes.material.opacity) * Math.min(1, dt * 2);
     notes.geometry.attributes.position.needsUpdate = true;
   }
 
@@ -464,4 +564,5 @@ function tick() {
   requestAnimationFrame(tick);
 }
 setMode("idle");
+loadTracks();
 tick();
