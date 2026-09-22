@@ -7,7 +7,12 @@
   "assets": {
     "directory": "./public",
     "binding": "ASSETS",
-    "run_worker_first": true
+    // unknown paths get public/404.html with a real 404 status (not the SPA fallback:
+    // /audio-status and the player rely on missing audio answering 404)
+    "not_found_handling": "404-page",
+    // only these reach the Worker; scripts, vendor files and covers are plain assets
+    // (free, never rate-limited). "/" keeps the HTTP->HTTPS redirect for the page.
+    "run_worker_first": ["/", "/audio-status", "/audio/*"]
   },
   "routes": [{ "pattern": "caset.cl", "custom_domain": true }]
 }

@@ -1,0 +1,937 @@
+[
+  {
+    "id": "voices",
+    "name": "Voices",
+    "color": "#e2582b",
+    "cover": "/covers/voices.svg",
+    "sides": {
+      "A": {
+        "label": "Science",
+        "label_es": "Ciencia",
+        "tracks": [
+          {
+            "id": "a1",
+            "title": "Pale Blue Dot",
+            "who": "Carl Sagan",
+            "date": "1994",
+            "dur": 174.8,
+            "src": "/audio/voices/a1.mp3",
+            "note": "Carl Sagan looks at Voyager 1’s photo of Earth, taken from about six billion kilometers away, where the whole planet is a speck smaller than a single pixel. Everyone who ever lived, he says, lived on that mote of dust in a sunbeam, and for now it is the only place we have.",
+            "note_es": "Carl Sagan mira la foto de la Tierra que tomó la Voyager 1 desde unos seis mil millones de kilómetros, donde el planeta entero es una mota más pequeña que un solo píxel. Todos los que alguna vez vivieron, dice, vivieron en esa mota de polvo suspendida en un rayo de sol, y por ahora es el único lugar que tenemos.",
+            "rights": "permission"
+          },
+          {
+            "id": "a2",
+            "title": "The beauty of a flower",
+            "who": "Richard Feynman",
+            "date": "1981",
+            "dur": 61.2,
+            "src": "/audio/voices/a2.mp3",
+            "note": "Physicist Richard Feynman answers an artist friend who says science takes the beauty out of a flower. He argues that knowing about its cells and why its colors evolved to attract insects only adds to the wonder.",
+            "note_es": "El físico Richard Feynman le responde a un amigo artista que dice que la ciencia le quita la belleza a una flor. Sostiene que saber de sus células, y de por qué sus colores evolucionaron para atraer insectos, solo aumenta el asombro.",
+            "rights": "permission",
+            "place": "BBC Horizon, The Pleasure of Finding Things Out"
+          },
+          {
+            "id": "a3",
+            "title": "Now I am become Death",
+            "who": "J. Robert Oppenheimer",
+            "date": "1965",
+            "dur": 53.9,
+            "src": "/audio/voices/a3.mp3",
+            "note": "The man who led the building of the atomic bomb remembers the silence after the first test, and the line from the Hindu scripture that came into his head. His slow, haunted delivery made this one of the most quoted moments of the nuclear age.",
+            "note_es": "El hombre que dirigió la construcción de la bomba atómica recuerda el silencio que siguió a la primera prueba y el verso de las escrituras hindúes que le vino a la mente. Su voz lenta y atormentada hizo de este uno de los momentos más citados de la era nuclear.",
+            "rights": "permission",
+            "place": "NBC, The Decision to Drop the Bomb"
+          }
+        ]
+      },
+      "B": {
+        "label": "History",
+        "label_es": "Historia",
+        "tracks": [
+          {
+            "id": "b1",
+            "title": "I’ve been to the mountaintop",
+            "who": "Martin Luther King Jr.",
+            "date": "1968",
+            "dur": 96.7,
+            "src": "/audio/voices/b1.mp3",
+            "note": "The night before he was killed, King tells a Memphis crowd that he has seen the Promised Land and may not get there with them. He had come to the city to support striking sanitation workers.",
+            "note_es": "La noche antes de ser asesinado, King le dice a una multitud en Memphis que ha visto la Tierra Prometida y que quizá no llegue allí con ellos. Había ido a la ciudad a apoyar a los recolectores de basura en huelga.",
+            "rights": "permission",
+            "place": "Mason Temple, Memphis"
+          },
+          {
+            "id": "b2",
+            "title": "A date which will live in infamy",
+            "who": "Franklin D. Roosevelt",
+            "date": "1941",
+            "dur": 61.0,
+            "src": "/audio/voices/b2.mp3",
+            "note": "The day after Japan’s attack on Pearl Harbor, Roosevelt opens his address to Congress and tells the nation it was attacked while still talking peace with Japan. Congress voted to declare war less than an hour after he finished.",
+            "note_es": "Al día siguiente del ataque de Japón a Pearl Harbor, Roosevelt abre su discurso ante el Congreso y le dice al país que fue atacado mientras todavía conversaba de paz con Japón. El Congreso votó la declaración de guerra menos de una hora después de que terminara.",
+            "rights": "pd",
+            "place": "Joint session of Congress, U.S. Capitol, Washington"
+          },
+          {
+            "id": "b3",
+            "title": "An ideal for which I am prepared to die",
+            "who": "Nelson Mandela",
+            "date": "1964",
+            "dur": 87.4,
+            "src": "/audio/voices/b3.mp3",
+            "note": "Facing a possible death sentence, Mandela closes his three-hour statement from the dock by saying what he has fought for: a free society where all people live together as equals. He was sentenced to life and spent 27 years in prison before becoming South Africa’s first democratically elected president.",
+            "note_es": "Ante una posible condena a muerte, Mandela cierra su declaración de tres horas desde el banquillo diciendo por qué ha luchado: una sociedad libre en la que todas las personas vivan juntas y en igualdad. Fue condenado a cadena perpetua y pasó 27 años en prisión antes de convertirse en el primer presidente de Sudáfrica elegido democráticamente.",
+            "rights": "murky",
+            "place": "Rivonia trial, Pretoria"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "moonshot",
+    "name": "Moonshot",
+    "color": "#e3b03a",
+    "cover": "/covers/moonshot.svg",
+    "sides": {
+      "A": {
+        "label": "Going",
+        "label_es": "La ida",
+        "tracks": [
+          {
+            "id": "a1",
+            "title": "We choose to go to the Moon",
+            "who": "John F. Kennedy",
+            "date": "1962",
+            "dur": 105.0,
+            "src": "/audio/moonshot/a1.mp3",
+            "note": "President Kennedy tells a stadium crowd why America will aim for the Moon, “not because they are easy, but because they are hard,” then describes feeling the ground shake at a test of a giant new rocket. When he spoke, no American had yet spent even a full day in orbit.",
+            "note_es": "El presidente Kennedy le explica a un estadio lleno por qué Estados Unidos apuntará a la Luna, “no porque sea fácil, sino porque es difícil”, y luego cuenta cómo sintió temblar el suelo en la prueba de un enorme cohete nuevo. Cuando habló, ningún estadounidense había pasado siquiera un día completo en órbita.",
+            "rights": "pd",
+            "place": "Rice University, Houston"
+          },
+          {
+            "id": "a2",
+            "title": "Genesis from lunar orbit",
+            "who": "Apollo 8 crew (Bill Anders, Jim Lovell, Frank Borman)",
+            "date": "1968",
+            "dur": 112.2,
+            "src": "/audio/moonshot/a2.mp3",
+            "note": "On Christmas Eve the first three people ever to circle the Moon take turns reading the opening verses of Genesis, then sign off with a Christmas wish to “all of you on the good Earth.” It was the most-watched broadcast in history up to then, heard by as many as a billion people.",
+            "note_es": "En Nochebuena, las tres primeras personas en dar la vuelta a la Luna se turnan para leer los primeros versículos del Génesis y se despiden con un deseo de Navidad para “todos ustedes en la buena Tierra”. Fue la transmisión más vista de la historia hasta entonces, con hasta mil millones de personas escuchando.",
+            "rights": "pd",
+            "place": "Lunar orbit"
+          },
+          {
+            "id": "a3",
+            "title": "One small step",
+            "who": "Neil Armstrong",
+            "date": "1969",
+            "dur": 84.0,
+            "src": "/audio/moonshot/a3.mp3",
+            "note": "Standing at the foot of the ladder, Neil Armstrong describes the fine, powder-like ground, then takes the first human step onto another world and says his famous sentence. He goes on to describe the dust he can scuff up with his toe.",
+            "note_es": "Al pie de la escalera, Neil Armstrong describe el suelo fino, casi como polvo, y luego da el primer paso humano sobre otro mundo y dice su famosa frase. Después describe el polvo que levanta con la punta de la bota.",
+            "rights": "pd",
+            "place": "Sea of Tranquility"
+          }
+        ]
+      },
+      "B": {
+        "label": "Trouble and return",
+        "label_es": "Problemas y regreso",
+        "tracks": [
+          {
+            "id": "b1",
+            "title": "1202 alarm, the Eagle has landed",
+            "who": "Apollo 11 (Neil Armstrong, Buzz Aldrin, CAPCOM Charlie Duke)",
+            "date": "1969",
+            "dur": 101.1,
+            "src": "/audio/moonshot/b1.mp3",
+            "note": "A condensed version of the last minutes of the first Moon landing: Houston waves off a computer overload alarm, Buzz Aldrin calls out height and speed as the fuel runs low, and Neil Armstrong announces the touchdown. Mission Control’s reply, that a room full of people was “about to turn blue,” shows how close it was.",
+            "note_es": "Una versión condensada de los últimos minutos del primer alunizaje: Houston deja pasar una alarma de sobrecarga del computador, Buzz Aldrin canta la altura y la velocidad mientras se acaba el combustible, y Neil Armstrong anuncia que se posaron. La respuesta de Control de Misión, que una sala llena de gente estaba “a punto de ponerse azul”, muestra lo justo que fue.",
+            "rights": "pd",
+            "place": "Sea of Tranquility"
+          },
+          {
+            "id": "b2",
+            "title": "Houston, we’ve had a problem",
+            "who": "Apollo 13 (Jack Swigert, Jim Lovell, Fred Haise, CAPCOM Jack Lousma)",
+            "date": "1970",
+            "dur": 100.8,
+            "src": "/audio/moonshot/b2.mp3",
+            "note": "Houston asks the crew to stir the spacecraft’s super-cold oxygen and hydrogen tanks, and moments later the astronauts calmly report a problem and describe “a pretty large bang.” An oxygen tank had exploded, and the Moon landing was abandoned as the crew fought to get home alive.",
+            "note_es": "Houston le pide a la tripulación que agite los tanques superfríos de oxígeno e hidrógeno de la nave, y momentos después los astronautas informan con calma de un problema y describen “un golpe bastante fuerte”. Había explotado un tanque de oxígeno, y el alunizaje se abandonó mientras la tripulación luchaba por volver con vida.",
+            "rights": "pd",
+            "place": "En route to the Moon"
+          },
+          {
+            "id": "b3",
+            "title": "Last words on the Moon",
+            "who": "Gene Cernan, Apollo 17",
+            "date": "1972",
+            "dur": 53.0,
+            "src": "/audio/moonshot/b3.mp3",
+            "note": "Just before climbing back into his lander, Gene Cernan says they leave as they came and, God willing, will return “with peace and hope for all mankind.” He was the last person to walk on the Moon, and no one walked there again for more than half a century.",
+            "note_es": "Justo antes de volver a subir al módulo lunar, Gene Cernan dice que se van como llegaron y que, si Dios quiere, volverán “con paz y esperanza para toda la humanidad”. Fue la última persona en caminar sobre la Luna, y nadie volvió a pisarla en más de medio siglo.",
+            "rights": "pd",
+            "place": "Taurus-Littrow"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "other-worlds",
+    "name": "Other worlds",
+    "color": "#3d8d8c",
+    "cover": "/covers/other-worlds.svg",
+    "sides": {
+      "A": {
+        "label": "Mars and Titan",
+        "label_es": "Marte y Titán",
+        "tracks": [
+          {
+            "id": "a1",
+            "title": "Wind on Mars",
+            "who": "Perseverance rover",
+            "date": "2021",
+            "dur": 39.9,
+            "src": "/audio/other-worlds/a1.mp3",
+            "note": "A microphone on Perseverance’s mast picks up the thin Martian air moving past, a low rushing hiss that swells in gusts about 20 seconds in. It was among the first sounds ever recorded on Mars.",
+            "note_es": "Un micrófono en el mástil del Perseverance capta el tenue aire marciano que pasa, un siseo grave que crece en ráfagas hacia los 20 segundos. Fue uno de los primeros sonidos grabados en Marte.",
+            "rights": "pd",
+            "credit": "NASA/JPL-Caltech/LANL/CNES/CNRS/ISAE-Supaero",
+            "place": "Jezero Crater, Mars"
+          },
+          {
+            "id": "a2",
+            "title": "Ingenuity in flight",
+            "who": "Perseverance rover",
+            "date": "2021",
+            "dur": 60.0,
+            "src": "/audio/other-worlds/a2.mp3",
+            "note": "The low hum is Ingenuity’s rotors, spinning about 2,500 times a minute, heard by the rover’s microphone from 80 meters away as the helicopter spins up, lifts off and flies. It was the first time a spacecraft on another planet recorded the sound of another spacecraft.",
+            "note_es": "El zumbido grave son los rotores del Ingenuity, que giran unas 2.500 veces por minuto, oídos por el micrófono del rover a 80 metros mientras el helicóptero acelera, despega y vuela. Fue la primera vez que una nave en otro planeta grabó el sonido de otra nave.",
+            "rights": "pd",
+            "credit": "NASA/JPL-Caltech/LANL/CNES/CNRS/ISAE-Supaero",
+            "place": "Jezero Crater, Mars"
+          },
+          {
+            "id": "a3",
+            "title": "Descent to Titan",
+            "who": "Huygens probe, ESA",
+            "date": "2005",
+            "dur": 60.0,
+            "src": "/audio/other-worlds/a3.mp3",
+            "note": "A lab reconstruction, built from the probe’s acoustic sensor, of what a passenger riding Huygens would have heard falling through Titan’s thick atmosphere: a steady roar of wind rushing past. Huygens is still the only spacecraft to land on a world in the outer solar system.",
+            "note_es": "Una reconstrucción de laboratorio, hecha a partir del sensor acústico de la sonda, de lo que habría oído un pasajero a bordo de Huygens al caer por la densa atmósfera de Titán: un rugido constante de viento. Huygens sigue siendo la única nave que se ha posado en un mundo del sistema solar exterior.",
+            "rights": "credit",
+            "credit": "ESA/HASI",
+            "place": "Titan"
+          }
+        ]
+      },
+      "B": {
+        "label": "Deep space",
+        "label_es": "Espacio profundo",
+        "tracks": [
+          {
+            "id": "b1",
+            "title": "The first pulsar",
+            "who": "Parkes radio telescope (R. N. Manchester, G. Hobbs, CSIRO); pulsar found by Jocelyn Bell Burnell",
+            "date": "2012",
+            "dur": 30.0,
+            "src": "/audio/other-worlds/b1.mp3",
+            "note": "Each burst of static is one sweep of the radio beam from a spinning dead star, which turns once every 1.34 seconds, picked up by a radio telescope and turned into sound. This is the star Jocelyn Bell Burnell spotted in 1967 as a graduate student at Cambridge, the first pulsar ever found.",
+            "note_es": "Cada ráfaga de estática es una pasada del haz de radio de una estrella muerta que gira una vez cada 1,34 segundos, captada por un radiotelescopio y convertida en sonido. Es la estrella que Jocelyn Bell Burnell detectó en 1967, cuando era estudiante de posgrado en Cambridge: el primer púlsar descubierto.",
+            "rights": "murky",
+            "credit": "R. N. Manchester and G. Hobbs, CSIRO Astronomy and Space Science",
+            "place": "Parkes, Australia"
+          },
+          {
+            "id": "b2",
+            "title": "Two black holes merge",
+            "who": "LIGO",
+            "date": "2015",
+            "dur": 33.2,
+            "src": "/audio/other-worlds/b2.mp3",
+            "note": "First comes the real signal from LIGO’s Hanford detector, shifted up in pitch so ears can catch it: a split-second upward whoop in the static, played twice, then the clean chirp Einstein’s theory predicts, twice at speed and once slowed right down. It was the first gravitational wave ever detected, a ripple in space itself from two black holes, each about 30 times the Sun’s mass, colliding more than a billion light-years away.",
+            "note_es": "Primero llega la señal real del detector de LIGO en Hanford, subida de tono para que el oído la capte: un breve silbido ascendente entre la estática, dos veces; luego el chirrido limpio que predice la teoría de Einstein, dos veces a velocidad real y una vez muy ralentizado. Fue la primera onda gravitacional detectada, una ondulación del propio espacio causada por dos agujeros negros, cada uno de unas 30 masas solares, que chocaron a más de mil millones de años luz.",
+            "rights": "credit",
+            "credit": "LIGO Scientific Collaboration / GWOSC, CC BY 4.0",
+            "license_url": "https://creativecommons.org/licenses/by/4.0/"
+          },
+          {
+            "id": "b3",
+            "title": "The Perseus cluster black hole",
+            "who": "NASA Chandra sonification",
+            "date": "2022",
+            "dur": 33.9,
+            "src": "/audio/other-worlds/b3.mp3",
+            "note": "Pressure waves pushed out by a giant black hole, rippling through the hot gas around it, raised 57 and 58 octaves so human ears can hear them; the real note is a B-flat far too deep for any ear, one of the deepest sounds ever found in space. As the sound sweeps around the black hole like a radar arm, each direction sings its own version of the moan.",
+            "note_es": "Ondas de presión que un agujero negro gigante empuja a través del gas caliente que lo rodea, subidas 57 y 58 octavas para que el oído humano las escuche; la nota real es un si bemol demasiado grave para cualquier oído, uno de los sonidos más graves hallados en el espacio. Mientras el sonido barre alrededor del agujero negro como el brazo de un radar, cada dirección canta su propia versión del lamento.",
+            "rights": "pd",
+            "credit": "X-ray: NASA/CXC/Univ. of Cambridge/C. Reynolds et al.; sonification: NASA/CXC/SAO/K. Arcand, SYSTEM Sounds (M. Russo, A. Santaguida)",
+            "place": "Perseus galaxy cluster"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "first-sounds",
+    "name": "First sounds",
+    "color": "#8a8b3b",
+    "cover": "/covers/first-sounds.svg",
+    "sides": {
+      "A": {
+        "label": "Firsts",
+        "label_es": "Primeras veces",
+        "tracks": [
+          {
+            "id": "a1",
+            "title": "Au clair de la lune",
+            "who": "Édouard-Léon Scott de Martinville",
+            "date": "1860",
+            "dur": 20.8,
+            "src": "/audio/first-sounds/a1.mp3",
+            "note": "A man, probably Scott himself, slowly sings a scrap of a French folk song, captured as squiggles on soot-blackened paper by a machine that could write sound down but never play it back. Researchers turned the tracing into audio in 2008 and corrected its speed in 2009, making it the oldest recognizable recording of a human voice.",
+            "note_es": "Un hombre, probablemente el propio Scott, canta despacio un fragmento de una canción popular francesa, capturado como garabatos sobre papel ennegrecido con hollín por una máquina que podía escribir el sonido pero nunca reproducirlo. Unos investigadores convirtieron el trazo en audio en 2008 y corrigieron su velocidad en 2009, y así pasó a ser la grabación reconocible más antigua de una voz humana.",
+            "rights": "credit",
+            "credit": "First Sounds (firstsounds.org), CC BY 1.0",
+            "license_url": "https://creativecommons.org/licenses/by/1.0/",
+            "place": "Paris"
+          },
+          {
+            "id": "a2",
+            "title": "How They Brought the Good News",
+            "who": "Robert Browning",
+            "date": "1889",
+            "dur": 48.1,
+            "src": "/audio/first-sounds/a2.mp3",
+            "note": "The poet starts reciting one of his own galloping verses into an Edison phonograph at a London gathering, loses his place, apologizes that he can’t remember his own lines, and praises the “wonderful invention” while the guests cheer. It is one of the earliest recordings of a famous writer’s voice.",
+            "note_es": "El poeta empieza a recitar uno de sus propios versos galopantes ante un fonógrafo de Edison en una reunión en Londres, pierde el hilo, se disculpa porque no recuerda sus propios versos y elogia el “maravilloso invento” mientras los invitados aplauden. Es una de las primeras grabaciones de la voz de un escritor famoso.",
+            "rights": "pd",
+            "place": "London"
+          },
+          {
+            "id": "a3",
+            "title": "Mary had a little lamb",
+            "who": "Thomas Edison",
+            "date": "1927",
+            "dur": 17.6,
+            "src": "/audio/first-sounds/a3.mp3",
+            "note": "Speaking for a newsreel crew, Edison re-creates the nursery rhyme he recited into his first tinfoil phonograph fifty years earlier, calling it “a little piece of practical poetry.” The 1877 original was never saved, so this re-enactment is as close as we can get.",
+            "note_es": "Ante un equipo de noticiero, Edison recrea la rima infantil que recitó en su primer fonógrafo de lámina de estaño cincuenta años antes, y la llama “un pequeño trozo de poesía práctica”. El original de 1877 nunca se conservó, así que esta recreación es lo más cerca que podemos llegar.",
+            "rights": "pd",
+            "place": "West Orange, New Jersey"
+          }
+        ]
+      },
+      "B": {
+        "label": "Machines speak",
+        "label_es": "Hablan las máquinas",
+        "tracks": [
+          {
+            "id": "b1",
+            "title": "Sputnik’s beep",
+            "who": "Sputnik 1, heard live on WTCN radio",
+            "date": "1957",
+            "dur": 38.3,
+            "src": "/audio/first-sounds/b1.mp3",
+            "note": "A Minneapolis talk-radio host puts a caller’s shortwave set on the air, and through the static comes the steady beeping of the first artificial satellite, hours after the Soviets announced its launch. The host marvels that his station “may have just presented the first sound coming from the first space satellite ever launched by man.”",
+            "note_es": "Un locutor de Minneapolis pone al aire el receptor de onda corta de un oyente que llamó, y entre la estática aparece el pitido constante del primer satélite artificial, horas después de que los soviéticos anunciaran su lanzamiento. El locutor se maravilla de que su emisora “quizá acaba de presentar el primer sonido del primer satélite espacial lanzado por el hombre”.",
+            "rights": "murky",
+            "credit": "Tom Gavaras / Shortwave Radio Audio Archive, CC BY-NC 3.0",
+            "license_url": "https://creativecommons.org/licenses/by-nc/3.0/",
+            "place": "Minneapolis, Minnesota"
+          },
+          {
+            "id": "b2",
+            "title": "Daisy Bell",
+            "who": "IBM 7094 at Bell Labs (voice by John L. Kelly Jr. and Carol Lochbaum, accompaniment by Max Mathews)",
+            "date": "1961",
+            "dur": 96.1,
+            "src": "/audio/first-sounds/b2.mp3",
+            "note": "An IBM mainframe at Bell Labs sings an 1890s music-hall song in a buzzing synthetic voice over a computer-made accompaniment, one of the first times a computer ever sang. Arthur C. Clarke heard the demo, and it became the song HAL sings as he is shut down in 2001: A Space Odyssey.",
+            "note_es": "Un computador central de IBM en los Laboratorios Bell canta una canción de music hall de la década de 1890 con una voz sintética y zumbante, sobre un acompañamiento hecho por computador: una de las primeras veces que un computador cantó. Arthur C. Clarke escuchó la demostración, y se volvió la canción que canta HAL mientras lo desconectan en 2001: Odisea del espacio.",
+            "rights": "murky",
+            "place": "Murray Hill, New Jersey"
+          },
+          {
+            "id": "b3",
+            "title": "A dial-up handshake",
+            "who": "Dial-up modem",
+            "date": "1990s",
+            "dur": 28.6,
+            "src": "/audio/first-sounds/b3.mp3",
+            "note": "A computer dials an internet provider over a phone line, and the two modems whistle, screech and hiss at each other as they test the line and settle on how fast they can talk. For millions of people this noise was the sound of going online.",
+            "note_es": "Un computador marca a un proveedor de internet por la línea telefónica, y los dos módems silban, chillan y sisean entre sí mientras prueban la línea y acuerdan qué tan rápido pueden hablar. Para millones de personas, este ruido era el sonido de conectarse.",
+            "rights": "pd"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "living-things",
+    "name": "Living things",
+    "color": "#6f9a52",
+    "cover": "/covers/living-things.svg",
+    "sides": {
+      "A": {
+        "label": "Animals",
+        "label_es": "Animales",
+        "tracks": [
+          {
+            "id": "a1",
+            "title": "The last ʻōʻō",
+            "who": "Kauaʻi ʻōʻō",
+            "date": "1975",
+            "dur": 60.0,
+            "src": "/audio/living-things/a1.mp3",
+            "note": "The hollow, flute-like calls of a Kauaʻi ʻōʻō, taped in the Alakaʻi Swamp when perhaps two dozen of these birds were left. The species was last heard in 1987, and with it went the last of Hawaiʻi’s honeyeaters, a whole family of birds.",
+            "note_es": "Los llamados huecos, como de flauta, de un ʻōʻō de Kauaʻi, grabados en el pantano Alakaʻi cuando quizá quedaban dos docenas de estas aves. La especie se oyó por última vez en 1987, y con ella desaparecieron los últimos mieleros de Hawaiʻi, toda una familia de aves.",
+            "rights": "permission",
+            "place": "Alakaʻi Swamp, Kauaʻi, Hawaiʻi"
+          },
+          {
+            "id": "a2",
+            "title": "The lyrebird",
+            "who": "Superb lyrebird",
+            "date": "2020",
+            "dur": 61.0,
+            "src": "/audio/living-things/a2.mp3",
+            "note": "A male superb lyrebird in full song, much of it borrowed from the calls of other birds that share his forest. Lyrebirds are among the best mimics on Earth, and a single male can sound like a whole flock.",
+            "note_es": "Un macho de ave lira soberbia en pleno canto, gran parte tomado de los llamados de otras aves que comparten su bosque. Las aves lira están entre los mejores imitadores de la Tierra, y un solo macho puede sonar como una bandada entera.",
+            "rights": "credit",
+            "credit": "Excerpt of XC570705 by James Ray / xeno-canto, CC BY-SA 4.0",
+            "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+            "place": "Blue Mountains, New South Wales, Australia"
+          },
+          {
+            "id": "a3",
+            "title": "Bats, slowed down",
+            "who": "Hoary bat and big brown bat",
+            "date": "2020",
+            "dur": 31.5,
+            "src": "/audio/living-things/a3.mp3",
+            "note": "Bat calls pitched far above human hearing, slowed ten times so we can hear them: first the steady chirps a bat sends out as it flies and searches for food, then the rapid “feeding buzz” it makes as it closes in on an insect.",
+            "note_es": "Llamadas de murciélago, mucho más agudas de lo que el oído humano alcanza, ralentizadas diez veces para poder oírlas: primero los chirridos regulares que un murciélago emite mientras vuela buscando comida, y luego el rápido “zumbido de alimentación” que hace al acercarse a un insecto.",
+            "rights": "pd",
+            "place": "Butler County, Pennsylvania, USA"
+          }
+        ]
+      },
+      "B": {
+        "label": "Earth itself",
+        "label_es": "La Tierra misma",
+        "tracks": [
+          {
+            "id": "b1",
+            "title": "Earth’s chorus",
+            "who": "NASA Van Allen Probes",
+            "date": "2012",
+            "dur": 29.8,
+            "src": "/audio/living-things/b1.mp3",
+            "note": "Radio waves given off by electrons trapped in the radiation belts around Earth, picked up by a NASA probe and turned into sound. Their rising chirps sound so much like birdsong that scientists call them “chorus,” after the dawn chorus of birds.",
+            "note_es": "Ondas de radio emitidas por electrones atrapados en los cinturones de radiación que rodean la Tierra, captadas por una sonda de la NASA y convertidas en sonido. Sus chirridos ascendentes se parecen tanto al canto de las aves que los científicos los llaman “coro”, por el coro de pájaros del amanecer.",
+            "rights": "pd",
+            "credit": "NASA / University of Iowa EMFISIS team",
+            "place": "Earth’s magnetosphere"
+          },
+          {
+            "id": "b2",
+            "title": "The Tōhoku earthquake",
+            "who": "Hi-net seismometer HTAH, sonified by Zhigang Peng",
+            "date": "2011",
+            "dur": 37.0,
+            "src": "/audio/living-things/b2.mp3",
+            "note": "A Japanese seismometer’s recording sped up 100 times, squeezing about an hour into under a minute: the opening roar is the magnitude 9.0 mainshock, and the pops that follow are its aftershocks. This was the earthquake that set off the tsunami that devastated Japan’s northeast coast.",
+            "note_es": "El registro de un sismómetro japonés acelerado 100 veces, que comprime cerca de una hora en menos de un minuto: el rugido inicial es el terremoto principal, de magnitud 9,0, y los chasquidos que siguen son sus réplicas. Fue el terremoto que desató el tsunami que devastó la costa noreste de Japón.",
+            "rights": "credit",
+            "credit": "Zhigang Peng (Peng et al. 2012, SRL 83(2)); data NIED Hi-net",
+            "place": "Japan"
+          },
+          {
+            "id": "b3",
+            "title": "The singing ice shelf",
+            "who": "Ross Ice Shelf (seismic data, Julien Chaput)",
+            "date": "2015",
+            "dur": 42.5,
+            "src": "/audio/living-things/b3.mp3",
+            "note": "Seismometers buried in the snow picked up the ice shelf humming as wind blew across its snow dunes, sped up about 1,200 times so human ears can hear it. Scientists think the changing tone could let them watch the ice for change from far away.",
+            "note_es": "Sismómetros enterrados en la nieve captaron el zumbido de la plataforma de hielo mientras el viento soplaba sobre sus dunas de nieve, acelerado unas 1.200 veces para que el oído humano lo escuche. Los científicos creen que los cambios de tono podrían permitirles vigilar desde lejos cómo cambia el hielo.",
+            "rights": "credit",
+            "credit": "AGU, seismic data by Julien Chaput, CC BY 3.0",
+            "license_url": "https://creativecommons.org/licenses/by/3.0/",
+            "place": "Ross Ice Shelf, Antarctica"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "ocean",
+    "name": "Ocean",
+    "color": "#33506b",
+    "cover": "/covers/ocean.svg",
+    "sides": {
+      "A": {
+        "label": "Whales",
+        "label_es": "Ballenas",
+        "tracks": [
+          {
+            "id": "a1",
+            "title": "Humpback song",
+            "who": "Humpback whale",
+            "date": "",
+            "dur": 117.5,
+            "src": "/audio/ocean/a1.mp3",
+            "note": "A male humpback in Hawaiian waters sings long moans, whoops and squeaks in phrases that he repeats in a set order. Recordings of songs like this helped make whales the symbol of the 1970s Save the Whales movement.",
+            "note_es": "Un macho de ballena jorobada en aguas hawaianas canta largos gemidos, alaridos y chillidos en frases que repite en un orden fijo. Grabaciones de cantos como este ayudaron a hacer de las ballenas el símbolo del movimiento Save the Whales de los años setenta.",
+            "rights": "pd",
+            "credit": "NOAA / U.S. Department of Commerce",
+            "place": "Hawaiian Islands Humpback Whale National Marine Sanctuary, Hawaiʻi"
+          },
+          {
+            "id": "a2",
+            "title": "The 52-hertz whale",
+            "who": "Unidentified whale",
+            "date": "1989",
+            "dur": 15.3,
+            "src": "/audio/ocean/a2.mp3",
+            "note": "Sped up ten times, these are the calls of a whale singing at about 52 hertz, higher than any known blue or fin whale. Scientists followed its voice around the North Pacific for years but never saw it, which earned it the nickname “the loneliest whale.”",
+            "note_es": "Aceleradas diez veces, estas son las llamadas de una ballena que canta a unos 52 hercios, más agudo que cualquier ballena azul o de aleta conocida. Los científicos siguieron su voz por el Pacífico Norte durante años sin llegar a verla, y por eso la apodaron “la ballena más solitaria”.",
+            "rights": "pd",
+            "place": "Northeast Pacific"
+          },
+          {
+            "id": "a3",
+            "title": "Sperm whale clicks",
+            "who": "Sperm whale",
+            "date": "",
+            "dur": 45.0,
+            "src": "/audio/ocean/a3.mp3",
+            "note": "A group of sperm whales clicking, sounds they use like sonar to find squid in the pitch-dark deep and, in patterned bursts, to talk to one another. Sperm whale clicks are the loudest sounds made by any animal.",
+            "note_es": "Un grupo de cachalotes haciendo clics, sonidos que usan como un sonar para encontrar calamares en la oscuridad total de las profundidades y, en ráfagas con patrón, para comunicarse entre sí. Los clics del cachalote son los sonidos más fuertes que produce cualquier animal.",
+            "rights": "pd"
+          }
+        ]
+      },
+      "B": {
+        "label": "Mysteries",
+        "label_es": "Misterios",
+        "tracks": [
+          {
+            "id": "b1",
+            "title": "Bloop",
+            "who": "NOAA hydrophones",
+            "date": "1997",
+            "dur": 10.3,
+            "src": "/audio/ocean/b1.mp3",
+            "note": "Sped up 16 times to bring it into our hearing range, this low sound reached NOAA’s underwater microphones from thousands of kilometers away. It was so loud and strange that people guessed at a giant sea creature, but NOAA later matched it to an iceberg cracking apart near Antarctica.",
+            "note_es": "Acelerado 16 veces para que entre en nuestro rango auditivo, este sonido grave llegó a los micrófonos submarinos de la NOAA desde miles de kilómetros. Era tan fuerte y extraño que se habló de una criatura marina gigante, pero la NOAA luego lo atribuyó a un iceberg que se partía cerca de la Antártida.",
+            "rights": "pd",
+            "place": "Southern Ocean, off Antarctica (heard across the Pacific)"
+          },
+          {
+            "id": "b2",
+            "title": "Upsweep",
+            "who": "NOAA hydrophones",
+            "date": "1991",
+            "dur": 28.8,
+            "src": "/audio/ocean/b2.mp3",
+            "note": "A long train of rising tones, sped up 20 times, loud enough to be picked up all across the Pacific. It seems to come from a remote patch of the South Pacific near undersea volcanic activity, but its cause has never been confirmed.",
+            "note_es": "Una larga serie de tonos ascendentes, acelerados 20 veces, tan fuertes que se captaron en todo el Pacífico. Parecen venir de una zona remota del Pacífico Sur con actividad volcánica submarina, pero su causa nunca se ha confirmado.",
+            "rights": "pd",
+            "place": "South Pacific (roughly 54°S, 140°W)"
+          },
+          {
+            "id": "b3",
+            "title": "Julia",
+            "who": "NOAA hydrophones",
+            "date": "1999",
+            "dur": 10.3,
+            "src": "/audio/ocean/b3.mp3",
+            "note": "Sped up 16 times, this long sound was caught by NOAA’s hydrophones in the eastern equatorial Pacific. The likeliest source is a huge iceberg that had run aground off Antarctica, grinding against the seafloor.",
+            "note_es": "Acelerado 16 veces, este largo sonido fue captado por los hidrófonos de la NOAA en el Pacífico ecuatorial oriental. La fuente más probable es un enorme iceberg encallado frente a la Antártida, raspando el fondo marino.",
+            "rights": "pd",
+            "place": "Eastern equatorial Pacific (source likely off Antarctica)"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "live",
+    "name": "Live",
+    "color": "#c0392b",
+    "cover": "/covers/live.svg",
+    "sides": {
+      "A": {
+        "label": "On the air",
+        "label_es": "Al aire",
+        "tracks": [
+          {
+            "id": "a1",
+            "title": "Oh, the humanity",
+            "who": "Herbert Morrison",
+            "date": "1937",
+            "dur": 80.7,
+            "src": "/audio/live/a1.mp3",
+            "note": "A Chicago radio reporter who came to record a routine airship landing instead describes the Hindenburg bursting into flames and falling, his voice breaking as he cries “oh, the humanity” until he can barely speak. NBC, which had never aired a recording before, played it across the country the next day, so listeners heard a disaster in the words of someone watching it happen.",
+            "note_es": "Un reportero radial de Chicago que había ido a grabar el aterrizaje rutinario de un dirigible describe en cambio al Hindenburg estallando en llamas y cayendo, con la voz quebrada mientras grita “oh, la humanidad” hasta que apenas puede hablar. NBC, que nunca había emitido una grabación, la transmitió a todo el país al día siguiente, y los oyentes escucharon un desastre en palabras de alguien que lo estaba viendo.",
+            "rights": "murky",
+            "place": "Lakehurst, New Jersey"
+          },
+          {
+            "id": "a2",
+            "title": "This is Trafalgar Square",
+            "who": "Edward R. Murrow",
+            "date": "1940",
+            "dur": 79.4,
+            "src": "/audio/live/a2.mp3",
+            "note": "Standing on the steps of St Martin-in-the-Fields as air-raid sirens wail in the blackout, Murrow describes searchlights sweeping the sky, a dimly lit red bus that looks like a ship passing in the night, and footsteps in the dark street. Live reports like this brought the war in Britain into American homes more than a year before the United States joined it.",
+            "note_es": "De pie en la escalinata de St Martin-in-the-Fields, mientras las sirenas antiaéreas aúllan en el apagón, Murrow describe reflectores que barren el cielo, un bus rojo apenas iluminado que parece un barco que pasa en la noche y pasos en la calle a oscuras. Crónicas en vivo como esta llevaron la guerra en Gran Bretaña a los hogares estadounidenses más de un año antes de que Estados Unidos entrara en ella.",
+            "rights": "murky",
+            "place": "Trafalgar Square, London"
+          },
+          {
+            "id": "a3",
+            "title": "The War of the Worlds",
+            "who": "Orson Welles and the Mercury Theatre on the Air",
+            "date": "1938",
+            "dur": 90.0,
+            "src": "/audio/live/a3.mp3",
+            "note": "A made-up hotel dance band is cut off by a news flash about explosions of gas on Mars, and then the music carries on as if nothing had happened. It was a Halloween radio play, but it copied the sound of real news bulletins so well that some listeners who tuned in late believed an invasion was under way.",
+            "note_es": "Una orquesta de baile de un hotel inventado es interrumpida por un boletín sobre explosiones de gas en Marte, y luego la música sigue como si nada. Era un radioteatro de Halloween, pero imitaba tan bien el sonido de los boletines reales que algunos oyentes que sintonizaron tarde creyeron que había una invasión en curso.",
+            "rights": "murky",
+            "place": "New York"
+          }
+        ]
+      },
+      "B": {
+        "label": "As it happened",
+        "label_es": "Tal como pasó",
+        "tracks": [
+          {
+            "id": "b1",
+            "title": "Immediately",
+            "who": "Günter Schabowski",
+            "date": "1989",
+            "dur": 61.0,
+            "src": "/audio/live/b1.mp3",
+            "note": "East Germany’s government spokesman reads out new rules letting people leave for the West through any border crossing, and when reporters ask when they start, he checks his notes and answers “sofort, unverzüglich”: immediately, without delay. The rules were meant to take effect the next day, but that night crowds went to the checkpoints, and the Berlin Wall opened within hours.",
+            "note_es": "El vocero del gobierno de Alemania Oriental lee nuevas normas que permiten salir hacia el Oeste por cualquier paso fronterizo, y cuando los periodistas preguntan desde cuándo rigen, revisa sus notas y responde “sofort, unverzüglich”: de inmediato, sin demora. Las normas debían entrar en vigor al día siguiente, pero esa noche multitudes fueron a los puestos de control y el Muro de Berlín se abrió en cuestión de horas.",
+            "rights": "murky",
+            "place": "East Berlin"
+          },
+          {
+            "id": "b2",
+            "title": "Bodies upon the gears",
+            "who": "Mario Savio",
+            "date": "1964",
+            "dur": 66.0,
+            "src": "/audio/live/b2.mp3",
+            "note": "A 21-year-old student leader tells a crowd outside the university’s administration building that when the machine becomes unbearable you must put your bodies upon the gears and make it stop, then adds that this doesn’t mean breaking anything, only a thousand people sitting down. Students then occupied the building, and the mass arrests that followed made the Free Speech Movement a model for 1960s campus protest.",
+            "note_es": "Un líder estudiantil de 21 años le dice a una multitud frente al edificio de la administración de la universidad que, cuando la máquina se vuelve insoportable, hay que poner el cuerpo sobre los engranajes y hacerla parar, y agrega que eso no significa romper nada, solo mil personas sentadas. Luego los estudiantes ocuparon el edificio, y los arrestos masivos que siguieron hicieron del Free Speech Movement un modelo para las protestas universitarias de los años sesenta.",
+            "rights": "murky",
+            "place": "Berkeley"
+          },
+          {
+            "id": "b3",
+            "title": "Ich bin ein Berliner",
+            "who": "John F. Kennedy",
+            "date": "1963",
+            "dur": 73.9,
+            "src": "/audio/live/b3.mp3",
+            "note": "Closing his speech to an enormous crowd outside Schöneberg town hall, Kennedy says freedom is indivisible, that all free people are citizens of Berlin, and that he too takes pride in the words “Ich bin ein Berliner.” Coming less than two years after the Wall went up, it told West Berliners that the United States would stand by them.",
+            "note_es": "Al cerrar su discurso ante una multitud enorme frente al ayuntamiento de Schöneberg, Kennedy dice que la libertad es indivisible, que todas las personas libres son ciudadanas de Berlín y que él también se enorgullece de las palabras “Ich bin ein Berliner”. A menos de dos años de levantado el Muro, les dijo a los berlineses del Oeste que Estados Unidos no los abandonaría.",
+            "rights": "pd",
+            "place": "West Berlin"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "now",
+    "name": "Now",
+    "color": "#d9679a",
+    "cover": "/covers/now.svg",
+    "sides": {
+      "A": {
+        "label": "Young voices",
+        "label_es": "Voces jóvenes",
+        "tracks": [
+          {
+            "id": "a1",
+            "title": "Rio Earth Summit",
+            "who": "Severn Cullis-Suzuki, age 12",
+            "date": "1992",
+            "dur": 93.8,
+            "src": "/audio/now/a1.mp3",
+            "note": "A twelve-year-old from Vancouver tells a hall of world leaders that she is afraid of the sun, the air and a world emptying of animals, then lists everything the adults don’t know how to fix. It ends on the line that made the speech famous: if you don’t know how to fix it, please stop breaking it.",
+            "note_es": "Una niña de doce años de Vancouver le dice a una sala llena de líderes mundiales que tiene miedo del sol, del aire y de un mundo que se queda sin animales, y luego enumera todo lo que los adultos no saben arreglar. Termina con la frase que hizo famoso el discurso: si no saben cómo arreglarlo, por favor dejen de romperlo.",
+            "rights": "murky",
+            "place": "Rio de Janeiro"
+          },
+          {
+            "id": "a2",
+            "title": "On her sixteenth birthday",
+            "who": "Malala Yousafzai",
+            "date": "2013",
+            "dur": 78.2,
+            "src": "/audio/now/a2.mp3",
+            "note": "Nine months after the Taliban shot her in the head for campaigning for girls’ schooling, a teenager tells the UN that the bullet meant to silence her and her friends only brought out thousands of new voices. Weakness, fear and hopelessness died, she says, and she is the same Malala, with the same dreams.",
+            "note_es": "Nueve meses después de que los talibanes le dispararan en la cabeza por defender la educación de las niñas, una adolescente le dice a la ONU que la bala que quería silenciarla a ella y a sus amigas solo hizo surgir miles de voces nuevas. La debilidad, el miedo y la desesperanza murieron, dice, y ella es la misma Malala, con los mismos sueños.",
+            "rights": "murky",
+            "place": "United Nations, New York"
+          },
+          {
+            "id": "a3",
+            "title": "How dare you",
+            "who": "Greta Thunberg",
+            "date": "2019",
+            "dur": 63.2,
+            "src": "/audio/now/a3.mp3",
+            "note": "A sixteen-year-old from Sweden, voice shaking, tells world leaders at a UN climate summit that she should be back in school and that they have stolen her dreams and her childhood with empty words. The clip ends on the hall’s applause after she condemns their talk of money and fairy tales of eternal economic growth.",
+            "note_es": "Una joven sueca de dieciséis años, con la voz temblorosa, les dice a los líderes mundiales en una cumbre climática de la ONU que debería estar en la escuela y que le han robado sus sueños y su infancia con palabras vacías. El clip termina con el aplauso de la sala después de que condena su charla sobre dinero y sus cuentos de hadas de crecimiento económico eterno.",
+            "rights": "murky",
+            "place": "United Nations, New York"
+          }
+        ]
+      },
+      "B": {
+        "label": "Loud",
+        "label_es": "A todo volumen",
+        "tracks": [
+          {
+            "id": "b1",
+            "title": "Saturn V launch",
+            "who": "Apollo 11",
+            "date": "1969",
+            "dur": 61.9,
+            "src": "/audio/now/b1.mp3",
+            "note": "NASA launch commentator Jack King counts down the last forty seconds, through ignition, to “liftoff, we have a liftoff” as Armstrong, Aldrin and Collins leave for the Moon. His calm voice went out live to radio and television audiences around the world.",
+            "note_es": "El comentarista de lanzamientos de la NASA Jack King cuenta los últimos cuarenta segundos, pasando por el encendido, hasta “despegue, tenemos despegue”, mientras Armstrong, Aldrin y Collins parten hacia la Luna. Su voz tranquila salió en vivo por radio y televisión a audiencias de todo el mundo.",
+            "rights": "pd",
+            "place": "Kennedy Space Center"
+          },
+          {
+            "id": "b2",
+            "title": "Concorde take-off",
+            "who": "Concorde",
+            "date": "",
+            "dur": 23.3,
+            "src": "/audio/now/b2.mp3",
+            "note": "A Concorde thunders down the runway and climbs away, recorded from the end of the runway on what the recordist describes as its last departure from this airport. Its four engines used afterburners for take-off, which made the supersonic airliner one of the loudest passenger planes ever built.",
+            "note_es": "Un Concorde atruena por la pista y se eleva, grabado desde el final de la pista en lo que el autor de la grabación describe como su última salida desde este aeropuerto. Sus cuatro motores usaban posquemadores para despegar, y eso hizo del avión supersónico uno de los aviones de pasajeros más ruidosos jamás construidos.",
+            "rights": "murky",
+            "credit": "ddub / Freesound, Sampling+ 1.0",
+            "license_url": "https://creativecommons.org/licenses/sampling+/1.0/",
+            "place": "Leeds Bradford Airport, England"
+          },
+          {
+            "id": "b3",
+            "title": "The first booster landing",
+            "who": "SpaceX Falcon 9",
+            "date": "2015",
+            "dur": 62.7,
+            "src": "/audio/now/b3.mp3",
+            "note": "SpaceX staff at their California headquarters fall quiet, then cheer louder and louder as the rocket’s first stage, having just sent satellites toward orbit, drops back to Florida and touches down upright on a landing pad. It was the first time the booster of an orbital rocket had come back and landed in one piece, a big step toward reusable rockets.",
+            "note_es": "El personal de SpaceX en su sede de California guarda silencio y luego vitorea cada vez más fuerte mientras la primera etapa del cohete, tras enviar satélites rumbo a la órbita, vuelve a Florida y se posa de pie en una plataforma de aterrizaje. Fue la primera vez que la etapa impulsora de un cohete orbital volvía y aterrizaba entera, un gran paso hacia los cohetes reutilizables.",
+            "rights": "murky",
+            "place": "Cape Canaveral"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "words",
+    "name": "Words",
+    "color": "#7a5c9e",
+    "cover": "/covers/words.svg",
+    "sides": {
+      "A": {
+        "label": "Poets",
+        "label_es": "Poetas",
+        "tracks": [
+          {
+            "id": "a1",
+            "title": "The Charge of the Light Brigade",
+            "who": "Alfred Tennyson",
+            "date": "1890",
+            "dur": 130.5,
+            "src": "/audio/words/a1.mp3",
+            "note": "An aging Tennyson chants his own poem into an Edison wax cylinder, half-buried in hiss but still keeping its galloping rhythm. It is one of the earliest recordings of a major poet reading his own work, and it ends with his call to honor the soldiers.",
+            "note_es": "Un Tennyson ya mayor salmodia su propio poema ante un cilindro de cera de Edison, medio enterrado en el siseo pero sin perder su ritmo galopante. Es una de las primeras grabaciones de un gran poeta leyendo su propia obra, y termina con su llamado a honrar a los soldados.",
+            "rights": "pd",
+            "place": "Isle of Wight"
+          },
+          {
+            "id": "a2",
+            "title": "America",
+            "who": "Walt Whitman (attributed)",
+            "date": "1890",
+            "dur": 37.5,
+            "src": "/audio/words/a2.mp3",
+            "note": "A crackling voice, long believed to be Walt Whitman’s, reads four lines praising America as the center of equal daughters and equal sons. If it really is him, this is the only known recording of the poet, and experts still disagree about it.",
+            "note_es": "Una voz crepitante, que por mucho tiempo se creyó de Walt Whitman, lee cuatro versos que alaban a América como el centro de hijas iguales e hijos iguales. Si de verdad es él, es la única grabación conocida del poeta, y los expertos todavía no se ponen de acuerdo.",
+            "rights": "pd",
+            "credit": "The Walt Whitman Archive",
+            "place": "Camden, New Jersey"
+          },
+          {
+            "id": "a3",
+            "title": "Do not go gentle into that good night",
+            "who": "Dylan Thomas",
+            "date": "1952",
+            "dur": 93.6,
+            "src": "/audio/words/a3.mp3",
+            "note": "Dylan Thomas reads his poem urging his dying father to fight to the very end, in the booming, musical voice that made his readings famous. You hear the whole poem, through the last “Rage, rage against the dying of the light.”",
+            "note_es": "Dylan Thomas lee su poema que le pide a su padre moribundo luchar hasta el final, con la voz resonante y musical que hizo famosas sus lecturas. Se escucha el poema completo, hasta el último “Rage, rage against the dying of the light” (enfurécete, enfurécete contra la muerte de la luz).",
+            "rights": "permission",
+            "place": "New York"
+          }
+        ]
+      },
+      "B": {
+        "label": "Languages",
+        "label_es": "Idiomas",
+        "tracks": [
+          {
+            "id": "b1",
+            "title": "Greetings from Earth",
+            "who": "Voyager Golden Record",
+            "date": "1977",
+            "dur": 120.7,
+            "src": "/audio/words/b1.mp3",
+            "note": "People speak short greetings in dozens of languages, recorded for the golden records carried by both Voyager spacecraft, which are now drifting between the stars. This stretch runs from Polish through Mandarin, Swedish, Persian, Hungarian and others, and ends with a six-year-old boy saying in English, “Hello from the children of planet Earth.”",
+            "note_es": "Personas dicen breves saludos en decenas de idiomas, grabados para los discos de oro que llevan las dos naves Voyager, que hoy van a la deriva entre las estrellas. Este tramo va del polaco al mandarín, el sueco, el persa, el húngaro y otros, y termina con un niño de seis años que dice en inglés “Hello from the children of planet Earth” (hola de parte de los niños del planeta Tierra).",
+            "rights": "pd"
+          },
+          {
+            "id": "b2",
+            "title": "Poema 20",
+            "who": "Pablo Neruda",
+            "date": "",
+            "dur": 173.6,
+            "src": "/audio/words/b2.mp3",
+            "note": "Pablo Neruda reads, in his slow, sing-song voice, his best-known love poem about writing the saddest lines on a starry night after losing someone. The excerpt ends on the famous “Es tan corto el amor, y es tan largo el olvido” (love is so short, forgetting is so long), just before the poem’s last four lines.",
+            "note_es": "Pablo Neruda lee, con su voz lenta y cantada, su poema de amor más conocido, sobre escribir los versos más tristes en una noche estrellada después de perder a alguien. El fragmento termina en el famoso “Es tan corto el amor, y es tan largo el olvido”, justo antes de los últimos cuatro versos del poema.",
+            "rights": "permission"
+          },
+          {
+            "id": "b3",
+            "title": "País de la ausencia",
+            "who": "Gabriela Mistral",
+            "date": "1950",
+            "dur": 90.6,
+            "src": "/audio/words/b3.mp3",
+            "note": "Gabriela Mistral, the first Latin American to win the Nobel Prize in Literature, reads her poem about a homeland made of everything she had lost: mountains she slept in, orchards, people she saw die. She recorded it in Washington after nearly three decades of living mostly outside Chile.",
+            "note_es": "Gabriela Mistral, la primera persona latinoamericana en ganar el Premio Nobel de Literatura, lee su poema sobre una patria hecha de todo lo que había perdido: montañas en que durmió, huertos, gente que vio morir. Lo grabó en Washington después de casi tres décadas viviendo mayormente fuera de Chile.",
+            "rights": "murky",
+            "place": "Library of Congress, Washington"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "music",
+    "name": "Music",
+    "color": "#b5651d",
+    "cover": "/covers/music.svg",
+    "sides": {
+      "A": {
+        "label": "The first records",
+        "label_es": "Los primeros discos",
+        "tracks": [
+          {
+            "id": "a1",
+            "title": "Vesti la giubba",
+            "who": "Enrico Caruso",
+            "date": "1907",
+            "dur": 179.0,
+            "src": "/audio/music/a1.mp3",
+            "note": "Caruso sings the clown Canio’s lament from the opera Pagliacci: his heart is breaking, yet he tells himself to put on his costume and make the audience laugh, and his voice breaks into sobs at the end. His records did more than anyone’s to make the gramophone respectable for serious music, and this one is often called the first record to sell a million copies.",
+            "note_es": "Caruso canta el lamento del payaso Canio de la ópera Pagliacci: se le rompe el corazón, pero se dice que debe ponerse el disfraz y hacer reír al público, y al final su voz se quiebra en sollozos. Sus discos hicieron más que los de nadie para que el gramófono fuera respetable para la música seria, y a menudo se dice que este fue el primer disco en vender un millón de copias.",
+            "rights": "pd",
+            "place": "New York"
+          },
+          {
+            "id": "a2",
+            "title": "Livery Stable Blues",
+            "who": "Original Dixieland Jass Band",
+            "date": "1917",
+            "dur": 150.8,
+            "src": "/audio/music/a2.mp3",
+            "note": "Five white New Orleans musicians play a rowdy blues in which the clarinet crows like a rooster, the cornet whinnies like a horse and the trombone moos. This was the first jazz record ever released, and it sold so well that it carried the new music across the country.",
+            "note_es": "Cinco músicos blancos de Nueva Orleans tocan un blues bullicioso en el que el clarinete canta como un gallo, la corneta relincha como un caballo y el trombón muge. Fue el primer disco de jazz publicado, y se vendió tan bien que llevó la nueva música por todo el país.",
+            "rights": "pd",
+            "place": "New York"
+          },
+          {
+            "id": "a3",
+            "title": "Maple Leaf Rag",
+            "who": "Scott Joplin, piano roll",
+            "date": "1916",
+            "dur": 130.1,
+            "src": "/audio/music/a3.mp3",
+            "note": "This is Joplin’s own performance of the piece that made him the King of Ragtime, saved as holes punched in a paper piano roll the year before he died. Here the roll plays back through a modern piano sound, and some hear his failing health in the uneven playing.",
+            "note_es": "Es la interpretación del propio Joplin de la pieza que lo convirtió en el Rey del Ragtime, guardada como perforaciones en un rollo de pianola de papel el año antes de su muerte. Aquí el rollo suena a través de un piano moderno, y hay quienes oyen su salud deteriorada en la ejecución irregular.",
+            "rights": "pd"
+          }
+        ]
+      },
+      "B": {
+        "label": "The classics in three minutes",
+        "label_es": "Los clásicos en tres minutos",
+        "tracks": [
+          {
+            "id": "b1",
+            "title": "Symphony No. 5, opening",
+            "who": "Ludwig van Beethoven, played by the Skidmore College Orchestra",
+            "date": "",
+            "dur": 100.0,
+            "src": "/audio/music/b1.mp3",
+            "note": "The famous four-note motif, often described as fate knocking at the door, opens the first movement, and the whole orchestra builds its argument out of that one tiny figure. Those four notes may be the best-known opening in all of music.",
+            "note_es": "El famoso motivo de cuatro notas, a menudo descrito como el destino que llama a la puerta, abre el primer movimiento, y toda la orquesta construye su argumento a partir de esa pequeña figura. Esas cuatro notas quizá sean el comienzo más conocido de toda la música.",
+            "rights": "pd",
+            "credit": "Skidmore College Orchestra / Musopen"
+          },
+          {
+            "id": "b2",
+            "title": "Toccata in D minor",
+            "who": "Johann Sebastian Bach, played by Norbert Schenk (organ)",
+            "date": "2017",
+            "dur": 132.7,
+            "src": "/audio/music/b2.mp3",
+            "note": "A church organ plays the stormy opening flourishes and thundering chords of the toccata, stopping just before the fugue begins. The piece became the sound of horror films and Halloween, even though experts still argue over whether Bach really wrote it.",
+            "note_es": "Un órgano de iglesia toca los tormentosos floreos iniciales y los acordes atronadores de la tocata, y se detiene justo antes de que empiece la fuga. La pieza se volvió el sonido de las películas de terror y de Halloween, aunque los expertos aún discuten si de verdad la escribió Bach.",
+            "rights": "credit",
+            "credit": "Norbert Schenk, CC BY 4.0",
+            "license_url": "https://creativecommons.org/licenses/by/4.0/",
+            "place": "Evangelische Kirche, Solms-Albshausen, Germany"
+          },
+          {
+            "id": "b3",
+            "title": "Mars, the Bringer of War",
+            "who": "Gustav Holst, played by the U.S. Air Force Band",
+            "date": "1998",
+            "dur": 177.3,
+            "src": "/audio/music/b3.mp3",
+            "note": "A relentless, lopsided beat in five builds under brass fanfares into a march of mechanical menace, written on the eve of the First World War. Film composers have been borrowing from it ever since, all the way to Star Wars.",
+            "note_es": "Un ritmo implacable y cojo, en cinco tiempos, crece bajo fanfarrias de metales hasta volverse una marcha de amenaza mecánica, escrita en vísperas de la Primera Guerra Mundial. Los compositores de cine la han tomado prestada desde entonces, hasta llegar a Star Wars.",
+            "rights": "pd"
+          }
+        ]
+      }
+    }
+  }
+]

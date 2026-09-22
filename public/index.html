@@ -2,43 +2,66 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="color-scheme" content="dark">
-  <meta name="description" content="A cassette player for a handful of recordings worth keeping.">
+  <meta name="theme-color" content="#17120f">
+  <meta name="description" content="A cassette deck and a shelf of tapes: voices, launches, whales and first recordings.">
   <title>caset</title>
+  <link rel="canonical" href="https://caset.cl/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="caset">
+  <meta property="og:title" content="caset">
+  <meta property="og:description" content="A cassette deck and a shelf of tapes: voices, launches, whales and first recordings.">
+  <meta property="og:url" content="https://caset.cl/">
+  <meta name="twitter:card" content="summary">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/style.css">
+  <link rel="modulepreload" href="/vendor/three.module.min.js">
+  <link rel="modulepreload" href="/vendor/three.core.min.js">
 </head>
 <body>
   <canvas id="stage" aria-hidden="true"></canvas>
+  <noscript><p class="noscript">caset is a cassette deck that runs in the browser: it needs JavaScript to play its tapes.</p></noscript>
 
-  <header class="brand">
-    <a href="/" aria-label="caset home">caset</a>
-    <span class="stripes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
-  </header>
+  <div class="app">
+    <header class="brand">
+      <h1><a href="/">caset</a></h1>
+      <span class="stripes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+    </header>
 
-  <aside class="side" aria-label="Side A">
-    <h2 class="side-title">Side A</h2>
-    <ol class="tracks" id="tracks"></ol>
-    <p class="side-empty" id="side-empty" hidden>No tape loaded.</p>
-  </aside>
+    <main class="deck" aria-label="Cassette deck">
+      <div class="slot" id="slot">
+        <div class="keys" id="keys" role="group" aria-label="Transport keys">
+          <button type="button" class="key" data-action="rewind" aria-pressed="false"><span class="key-ico" aria-hidden="true">◀◀</span><span class="key-lbl">rewind</span></button>
+          <button type="button" class="key" data-action="play" aria-pressed="false"><span class="key-ico" aria-hidden="true">▶</span><span class="key-lbl">play</span></button>
+          <button type="button" class="key" data-action="forward" aria-pressed="false"><span class="key-ico" aria-hidden="true">▶▶</span><span class="key-lbl">forward</span></button>
+          <button type="button" class="key" data-action="stop"><span class="key-ico" aria-hidden="true">■</span><span class="key-lbl">stop</span></button>
+          <button type="button" class="key" data-action="flip"><span class="key-ico" aria-hidden="true">⇅</span><span class="key-lbl">side B</span></button>
+          <button type="button" class="key" data-action="eject"><span class="key-ico" aria-hidden="true">⏏</span><span class="key-lbl">eject</span></button>
+        </div>
+      </div>
+      <p class="sr" id="status" aria-live="polite"></p>
+    </main>
 
-  <section class="deck" aria-label="Transport">
-    <output id="counter" class="counter" aria-live="off" aria-label="Tape counter">0000</output>
-    <div class="keys" role="group" aria-label="Transport keys">
-      <button class="key" data-action="rewind" type="button" aria-label="Rewind"><span aria-hidden="true">◀◀</span></button>
-      <button class="key key-play" data-action="play" type="button" aria-pressed="false" aria-label="Play"><span aria-hidden="true">▶</span></button>
-      <button class="key" data-action="stop" type="button" aria-label="Stop"><span aria-hidden="true">■</span></button>
-      <button class="key" data-action="forward" type="button" aria-label="Fast forward"><span aria-hidden="true">▶▶</span></button>
-    </div>
-    <p class="now" id="now">&nbsp;</p>
-  </section>
+    <section class="shelf" aria-labelledby="shelf-title">
+      <h2 class="sr" id="shelf-title">Tapes</h2>
+      <ul class="rail" id="rail"></ul>
+    </section>
 
-  <footer class="colophon">
-    <a href="https://lucaspose.cl" rel="me">lucaspose.cl</a>
-  </footer>
+    <aside class="liner" id="liner" aria-label="Liner notes">
+      <div class="liner-body" id="liner-body"></div>
+      <div class="lang" role="group" aria-label="Notes language">
+        <button type="button" data-lang="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang="es" aria-pressed="false">ES</button>
+      </div>
+    </aside>
 
-  <audio id="player" preload="metadata"></audio>
+    <footer class="foot">
+      <a href="https://lucaspose.cl" rel="me">lucaspose.cl</a>
+    </footer>
+  </div>
+
+  <audio id="player" preload="auto"></audio>
   <script type="module" src="/app.js"></script>
 </body>
 </html>

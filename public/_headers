@@ -2,4 +2,14 @@
   Strict-Transport-Security: max-age=31536000; includeSubDomains
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
-  Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none'
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Content-Security-Policy: default-src 'self'; img-src 'self' data:; style-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
+
+/vendor/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=2592000
+
+/covers/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/audio/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800

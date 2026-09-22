@@ -1,555 +1,776 @@
-import * as THREE from "./vendor/three.module.js";
-import { RoundedBoxGeometry } from "./vendor/RoundedBoxGeometry.js";
+import { createDeck } from "./deck3d.js";
+import { createSound } from "./sound.js";
 
-// ---------- setup ----------
-const canvas = document.getElementById("stage");
-const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const motionQuery = matchMedia("(prefers-reduced-motion: reduce)");
+let reduceMotion = motionQuery.matches;
+const WIND = 16;                       // rewind / fast-forward speed, x real time
+const R_MIN = 1.08, R_MAX = 2.28;      // reel pack radii, cm (for the wind whine)
 
-let renderer;
-try {
-  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "high-performance" });
-} catch {
-  canvas.remove();
-  const p = document.createElement("p");
-  p.className = "nogl";
-  p.textContent = "This player needs WebGL. Your browser has it turned off.";
-  document.body.prepend(p);
-  throw new Error("no webgl");
-}
-renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-renderer.outputColorSpace = THREE.SRGBColorSpace;
-renderer.toneMapping = THREE.NoToneMapping;
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFShadowMap;
+const $ = (s) => document.querySelector(s);
+const canvas = $("#stage");
+const slot = $("#slot");
+const rail = $("#rail");
+const liner = $("#liner");
+const linerBody = $("#liner-body");
+const statusEl = $("#status");
+const audio = $("#player");
+const keyButtons = new Map([...document.querySelectorAll(".key")].map((b) => [b.dataset.action, b]));
+const langButtons = [...document.querySelectorAll(".lang button")];
 
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 200);
-
-// ---------- palette ----------
-const C = {
-  body: 0x2b2521,
-  face: 0x3b332d,
-  rim: 0x4a403a,
-  ivory: 0xefe4cc,
-  ivoryDim: 0xbfae94,
-  black: 0x1c1613,
-  shell: 0x1e1a18,
-  tape: 0x8a6650,
-  hub: 0xe9dfca,
-  orange: 0xe2582b,
-  mustard: 0xe3b03a,
-  olive: 0x8a8b3b,
-  teal: 0x3d8d8c,
-  navy: 0x33506b,
-  glass: 0xcfd8d6,
+// ---------- words ----------
+const T = {
+  en: {
+    empty: "The deck is empty.",
+    pick: "Pick a tape from the shelf.",
+    hint: "Space plays and stops, the arrow keys wind. Click a track to wind straight to it.",
+    side: "Side",
+    other: "On the other side",
+    noNote: "No notes for this one yet.",
+    missing: "Missing audio file",
+    silent: (d) => `The tape runs silent for ${d}.`,
+    trackOf: (i, n) => `track ${i} of ${n}`,
+    failed: "The tapes could not be loaded. Try reloading the page.",
+    credit: "Credit",
+    license: "license",
+    keys: { rewind: "rewind", play: "play", forward: "forward", stop: "stop", eject: "eject" },
+    sideKey: (s) => `side ${s}`,
+    flipTo: (s) => `Flip to side ${s}`,
+    status: { play: "Playing", stop: "Stopped", rewind: "Rewinding", forward: "Fast forward", seek: "Winding", end: "End of side", eject: "Deck empty", load: (n, s) => `${n}, side ${s} loaded`, flip: (s) => `Side ${s}` },
+  },
+  es: {
+    empty: "La casetera está vacía.",
+    pick: "Elige una cinta del estante.",
+    hint: "Espacio reproduce y detiene, las flechas rebobinan y adelantan. Toca una pista para ir directo a ella.",
+    side: "Lado",
+    other: "Al otro lado",
+    noNote: "Todavía no hay notas para esta.",
+    missing: "Falta el archivo de audio",
+    silent: (d) => `La cinta corre en silencio durante ${d}.`,
+    trackOf: (i, n) => `pista ${i} de ${n}`,
+    failed: "No se pudieron cargar las cintas. Prueba recargando la página.",
+    credit: "Créditos",
+    license: "licencia",
+    keys: { rewind: "rebobinar", play: "reproducir", forward: "adelantar", stop: "detener", eject: "expulsar" },
+    sideKey: (s) => `lado ${s}`,
+    flipTo: (s) => `Dar vuelta al lado ${s}`,
+    status: { play: "Reproduciendo", stop: "Detenido", rewind: "Rebobinando", forward: "Adelantando", seek: "Buscando", end: "Fin del lado", eject: "Casetera vacía", load: (n, s) => `${n}, lado ${s} cargado`, flip: (s) => `Lado ${s}` },
+  },
 };
-const STRIPES = ["#e2582b", "#e3b03a", "#8a8b3b", "#3d8d8c", "#33506b"];
+let lang = "en";
+try {
+  const saved = localStorage.getItem("caset-lang");
+  if (saved === "en" || saved === "es") lang = saved;
+} catch { /* storage blocked: stay in English */ }
 
-const mat = (color, extra = {}) =>
-  new THREE.MeshStandardMaterial({ color, roughness: 0.6, metalness: 0.05, ...extra });
+// ---------- state ----------
+let tapes = [];
+const byId = new Map();
+const memory = new Map();              // id -> { A: seconds, B: seconds, side }
+const missing = new Set();
+let cur = null;                        // cassette in the deck
+let side = "A";
+let tracks = [], offsets = [], total = 0;
+let pos = 0;                           // seconds from the start of the side
+let mode = "stop";                     // stop | play | rewind | forward | seek
+let seekTarget = 0, seekSpeed = WIND;
+let busy = false;                      // a mechanism animation is running
+let queued = null;
+let curIndex = -1;
+let announcedTrack = -1;
+let lastSpeed = 0;
 
-// ---------- lights ----------
-scene.add(new THREE.HemisphereLight(0xfff1dc, 0x2a1f18, 1.0));
-const key = new THREE.DirectionalLight(0xffe9cc, 2.2);
-key.position.set(3, 6, 5);
-key.castShadow = true;
-key.shadow.mapSize.set(2048, 2048);
-key.shadow.radius = 5;
-Object.assign(key.shadow.camera, { left: -4, right: 4, top: 4, bottom: -4, near: 1, far: 20 });
-scene.add(key);
-const rim = new THREE.DirectionalLight(0x8fb6c8, 1.2);
-rim.position.set(-4, 3, -4);
-scene.add(rim);
-const warm = new THREE.PointLight(0xe2582b, 6, 8, 2);
-warm.position.set(2.5, 1.5, 2.5);
-scene.add(warm);
-
-// ---------- ground ----------
-const ground = new THREE.Mesh(
-  new THREE.PlaneGeometry(30, 30),
-  new THREE.ShadowMaterial({ opacity: 0.45, color: 0x000000 })
-);
-ground.rotation.x = -Math.PI / 2;
-ground.position.y = -0.6;
-ground.receiveShadow = true;
-scene.add(ground);
-
-// ---------- device ----------
-const device = new THREE.Group();
-scene.add(device);
-const BASE_TILT = 0.62; // propped up toward the viewer
-
-function add(mesh, parent = device, { shadow = true } = {}) {
-  mesh.castShadow = shadow;
-  mesh.receiveShadow = shadow;
-  parent.add(mesh);
-  return mesh;
+const sound = createSound();
+let deck = createDeck({
+  canvas, slot, reduceMotion,
+  onEvent(kind) {
+    if (kind === "lid") sound.clunk("lid");
+    else if (kind === "lid-shut") sound.clunk("shut");
+    else if (kind === "drop") sound.clunk("drop");
+    else if (kind === "slide" || kind === "turn") sound.clunk("slide");
+    else if (kind === "contextlost") glLost();
+  },
+});
+if (!deck) {
+  canvas.remove();
+  document.body.classList.add("nogl");
+} else {
+  document.body.classList.add("gl");
 }
-
-const TOP = 0.275;
-add(new THREE.Mesh(new RoundedBoxGeometry(3.6, 0.55, 2.3, 6, 0.12), mat(C.body, { roughness: 0.7 })));
-// faceplate
-const plate = add(new THREE.Mesh(new RoundedBoxGeometry(3.4, 0.05, 2.1, 4, 0.05), mat(C.face, { roughness: 0.5, metalness: 0.25 })));
-plate.position.y = TOP;
-
-// stripe band along the right side (texture)
-function stripeTexture() {
-  const w = 410, h = 1024;
-  const cv = document.createElement("canvas");
-  cv.width = w; cv.height = h;
-  const g = cv.getContext("2d");
-  const bar = 30, gap = 8, total = STRIPES.length * bar + (STRIPES.length - 1) * gap;
-  const x0 = 300 - total / 2;
-  g.lineCap = "round";
-  STRIPES.forEach((c, i) => {
-    const x = x0 + i * (bar + gap) + bar / 2;
-    g.strokeStyle = c; g.lineWidth = bar;
-    g.beginPath();
-    g.moveTo(x, -20);
-    g.lineTo(x, h * 0.62 - (STRIPES.length - 1 - i) * (bar + gap));
-    g.lineTo(x - 420, h * 0.62 + 420 - (STRIPES.length - 1 - i) * (bar + gap));
-    g.stroke();
-  });
-  const t = new THREE.CanvasTexture(cv);
-  t.colorSpace = THREE.SRGBColorSpace;
-  t.anisotropy = renderer.capabilities.getMaxAnisotropy();
-  return t;
+// The GPU dropped the WebGL context (memory pressure, driver reset): fall back to the
+// plain HTML keys for the rest of the visit rather than leave invisible buttons over a blank canvas.
+function glLost() {
+  deck = null;
+  canvas.hidden = true;
+  document.body.classList.replace("gl", "nogl");
+  for (const b of keyButtons.values()) for (const k of ["left", "top", "width", "height"]) b.style.removeProperty(k);
 }
-const band = add(new THREE.Mesh(new THREE.PlaneGeometry(0.8, 1.9), mat(0xffffff, { map: stripeTexture(), transparent: true, roughness: 0.5 })), device, { shadow: false });
-band.rotation.x = -Math.PI / 2;
-band.rotation.z = Math.PI; // stripes run from the back edge toward the front, bending at the front
-band.position.set(1.38, TOP + 0.027, 0);
-
-// cassette door frame + pit
-const door = add(new THREE.Mesh(new RoundedBoxGeometry(2.5, 0.12, 1.28, 4, 0.05), mat(C.rim, { roughness: 0.45, metalness: 0.3 })));
-door.position.set(-0.35, TOP + 0.02, -0.28);
-const pit = add(new THREE.Mesh(new RoundedBoxGeometry(2.28, 0.1, 1.06, 3, 0.04), mat(C.black, { roughness: 0.85 })));
-pit.position.set(-0.35, TOP + 0.02, -0.28);
-
-// cassette face (canvas texture; re-rendered per track)
-function labelTexture(title, sub) {
-  const w = 1024, h = 480;
-  const cv = document.createElement("canvas");
-  cv.width = w; cv.height = h;
-  const g = cv.getContext("2d");
-  g.fillStyle = "#1e1a18";
-  g.fillRect(0, 0, w, h);
-  g.fillStyle = "#efe4cc";
-  g.beginPath(); g.roundRect(60, 40, w - 120, 300, 22); g.fill();
-  STRIPES.forEach((c, i) => { g.fillStyle = c; g.fillRect(60, 48 + i * 14, w - 120, 10); });
-  g.fillStyle = "#17120f";
-  g.font = "700 40px Futura, 'Century Gothic', 'Avenir Next', system-ui, sans-serif";
-  const lines = wrapText(g, title, w - 220, 2);
-  lines.forEach((ln, i) => g.fillText(ln, 100, 165 + i * 44));
-  g.font = "500 26px Futura, 'Century Gothic', 'Avenir Next', system-ui, sans-serif";
-  g.fillStyle = "#6b5f52";
-  g.fillText(sub, 100, 165 + lines.length * 44 + 4);
-  g.globalCompositeOperation = "destination-out";
-  g.beginPath(); g.roundRect(200, 245, w - 400, 160, 80); g.fill();
-  g.globalCompositeOperation = "source-over";
-  g.fillStyle = "#0f0b09";
-  for (const x of [200, 300, w - 340, w - 240]) { g.beginPath(); g.roundRect(x, 400, 28, 50, 8); g.fill(); }
-  const t = new THREE.CanvasTexture(cv);
-  t.colorSpace = THREE.SRGBColorSpace;
-  t.anisotropy = renderer.capabilities.getMaxAnisotropy();
-  return t;
-}
-function wrapText(g, text, max, maxLines) {
-  const words = text.split(" ");
-  const lines = [];
-  let cur = "";
-  for (const wd of words) {
-    const next = cur ? `${cur} ${wd}` : wd;
-    if (g.measureText(next).width <= max || !cur) cur = next;
-    else { lines.push(cur); cur = wd; }
-  }
-  if (cur) lines.push(cur);
-  if (lines.length > maxLines) {
-    let last = lines.slice(maxLines - 1).join(" ");
-    while (last.length > 3 && g.measureText(last + "…").width > max) last = last.slice(0, -1);
-    return [...lines.slice(0, maxLines - 1), last.trimEnd() + "…"];
-  }
-  return lines;
-}
-const faceMat = mat(0xffffff, { map: labelTexture("caset", "side A"), roughness: 0.75, transparent: true, alphaTest: 0.5 });
-const face = add(new THREE.Mesh(new THREE.PlaneGeometry(2.16, 1.0), faceMat), device, { shadow: false });
-face.rotation.x = -Math.PI / 2;
-face.position.set(-0.35, TOP + 0.135, -0.28);
-function setLabel(title, sub) {
-  const old = faceMat.map;
-  faceMat.map = labelTexture(title, sub);
-  faceMat.needsUpdate = true;
-  old?.dispose();
-}
-
-// reels
-const R_MAX = 0.34, R_MIN = 0.16;
-function makeReel(x) {
-  const g = new THREE.Group();
-  g.position.set(x, TOP + 0.075, -0.28 + 0.18);
-  const spool = new THREE.Mesh(new THREE.CylinderGeometry(1, 1, 0.03, 48), mat(C.tape, { roughness: 0.85 }));
-  spool.position.y = 0.01;
-  g.add(spool);
-  const hub = new THREE.Group();
-  hub.position.y = 0.08;
-  hub.add(new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.16, 0.05, 32), mat(C.hub)));
-  hub.add(new THREE.Mesh(new THREE.CylinderGeometry(0.085, 0.085, 0.06, 24), mat(C.black)));
-  for (let i = 0; i < 6; i++) {
-    const tooth = new THREE.Mesh(new THREE.BoxGeometry(0.045, 0.06, 0.06), mat(C.black));
-    const a = (i / 6) * Math.PI * 2;
-    tooth.position.set(Math.cos(a) * 0.145, 0.005, Math.sin(a) * 0.145);
-    tooth.rotation.y = -a;
-    hub.add(tooth);
-  }
-  g.add(hub);
-  device.add(g);
-  return { group: g, spool, hub };
-}
-const reelL = makeReel(-0.35 - 0.38);
-const reelR = makeReel(-0.35 + 0.38);
-
-// door glass
-const glass = new THREE.Mesh(
-  new RoundedBoxGeometry(2.36, 0.04, 1.14, 3, 0.02),
-  new THREE.MeshPhysicalMaterial({ color: C.glass, roughness: 0.08, transparent: true, opacity: 0.12, clearcoat: 1 })
-);
-glass.position.set(-0.35, TOP + 0.2, -0.28);
-device.add(glass);
-
-// screws
-for (const [x, z] of [[-1.53, -0.86], [0.83, -0.86], [-1.53, 0.3], [0.83, 0.3]]) {
-  const s = add(new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.02, 16), mat(0x8d8378, { metalness: 0.6, roughness: 0.4 })), device, { shadow: false });
-  s.position.set(x, TOP + 0.085, z);
-}
-
-// keys (3D)
-const keyDefs = [
-  { action: "rewind", color: C.ivory },
-  { action: "play", color: C.orange },
-  { action: "stop", color: C.ivory },
-  { action: "forward", color: C.ivory },
-];
-const KEY_UP = TOP + 0.08, KEY_DOWN = TOP + 0.02;
-const keys3d = keyDefs.map((d, i) => {
-  const m = add(new THREE.Mesh(new RoundedBoxGeometry(0.5, 0.2, 0.4, 4, 0.04), mat(d.color, { roughness: 0.4 })));
-  m.position.set(-1.4 + i * 0.58, KEY_UP, 0.72);
-  m.userData.action = d.action;
-  return m;
+motionQuery.addEventListener?.("change", (e) => {
+  reduceMotion = e.matches;
+  deck?.setReduceMotion(reduceMotion);
 });
 
-// LED
-const led = add(new THREE.Mesh(new THREE.SphereGeometry(0.045, 16, 16), mat(0x5a2a1a, { emissive: 0x000000 })), device, { shadow: false });
-led.position.set(1.05, TOP + 0.02, 0.72);
-
-// volume wheel
-const wheel = add(new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.24, 0.1, 40), mat(C.rim, { roughness: 0.35, metalness: 0.3 })));
-wheel.rotation.z = Math.PI / 2;
-wheel.position.set(1.8, 0.02, 0.62);
-for (let i = 0; i < 24; i++) {
-  const rib = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.12, 0.03), mat(C.body));
-  const a = (i / 24) * Math.PI * 2;
-  rib.position.set(Math.cos(a) * 0.235, 0, Math.sin(a) * 0.235);
-  rib.rotation.y = -a;
-  wheel.add(rib);
-}
-
-// headphone jack
-const jack = add(new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.1, 20), mat(C.black)), device, { shadow: false });
-jack.rotation.x = Math.PI / 2;
-jack.position.set(-1.5, 0.02, 1.13);
-
-device.rotation.x = BASE_TILT;
-
-// ---------- stars ----------
-const STAR_COUNT = 2600;
-const stars = (() => {
-  const pos = new Float32Array(STAR_COUNT * 3);
-  const col = new Float32Array(STAR_COUNT * 3);
-  const size = new Float32Array(STAR_COUNT);
-  const phase = new Float32Array(STAR_COUNT);
-  const tints = [new THREE.Color(0xffffff), new THREE.Color(0xfff1d6), new THREE.Color(0xd8e6ff), new THREE.Color(0xe3b03a)];
-  for (let i = 0; i < STAR_COUNT; i++) {
-    // uniform on a sphere, camera-facing hemisphere weighted
-    const u = Math.random() * 2 - 1, th = Math.random() * Math.PI * 2;
-    const r = Math.sqrt(1 - u * u), R = 60;
-    pos[i * 3] = R * r * Math.cos(th);
-    pos[i * 3 + 1] = R * u;
-    pos[i * 3 + 2] = R * r * Math.sin(th) - 20;
-    const c = tints[Math.random() < 0.9 ? (Math.random() * 3) | 0 : 3];
-    col.set([c.r, c.g, c.b], i * 3);
-    const big = Math.random();
-    size[i] = big < 0.04 ? 3.6 + Math.random() * 1.8 : big < 0.3 ? 2.0 + Math.random() : 1.1 + Math.random() * 0.7;
-    phase[i] = Math.random() * Math.PI * 2;
+// ---------- helpers ----------
+function h(tag, attrs = {}, ...kids) {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (v == null || v === false) continue;
+    if (k === "class") el.className = v;
+    else if (k === "text") el.textContent = v;
+    else el.setAttribute(k, v === true ? "" : v);
   }
-  const geo = new THREE.BufferGeometry();
-  geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
-  geo.setAttribute("color", new THREE.BufferAttribute(col, 3));
-  geo.setAttribute("aSize", new THREE.BufferAttribute(size, 1));
-  geo.setAttribute("aPhase", new THREE.BufferAttribute(phase, 1));
-  const m = new THREE.ShaderMaterial({
-    uniforms: { uTime: { value: 0 }, uPR: { value: renderer.getPixelRatio() } },
-    vertexShader: `
-      attribute float aSize; attribute float aPhase;
-      uniform float uTime, uPR;
-      varying vec3 vColor; varying float vA;
-      void main() {
-        vColor = color;
-        float tw = 0.65 + 0.35 * sin(uTime * (0.6 + fract(aPhase) * 1.4) + aPhase);
-        vA = tw;
-        vec4 mv = modelViewMatrix * vec4(position, 1.0);
-        gl_PointSize = aSize * uPR;
-        gl_Position = projectionMatrix * mv;
-      }`,
-    fragmentShader: `
-      varying vec3 vColor; varying float vA;
-      void main() {
-        vec2 d = gl_PointCoord - 0.5;
-        float r = length(d);
-        float a = smoothstep(0.5, 0.12, r) * vA;
-        gl_FragColor = vec4(vColor, a);
-      }`,
-    vertexColors: true, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
-  });
-  const pts = new THREE.Points(geo, m);
-  scene.add(pts);
-  return pts;
-})();
-
-// ---------- tape + tracks ----------
-const WIND = 14;
-const audio = document.getElementById("player");
-const counterEl = document.getElementById("counter");
-const nowEl = document.getElementById("now");
-const listEl = document.getElementById("tracks");
-const htmlKeys = [...document.querySelectorAll(".key")];
-
-let tracks = [];          // { slug, title, year, duration, src }
-let offsets = [];         // cumulative start seconds
-let total = 240;          // seconds of tape on this side (fallback when no audio)
-let pos = 0;              // seconds from the start of the side
-let mode = "idle";        // idle | play | rewind | forward
-let angL = 0, angR = 0;
-let keyTargets = keys3d.map(() => KEY_UP);
-let current = -1;
-
-const fmt = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
-
+  for (const kid of kids) if (kid != null) el.append(kid);
+  return el;
+}
+const fmt = (s) => {
+  s = Math.max(0, Math.floor(s));
+  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+};
+function announce(text) { statusEl.textContent = text; }
+function mem(id) {
+  if (!memory.has(id)) memory.set(id, { A: 0, B: 0, side: "A" });
+  return memory.get(id);
+}
+function savePos() {
+  if (!cur) return;
+  const m = mem(cur.id);
+  m[side] = pos;
+  m.side = side;
+}
+function bindSide() {
+  tracks = cur ? cur.sides[side].tracks : [];
+  offsets = [];
+  let acc = 0;
+  for (const t of tracks) { offsets.push(acc); acc += Math.max(1, Number(t.dur) || 0); }
+  total = acc;
+  pos = cur ? Math.min(mem(cur.id)[side], total) : 0;
+  curIndex = -1;
+  audioTrack = -1;
+}
 function trackAt(p) {
   let i = 0;
-  while (i < tracks.length - 1 && p >= offsets[i + 1]) i++;
+  while (i < tracks.length - 1 && p >= offsets[i + 1] - 1e-6) i++;
   return i;
 }
+function trackEnd(i) { return i + 1 < offsets.length ? offsets[i + 1] : total; }
 
-function renderList() {
-  listEl.replaceChildren(...tracks.map((t, i) => {
-    const li = document.createElement("li");
-    const b = document.createElement("button");
-    b.className = "track"; b.type = "button"; b.dataset.index = i;
-    b.innerHTML = `<span class="t">${t.title}<span class="y">${t.year}</span></span><span class="d">${fmt(t.duration)}</span>`;
-    b.addEventListener("click", () => { click(); pos = offsets[i]; setCurrent(i); setMode("play"); });
-    li.append(b);
-    return li;
-  }));
-}
+// ---------- audio: one element, slaved to the tape ----------
+let audioTrack = -1, audioEnded = false, waitT = 0, resyncT = 0, pendingSeek = null;
+const absUrl = (src) => new URL(src, location.href).href;
 
-function setCurrent(i) {
-  if (i === current) return;
-  current = i;
-  const t = tracks[i];
-  for (const b of listEl.querySelectorAll(".track")) {
-    if (Number(b.dataset.index) === i) b.setAttribute("aria-current", "true"); else b.removeAttribute("aria-current");
+audio.addEventListener("loadedmetadata", () => {
+  if (pendingSeek != null) {
+    try { audio.currentTime = pendingSeek; } catch { /* ignore */ }
+    pendingSeek = null;
   }
-  if (t) {
-    nowEl.textContent = `${t.title} · ${t.year}`;
-    setLabel(t.title, `${t.year} — side A, track ${String(i + 1).padStart(2, "0")}`);
-    if (audio.src !== t.src) audio.src = t.src;
-  }
-}
-
-async function loadTracks() {
-  try {
-    const r = await fetch("/audio/tracks.json", { cache: "no-cache" });
-    if (!r.ok) throw new Error(r.status);
-    tracks = (await r.json()).map((t) => ({ ...t, src: new URL(`/audio/${t.slug}.mp3`, location.href).href }));
-  } catch {
-    tracks = [];
-  }
-  offsets = tracks.reduce((a, t, i) => (a.push(i ? a[i - 1] + tracks[i - 1].duration : 0), a), []);
-  total = tracks.reduce((s, t) => s + t.duration, 0) || 240;
-  document.getElementById("side-empty").hidden = tracks.length > 0;
-  renderList();
-  if (tracks.length) setCurrent(0);
-}
-
-// keep audio element in sync with tape position
-function syncAudio() {
-  if (!tracks.length) return;
-  const i = trackAt(pos);
-  setCurrent(i);
-  const local = pos - offsets[i];
-  const apply = () => { if (Math.abs(audio.currentTime - local) > 0.35) audio.currentTime = local; };
-  if (audio.readyState >= 1) apply(); else audio.addEventListener("loadedmetadata", apply, { once: true });
-}
-
-audio.addEventListener("ended", () => {
-  if (current < tracks.length - 1) { pos = offsets[current + 1]; syncAudio(); audio.play(); }
-  else { pos = total; setMode("idle"); }
+});
+audio.addEventListener("ended", () => { audioEnded = true; });
+audio.addEventListener("error", () => {
+  const t = tracks[audioTrack];
+  if (t && audio.src === absUrl(t.src)) markMissing(t.src);
 });
 
-function setMode(next) {
-  if ((next === "play" || next === "forward") && pos >= total) next = "idle";
-  if (next === "rewind" && pos <= 0) next = "idle";
-  mode = next;
-  for (const b of htmlKeys) {
-    const latched = b.dataset.action === mode;
-    b.classList.toggle("is-down", latched);
-    if (b.dataset.action === "play") b.setAttribute("aria-pressed", String(latched));
+function startTrackAudio(i) {
+  audioTrack = i;
+  audioEnded = false;
+  waitT = 0;
+  const t = tracks[i];
+  if (!t || missing.has(t.src)) { audio.pause(); return; }
+  const local = pos - offsets[i];
+  const url = absUrl(t.src);
+  if (audio.src !== url) {
+    pendingSeek = local;
+    audio.src = url;
+  } else if (audio.readyState >= 1) {
+    try { audio.currentTime = local; } catch { /* ignore */ }
+  } else pendingSeek = local;
+  const p = audio.play();
+  if (p) p.catch((err) => {
+    if (err.name === "NotAllowedError") { if (mode === "play") setMode("stop"); }
+    else if (err.name === "NotSupportedError") markMissing(t.src);
+  });
+}
+
+function markMissing(src) {
+  if (missing.has(src)) return;
+  missing.add(src);
+  if (tracks[curIndex]?.src === src) renderNow();
+}
+
+// Ask the worker which files exist, so a missing one runs silent without a 404.
+// If that endpoint is unavailable, the media element's own error does the job.
+const probed = new Set();
+const probing = new Set();
+const known = new Set();
+function probe(c) {
+  if (probed.has(c.id)) return;
+  probed.add(c.id);
+  probing.add(c.id);
+  const q = new URLSearchParams();
+  for (const s of ["A", "B"]) for (const t of c.sides[s].tracks) q.append("src", t.src);
+  fetch(`/audio-status?${q}`)
+    .then((r) => (r.ok ? r.json() : null))
+    .then((res) => {
+      if (!res || typeof res !== "object") return;
+      for (const [src, ok] of Object.entries(res)) {
+        known.add(src);
+        if (!ok) markMissing(src);
+      }
+    })
+    .catch(() => {})
+    .finally(() => probing.delete(c.id));
+}
+
+// ---------- transport ----------
+function latchedKey() {
+  if (mode === "seek") return seekTarget < pos ? "rewind" : "forward";
+  return mode === "stop" ? null : mode;
+}
+function setMode(m) {
+  mode = m;
+  const latched = latchedKey();
+  deck?.setLatched(latched);
+  for (const [a, b] of keyButtons) {
+    if (b.hasAttribute("aria-pressed")) b.setAttribute("aria-pressed", String(a === latched));
   }
-  keyTargets = keys3d.map((k) => (k.userData.action === mode ? KEY_DOWN : KEY_UP));
-  led.material.emissive.set(mode === "idle" ? 0x000000 : 0xff6a30);
-  led.material.emissiveIntensity = mode === "idle" ? 0 : 2;
-  if (mode === "play" && tracks.length) { syncAudio(); audio.play().catch(() => {}); }
+  if (m === "play") { audioTrack = -1; waitT = 0; }
   else audio.pause();
-  hiss(mode === "idle" ? 0 : mode === "play" ? 0.012 : 0.04);
+  sound.setHiss(m === "play");
+  if (m !== "rewind" && m !== "forward" && m !== "seek") sound.setWind(0, 0);
+  if (!cur) return;
+  const t = m === "play" && tracks[trackAt(pos)];
+  if (t) announcedTrack = trackAt(pos);
+  announce(t ? `${T[lang].status.play}: ${t.title}` : T[lang].status[m] || "");
+}
+
+function tap(action, kind = "key") {
+  deck?.tap(action);
+  sound.clunk(kind);
 }
 
 function press(action) {
-  click();
-  if (action === "stop") return setMode("idle");
-  setMode(mode === action ? "idle" : action);
+  sound.unlock();
+  if (busy) return;
+  switch (action) {
+    case "play":
+      if (!cur || mode === "play" || pos >= total - 0.05) return tap(action);
+      sound.clunk("latch");
+      return setMode("play");
+    case "rewind":
+      if (!cur || mode === "rewind" || pos <= 0.01) return tap(action);
+      sound.clunk("latch");
+      return setMode("rewind");
+    case "forward":
+      if (!cur || mode === "forward" || pos >= total - 0.01) return tap(action);
+      sound.clunk("latch");
+      return setMode("forward");
+    case "stop":
+      tap(action);
+      if (mode !== "stop") setMode("stop");
+      return;
+    case "flip": return flip();
+    case "eject": return eject();
+  }
 }
-for (const b of htmlKeys) b.addEventListener("click", () => press(b.dataset.action));
+
+function endOfSide(auto = true) {
+  pos = total;
+  setMode("stop");
+  if (auto) sound.clunk("key");
+  announce(T[lang].status.end);
+}
+
+function seekTo(i) {
+  sound.unlock();
+  if (!cur || busy || !tracks[i]) return;
+  const target = offsets[i];
+  if (Math.abs(target - pos) < 0.25) {
+    pos = target;
+    if (mode === "play") startTrackAudio(i);
+    else { sound.clunk("latch"); setMode("play"); }
+    return;
+  }
+  sound.clunk("latch");
+  seekTarget = target;
+  seekSpeed = Math.max(WIND, Math.abs(target - pos) / 2.2);
+  setMode("seek");
+}
+
+function transport(dt) {
+  let speed = 0;
+  if (cur && !busy) {
+    if (mode === "play") speed = tickPlay(dt);
+    else if (mode === "rewind") {
+      pos -= WIND * dt; speed = -WIND;
+      if (pos <= 0) { pos = 0; setMode("stop"); sound.clunk("key"); }
+    } else if (mode === "forward") {
+      pos += WIND * dt; speed = WIND;
+      if (pos >= total) endOfSide();
+    } else if (mode === "seek") {
+      const d = seekTarget - pos, step = seekSpeed * dt;
+      if (Math.abs(d) <= step) {
+        pos = seekTarget;
+        sound.clunk("latch");
+        setMode("play");
+      } else { pos += Math.sign(d) * step; speed = Math.sign(d) * seekSpeed; }
+    }
+  }
+  const frac = total > 0 ? pos / total : 0;
+  if (speed !== 0 && mode !== "play") {
+    const f = frac;
+    const take = speed > 0 ? Math.sqrt(R_MIN ** 2 + (R_MAX ** 2 - R_MIN ** 2) * f) : Math.sqrt(R_MAX ** 2 + (R_MIN ** 2 - R_MAX ** 2) * f);
+    sound.setWind(1, Math.min(15, (Math.abs(speed) * 4.76) / take));
+  } else if (lastSpeed !== 0 && mode !== "play") sound.setWind(0, 0);
+  lastSpeed = speed;
+  deck?.setTape(frac, speed, dt, pos);
+  if (cur) {
+    const i = trackAt(pos);
+    if (i !== curIndex) {
+      // a new track while playing is announced once (not while winding past tracks)
+      if (mode === "play" && curIndex !== -1 && i !== announcedTrack) {
+        announcedTrack = i;
+        announce(`${tracks[i].title}, ${T[lang].trackOf(i + 1, tracks.length)}`);
+      }
+      curIndex = i;
+      renderNow();
+      updateHash();
+    }
+    updateTime();
+  }
+}
+
+function tickPlay(dt) {
+  if (pos >= total - 1e-3) { endOfSide(); return 0; }
+  const i = trackAt(pos);
+  const t = tracks[i];
+  if (i !== audioTrack) {
+    // wait (briefly) for the file check so a missing file is never requested
+    if (probing.has(cur.id) && !known.has(t.src) && waitT < 2) { waitT += dt; return 0; }
+    startTrackAudio(i);
+  }
+  const end = trackEnd(i);
+  let moving = true;
+  if (missing.has(t.src) || audioEnded) pos += dt;
+  else if (!audio.paused && !audio.seeking && audio.readyState >= 3) {
+    waitT = 0;
+    const at = offsets[i] + audio.currentTime;
+    if (Math.abs(at - pos) < 0.75) pos = Math.max(pos, at);
+    else {
+      // the audio drifted from the tape (a seek that did not take): tape leads, audio follows
+      pos += dt;
+      resyncT += dt;
+      if (resyncT > 0.5) {
+        resyncT = 0;
+        try { audio.currentTime = pos - offsets[i]; } catch { /* not seekable yet */ }
+      }
+    }
+  } else {
+    // still buffering: hold the tape briefly, then run on regardless
+    waitT += dt;
+    if (waitT > 3) pos += dt; else moving = false;
+  }
+  if (pos >= end - 1e-6) {
+    pos = end;
+    if (i === tracks.length - 1) { endOfSide(); return 0; }
+    audio.pause();
+    audioTrack = -1;
+  }
+  return moving ? 1 : 0;
+}
+
+// ---------- mechanism ----------
+// key names follow the language, on the HTML buttons and on the 3D key tops
+function updateKeyLabels() {
+  const L = T[lang];
+  for (const [action, b] of keyButtons) {
+    if (action === "flip") continue;
+    b.querySelector(".key-lbl").textContent = L.keys[action];
+    deck?.setKeyLabel(action, L.keys[action]);
+  }
+  updateFlipLabel();
+}
+function updateFlipLabel() {
+  const to = cur && side === "B" ? "A" : "B";
+  const label = T[lang].sideKey(to);
+  const b = keyButtons.get("flip");
+  b.querySelector(".key-lbl").textContent = label;
+  b.setAttribute("aria-label", T[lang].flipTo(to));
+  deck?.setFlipLabel(label);
+}
+
+async function flip() {
+  if (!cur) return tap("flip");
+  tap("flip");
+  savePos();
+  if (mode !== "stop") setMode("stop");
+  busy = true;
+  const to = side === "A" ? "B" : "A";
+  const swap = () => {
+    side = to;
+    mem(cur.id).side = to;
+    bindSide();
+    renderLiner();
+    updateFlipLabel();
+  };
+  try {
+    if (deck) await deck.flip(to, swap); else swap();
+  } finally {
+    busy = false;
+  }
+  updateHash();
+  announce(T[lang].status.flip(side));
+  runQueued(); // a tape picked (or a link followed) while the cassette was turning
+}
+
+async function eject() {
+  queued = null; // eject means an empty deck: never let an older request load after it
+  if (!cur) return tap("eject");
+  tap("eject");
+  savePos();
+  if (mode !== "stop") setMode("stop");
+  busy = true;
+  try { if (deck) await deck.eject(); } finally { busy = false; }
+  cur = null;
+  bindSide();
+  renderShelfState();
+  renderLiner();
+  updateHash();
+  updateFlipLabel();
+  announce(T[lang].status.eject);
+  runQueued();
+}
+
+async function loadCassette(id, opts = {}) {
+  const c = byId.get(id);
+  if (!c) return;
+  if (busy) { queued = { id, ...opts }; return; }
+  const wantSide = opts.side || mem(id).side || "A";
+  if (cur && cur.id === id && opts.track == null && wantSide === side) return;
+  if (cur && cur.id === id) {
+    // same tape: just move to the requested side and track
+    if (wantSide !== side) { await flip(); }
+    if (busy || cur !== c) return; // something queued during the flip has taken over
+    if (opts.track != null) { pos = offsets[Math.min(opts.track, tracks.length - 1)] || 0; audioTrack = -1; }
+    return;
+  }
+  probe(c);
+  savePos();
+  if (mode !== "stop") setMode("stop");
+  busy = true;
+  const swap = () => {
+    cur = c;
+    side = wantSide;
+    const m = mem(c.id);
+    m.side = side;
+    if (opts.track != null) {
+      tracks = c.sides[side].tracks;
+      let acc = 0;
+      for (let k = 0; k < Math.min(opts.track, tracks.length - 1); k++) acc += Math.max(1, Number(tracks[k].dur) || 0);
+      m[side] = acc;
+    }
+    bindSide();
+    renderShelfState();
+    renderLiner();
+    updateFlipLabel();
+  };
+  try {
+    if (deck && !reduceMotion) await deck.load(c, wantSide, swap);
+    else { swap(); deck?.setCassette(c, wantSide); }
+  } finally {
+    busy = false;
+  }
+  updateHash();
+  announce(T[lang].status.load(c.name, side));
+  runQueued();
+}
+function runQueued() {
+  if (!queued) return;
+  const q = queued;
+  queued = null;
+  loadCassette(q.id, q);
+}
+
+// ---------- URL ----------
+let lastHash = null;
+function updateHash() {
+  let hash = "";
+  if (cur) hash = `#${cur.id}/${side.toLowerCase()}/${Math.max(0, curIndex) + 1}`;
+  const t = cur && tracks[Math.max(0, curIndex)];
+  const title = t ? `${t.title} · ${cur.name} · caset` : "caset";
+  if (document.title !== title) document.title = title;
+  if (hash === lastHash) return;
+  lastHash = hash;
+  try { history.replaceState(null, "", hash || location.pathname + location.search); } catch { /* ignore */ }
+}
+// no decoding needed: the pattern has nothing that could be percent-encoded
+function parseHash() {
+  const m = /^#([a-z0-9-]+)\/([ab])\/(\d+)$/i.exec(location.hash);
+  if (!m) return null;
+  const id = m[1].toLowerCase();
+  const c = byId.get(id);
+  if (!c) return null;
+  const s = m[2].toUpperCase();
+  const n = Math.max(1, Math.min(c.sides[s].tracks.length, parseInt(m[3], 10)));
+  return { id, side: s, track: n - 1 };
+}
+// put the address bar back in step with the deck (after a link it could not use)
+function canonicalHash() {
+  lastHash = null;
+  updateHash();
+}
+addEventListener("hashchange", () => {
+  const want = parseHash();
+  if (!want) return canonicalHash();
+  if (cur && cur.id === want.id && side === want.side && curIndex === want.track) return canonicalHash();
+  if (mode !== "stop") setMode("stop");
+  loadCassette(want.id, want);
+});
+
+// ---------- shelf ----------
+function renderShelf() {
+  rail.replaceChildren(...tapes.map((c) => {
+    const img = new Image();
+    img.alt = "";
+    img.decoding = "async";
+    img.draggable = false;
+    const b = h("button", {
+      type: "button", class: "case", "data-id": c.id, "aria-pressed": "false",
+      "aria-label": `${c.name}: ${sideLabel(c.sides.A)} / ${sideLabel(c.sides.B)}`,
+    },
+      h("span", { class: "case-body", "aria-hidden": "true" },
+        h("span", { class: "jcard" },
+          h("span", { class: "jc-art" }, img),
+          h("span", { class: "fallback" },
+            h("span", { class: "fb-name", text: c.name }),
+            h("span", { class: "fb-stripes" }, h("i"), h("i"), h("i"), h("i"), h("i")))),
+        h("span", { class: "case-shine" })),
+      h("span", { class: "case-name", "aria-hidden": "true", text: c.name }));
+    b.style.setProperty("--tape", c.color);
+    img.addEventListener("error", () => b.classList.add("nocover"));
+    img.addEventListener("load", () => b.classList.add("hascover"));
+    img.src = c.cover;
+    b.addEventListener("click", (e) => {
+      sound.unlock();
+      if (e.detail > 0) b.blur();
+      loadCassette(c.id);
+    });
+    return h("li", {}, b);
+  }));
+}
+function renderShelfState() {
+  for (const b of rail.querySelectorAll(".case")) {
+    const on = !!cur && b.dataset.id === cur.id;
+    b.setAttribute("aria-pressed", String(on));
+    const c = byId.get(b.dataset.id);
+    if (c) b.setAttribute("aria-label", `${c.name}: ${sideLabel(c.sides.A)} / ${sideLabel(c.sides.B)}`);
+  }
+}
+
+// ---------- liner card ----------
+const sideLabel = (sd) => (lang === "es" && sd.label_es) || sd.label;
+let timeEl = null, lastTimeText = "", lastTimeSec = -1;
+// whichever ink reads better on the tape colour (WCAG contrast), for the liner spine
+function luminance(hex) {
+  const n = parseInt(hex.slice(1), 16);
+  const lin = (v) => { v /= 255; return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; };
+  return 0.2126 * lin((n >> 16) & 255) + 0.7152 * lin((n >> 8) & 255) + 0.0722 * lin(n & 255);
+}
+function inkFor(hex) {
+  const DARK = "#0b0806", LIGHT = "#fbf6ea";
+  const l = luminance(hex);
+  const ratio = (a, b) => (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+  return ratio(l, luminance(DARK)) >= ratio(l, luminance(LIGHT)) ? DARK : LIGHT;
+}
+function renderLiner() {
+  const L = T[lang];
+  document.documentElement.lang = lang;
+  liner.lang = lang;
+  for (const b of langButtons) b.setAttribute("aria-pressed", String(b.dataset.lang === lang));
+  timeEl = null;
+  lastTimeText = "";
+  if (!tapes.length) {
+    linerBody.replaceChildren(h("div", { class: "empty" }, h("p", { class: "empty-title", text: L.failed })));
+    return;
+  }
+  if (!cur) {
+    liner.style.removeProperty("--tape");
+    linerBody.replaceChildren(h("div", { class: "empty" },
+      h("p", { class: "empty-title", text: L.empty }),
+      h("p", { text: L.pick }),
+      h("p", { class: "hint", text: L.hint })));
+    return;
+  }
+  const sd = cur.sides[side];
+  const other = cur.sides[side === "A" ? "B" : "A"];
+  liner.style.setProperty("--tape", cur.color);
+  liner.style.setProperty("--tape-ink", inkFor(cur.color));
+  const list = h("ol", { class: "tracks" }, ...tracks.map((t, i) => {
+    const b = h("button", { type: "button", class: "track", "data-i": String(i) },
+      h("span", { class: "tn", text: String(i + 1) }),
+      h("span", { class: "tt" },
+        h("span", { class: "tt-title", text: t.title }),
+        h("span", { class: "tt-who", text: [t.who, t.date].filter(Boolean).join(", ") })),
+      h("span", { class: "td", text: fmt(t.dur) }));
+    b.addEventListener("click", (e) => { if (e.detail > 0) b.blur(); seekTo(i); });
+    return h("li", {}, b);
+  }));
+  linerBody.replaceChildren(
+    h("header", { class: "spine" },
+      h("span", { class: "spine-side", text: side }),
+      h("span", { class: "spine-text" },
+        h("span", { class: "spine-name", text: cur.name }),
+        h("span", { class: "spine-label", text: `${L.side} ${side} · ${sideLabel(sd)}` }))),
+    list,
+    h("p", { class: "flipside", text: `${L.other}: ${sideLabel(other)}` }),
+    // not a live region: the clock in here changes every second; #status announces instead
+    h("section", { class: "now", id: "now" }));
+  renderNow();
+}
+function renderNow() {
+  const now = $("#now");
+  if (!now || !cur) return;
+  const L = T[lang];
+  for (const b of linerBody.querySelectorAll(".track")) {
+    if (Number(b.dataset.i) === curIndex) b.setAttribute("aria-current", "true");
+    else b.removeAttribute("aria-current");
+  }
+  const i = Math.max(0, curIndex === -1 ? trackAt(pos) : curIndex);
+  const t = tracks[i];
+  if (!t) { now.replaceChildren(); return; }
+  const note = (lang === "es" ? t.note_es || t.note : t.note) || "";
+  const noteLang = lang === "es" && !t.note_es ? "en" : null; // an English fallback is read as English
+  let credit = null;
+  if (t.credit) {
+    credit = h("p", { class: "now-credit" }, h("span", { text: `${L.credit}: ${t.credit}` }));
+    if (/^https:\/\//.test(t.license_url || "")) {
+      credit.append(" · ", h("a", { href: t.license_url, rel: "license noopener noreferrer", target: "_blank", lang: "en", text: L.license }));
+    }
+  }
+  timeEl = h("span", { class: "tnum" });
+  lastTimeText = "";
+  now.replaceChildren(...[
+    h("p", { class: "now-pos" }, timeEl, h("span", { text: ` / ${fmt(t.dur)} · ${L.trackOf(i + 1, tracks.length)}` })),
+    h("h3", { class: "now-title", text: t.title }),
+    h("p", { class: "now-meta", text: [t.who, t.date, t.place].filter(Boolean).join(" · ") }),
+    note ? h("p", { class: "now-note", lang: noteLang, text: note }) : h("p", { class: "now-note is-empty", text: L.noNote }),
+    credit,
+    missing.has(t.src)
+      ? h("p", { class: "missing", role: "note" },
+          h("strong", { text: L.missing }), h("code", { text: t.src }), h("span", { text: L.silent(fmt(t.dur)) }))
+      : null,
+  ].filter(Boolean));
+  updateTime();
+}
+function updateTime() {
+  if (!timeEl || !cur) return;
+  const i = Math.max(0, curIndex);
+  const sec = Math.max(0, Math.floor(pos - (offsets[i] || 0)));
+  if (sec === lastTimeSec && lastTimeText) return; // no string work unless the second changed
+  lastTimeSec = sec;
+  lastTimeText = fmt(sec);
+  timeEl.textContent = lastTimeText;
+}
+
+for (const b of langButtons) {
+  b.addEventListener("click", () => {
+    lang = b.dataset.lang;
+    try { localStorage.setItem("caset-lang", lang); } catch { /* ignore */ }
+    renderLiner();
+    renderShelfState();
+    updateKeyLabels();
+  });
+}
+
+// ---------- keys: HTML buttons laid over the 3D keys ----------
+for (const [action, b] of keyButtons) {
+  b.addEventListener("click", (e) => {
+    if (e.detail > 0) b.blur();
+    press(action);
+  });
+}
+function placeKeys() {
+  if (!deck) return;
+  deck.fit();
+  const sr = slot.getBoundingClientRect();
+  const root = document.documentElement.style;
+  root.setProperty("--gx", `${Math.round(sr.left + sr.width / 2)}px`);
+  root.setProperty("--gy", `${Math.round(sr.top + sr.height * 0.62)}px`);
+  for (const r of deck.keyRects) {
+    const b = keyButtons.get(r.action);
+    b.style.left = `${r.x - sr.left}px`;
+    b.style.top = `${r.y - sr.top}px`;
+    b.style.width = `${r.w}px`;
+    b.style.height = `${r.h}px`;
+  }
+}
+addEventListener("resize", placeKeys);
+if ("ResizeObserver" in window) new ResizeObserver(placeKeys).observe(slot);
+
 addEventListener("keydown", (e) => {
-  if (e.target instanceof HTMLButtonElement && e.key !== "Escape") return;
-  if (e.code === "Space") { e.preventDefault(); press(mode === "play" ? "stop" : "play"); }
-  else if (e.key === "ArrowLeft") press("rewind");
-  else if (e.key === "ArrowRight") press("forward");
-  else if (e.key === "Escape") press("stop");
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const el = e.target;
+  const tag = el?.tagName;
+  if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || el?.isContentEditable) return;
+  if (e.key === " " || e.code === "Space") {
+    if (tag === "BUTTON" || tag === "A") return; // let the focused control handle it
+    e.preventDefault();
+    press(mode === "stop" ? "play" : "stop");
+  } else if (e.key === "ArrowLeft") {
+    e.preventDefault();
+    press("rewind");
+  } else if (e.key === "ArrowRight") {
+    e.preventDefault();
+    press("forward");
+  }
 });
-
-// 3D key picking
-const ray = new THREE.Raycaster();
-const ndc = new THREE.Vector2();
-canvas.addEventListener("pointerdown", (e) => {
-  ndc.set((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1);
-  ray.setFromCamera(ndc, camera);
-  const hit = ray.intersectObjects(keys3d, false)[0];
-  if (hit) press(hit.object.userData.action);
-});
-canvas.addEventListener("pointermove", (e) => {
-  ndc.set((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1);
-  ray.setFromCamera(ndc, camera);
-  canvas.style.cursor = ray.intersectObjects(keys3d, false).length ? "pointer" : "";
-});
-
-// ---------- synthesised click + hiss ----------
-let actx, hissGain;
-function ctxAudio() {
-  if (actx) return actx;
-  actx = new (window.AudioContext || window.webkitAudioContext)();
-  const len = actx.sampleRate * 2;
-  const buf = actx.createBuffer(1, len, actx.sampleRate);
-  const d = buf.getChannelData(0);
-  for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
-  const src = actx.createBufferSource();
-  src.buffer = buf; src.loop = true;
-  const bp = actx.createBiquadFilter();
-  bp.type = "bandpass"; bp.frequency.value = 3200; bp.Q.value = 0.6;
-  hissGain = actx.createGain(); hissGain.gain.value = 0;
-  src.connect(bp).connect(hissGain).connect(actx.destination);
-  src.start();
-  return actx;
-}
-function hiss(level) {
-  if (!actx) return;
-  hissGain.gain.setTargetAtTime(level, actx.currentTime, 0.15);
-}
-function click() {
-  const ctx = ctxAudio();
-  if (ctx.state === "suspended") ctx.resume();
-  const len = ctx.sampleRate * 0.04;
-  const buf = ctx.createBuffer(1, len, ctx.sampleRate);
-  const d = buf.getChannelData(0);
-  for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / len) ** 3;
-  const src = ctx.createBufferSource();
-  src.buffer = buf;
-  const lp = ctx.createBiquadFilter();
-  lp.type = "lowpass"; lp.frequency.value = 1800;
-  const g = ctx.createGain(); g.gain.value = 0.5;
-  src.connect(lp).connect(g).connect(ctx.destination);
-  src.start();
-}
-
-// ---------- pointer parallax ----------
-const look = { x: 0, y: 0 };
-addEventListener("pointermove", (e) => {
-  look.x = (e.clientX / innerWidth - 0.5) * 2;
-  look.y = (e.clientY / innerHeight - 0.5) * 2;
-});
-
-// ---------- camera ----------
-function fit() {
-  const w = innerWidth, h = innerHeight;
-  renderer.setSize(w, h, false);
-  camera.aspect = w / h;
-  const half = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
-  const wide = camera.aspect > 1.1;
-  const d = THREE.MathUtils.clamp(Math.max((wide ? 3.2 : 2.3) / (half * camera.aspect), 1.8 / half), 6, 16);
-  const el = THREE.MathUtils.degToRad(9);
-  camera.position.set(0, Math.sin(el) * d, Math.cos(el) * d);
-  camera.lookAt(wide ? 0.85 : 0, wide ? -0.25 : -0.8, 0);
-  camera.updateProjectionMatrix();
-}
-addEventListener("resize", fit);
-fit();
+addEventListener("pointerdown", () => sound.unlock(), { passive: true });
 
 // ---------- loop ----------
-const timer = new THREE.Timer();
-
-function tick() {
-  timer.update();
-  const dt = Math.min(timer.getDelta(), 0.05);
-  const t = timer.getElapsed();
-
-  // transport
-  let v = 0;
-  if (mode === "play") {
-    if (tracks.length) {
-      if (!audio.paused && !audio.seeking) pos = offsets[current] + audio.currentTime;
-      v = audio.paused ? 0 : 1;
-    } else { v = 1; pos += dt; }
-  } else if (mode === "forward") { v = WIND; pos += WIND * dt; }
-  else if (mode === "rewind") { v = -WIND; pos -= WIND * dt; }
-  pos = THREE.MathUtils.clamp(pos, 0, total);
-  if (mode !== "idle" && mode !== "play" && (pos <= 0 || pos >= total)) setMode("idle");
-  if (mode !== "play" && tracks.length && v) setCurrent(trackAt(pos));
-
-  const frac = pos / total;
-  const rL = Math.sqrt(THREE.MathUtils.lerp(R_MAX ** 2, R_MIN ** 2, frac));
-  const rR = Math.sqrt(THREE.MathUtils.lerp(R_MIN ** 2, R_MAX ** 2, frac));
-  reelL.spool.scale.set(rL, 1, rL);
-  reelR.spool.scale.set(rR, 1, rR);
-  const lin = v * 0.18; // tape linear speed, scene units/s at 1x
-  angL -= (lin / rL) * dt;
-  angR -= (lin / rR) * dt;
-  reelL.hub.rotation.y = reelL.spool.rotation.y = angL;
-  reelR.hub.rotation.y = reelR.spool.rotation.y = angR;
-  counterEl.textContent = String(Math.round(frac * 999)).padStart(4, "0");
-
-  keys3d.forEach((k, i) => { k.position.y += (keyTargets[i] - k.position.y) * Math.min(1, dt * 18); });
-
-  const tx = BASE_TILT + (reduceMotion ? 0 : look.y * 0.08);
-  const ty = reduceMotion ? 0 : look.x * 0.18;
-  device.rotation.x += (tx - device.rotation.x) * Math.min(1, dt * 3);
-  device.rotation.y += (ty - device.rotation.y) * Math.min(1, dt * 3);
-  if (!reduceMotion) device.position.y = Math.sin(t * 0.8) * 0.015;
-
-  stars.material.uniforms.uTime.value = reduceMotion ? 0 : t;
-  if (!reduceMotion) stars.rotation.y = t * 0.004;
-
-  renderer.render(scene, camera);
-  requestAnimationFrame(tick);
+let last = performance.now();
+let raf = 0, hiddenTimer = 0;
+function loop(t) {
+  raf = requestAnimationFrame(loop);
+  const dt = Math.min(0.1, Math.max(0, (t - last) / 1000));
+  last = t;
+  transport(dt);
+  deck?.frame(t / 1000, dt);
 }
-setMode("idle");
-loadTracks();
-tick();
+function onVisibility() {
+  if (document.hidden) {
+    cancelAnimationFrame(raf);
+    raf = 0;
+    last = performance.now();
+    // keep the tape moving (audio keeps playing) without drawing anything
+    hiddenTimer = setInterval(() => {
+      const n = performance.now();
+      transport(Math.min(1, (n - last) / 1000));
+      last = n;
+    }, 250);
+  } else {
+    clearInterval(hiddenTimer);
+    last = performance.now();
+    if (!raf) raf = requestAnimationFrame(loop);
+  }
+}
+document.addEventListener("visibilitychange", onVisibility);
+
+// ---------- boot ----------
+async function boot() {
+  try {
+    const r = await fetch("/tapes.json", { cache: "no-cache" });
+    if (!r.ok) throw new Error(String(r.status));
+    tapes = (await r.json()).filter((c) => c && c.id && c.sides?.A && c.sides?.B);
+  } catch {
+    tapes = [];
+  }
+  for (const c of tapes) byId.set(c.id, c);
+  renderShelf();
+  renderLiner();
+  updateKeyLabels();
+  placeKeys();
+  if (!document.hidden) raf = requestAnimationFrame(loop);
+  else onVisibility();
+  const want = parseHash();
+  if (want) loadCassette(want.id, want);
+  else if (location.hash) canonicalHash();
+}
+boot();
