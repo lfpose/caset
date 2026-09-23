@@ -3,7 +3,7 @@
     "id": "voices",
     "name": "Voices",
     "color": "#e2582b",
-    "cover": "/covers/voices.svg",
+    "cover": "/covers/voices.svg?v=3",
     "sides": {
       "A": {
         "label": "Science",
@@ -94,7 +94,7 @@
     "id": "moonshot",
     "name": "Moonshot",
     "color": "#e3b03a",
-    "cover": "/covers/moonshot.svg",
+    "cover": "/covers/moonshot.svg?v=3",
     "sides": {
       "A": {
         "label": "Going",
@@ -186,7 +186,7 @@
     "id": "other-worlds",
     "name": "Other worlds",
     "color": "#3d8d8c",
-    "cover": "/covers/other-worlds.svg",
+    "cover": "/covers/other-worlds.svg?v=3",
     "sides": {
       "A": {
         "label": "Mars and Titan",
@@ -284,7 +284,7 @@
     "id": "first-sounds",
     "name": "First sounds",
     "color": "#8a8b3b",
-    "cover": "/covers/first-sounds.svg",
+    "cover": "/covers/first-sounds.svg?v=3",
     "sides": {
       "A": {
         "label": "Firsts",
@@ -379,7 +379,7 @@
     "id": "living-things",
     "name": "Living things",
     "color": "#6f9a52",
-    "cover": "/covers/living-things.svg",
+    "cover": "/covers/living-things.svg?v=3",
     "sides": {
       "A": {
         "label": "Animals",
@@ -477,7 +477,7 @@
     "id": "ocean",
     "name": "Ocean",
     "color": "#33506b",
-    "cover": "/covers/ocean.svg",
+    "cover": "/covers/ocean.svg?v=3",
     "sides": {
       "A": {
         "label": "Whales",
@@ -569,7 +569,7 @@
     "id": "live",
     "name": "Live",
     "color": "#c0392b",
-    "cover": "/covers/live.svg",
+    "cover": "/covers/live.svg?v=3",
     "sides": {
       "A": {
         "label": "On the air",
@@ -661,7 +661,7 @@
     "id": "now",
     "name": "Now",
     "color": "#d9679a",
-    "cover": "/covers/now.svg",
+    "cover": "/covers/now.svg?v=3",
     "sides": {
       "A": {
         "label": "Young voices",
@@ -755,7 +755,7 @@
     "id": "words",
     "name": "Words",
     "color": "#7a5c9e",
-    "cover": "/covers/words.svg",
+    "cover": "/covers/words.svg?v=3",
     "sides": {
       "A": {
         "label": "Poets",
@@ -846,7 +846,7 @@
     "id": "music",
     "name": "Music",
     "color": "#b5651d",
-    "cover": "/covers/music.svg",
+    "cover": "/covers/music.svg?v=3",
     "sides": {
       "A": {
         "label": "The first records",

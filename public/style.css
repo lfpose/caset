@@ -196,8 +196,8 @@ body {
   border-radius: 1px;
   background: var(--tape);
 }
-.jcard { display: flex; align-items: center; background: #17120f; }
-.jc-art { display: block; width: 100%; aspect-ratio: 1; overflow: hidden; background: var(--tape); }
+.jcard { display: block; background: var(--tape); }
+.jc-art { display: block; width: 100%; height: 100%; overflow: hidden; background: var(--tape); }
 .jc-art img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .case.nocover .jc-art img { display: none; }
 .fallback {

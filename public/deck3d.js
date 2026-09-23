@@ -253,12 +253,15 @@ export function createDeck({ canvas, slot, reduceMotion, onEvent = () => {} }) {
   const LW = 2048, LH = Math.round((2048 * LBL.h) / LBL.w), LSCALE = 0.5;
   const PXCM = LW / LBL.w;
   function roundRect(g, x, y, w, h, r) { g.beginPath(); g.roundRect(x, y, w, h, r); }
+  // covers are portrait J-cards (600x1060) whose top 415 units are the picture band;
+  // the cassette label only shows that band, cropped to fill the frame
   function coverFit(g, img, x, y, w, h) {
-    const iw = img.naturalWidth || 1000, ih = img.naturalHeight || 1000;
-    const s = Math.max(w / iw, h / ih);
-    const dw = iw * s, dh = ih * s;
+    const iw = img.naturalWidth || 600, ih = img.naturalHeight || 1060;
+    const sw = iw, sh = ih > iw ? iw * (415 / 600) : ih;
+    const s = Math.max(w / sw, h / sh);
+    const cw = w / s, ch = h / s;
     g.save(); g.beginPath(); g.rect(x, y, w, h); g.clip();
-    g.drawImage(img, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh);
+    g.drawImage(img, (sw - cw) / 2, (sh - ch) / 2, cw, ch, x, y, w, h);
     g.restore();
   }
   // whichever of the two inks has the higher WCAG contrast on the tape colour

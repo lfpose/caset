@@ -234,7 +234,6 @@ function setMode(m) {
   }
   if (m === "play") { audioTrack = -1; waitT = 0; }
   else audio.pause();
-  sound.setHiss(m === "play");
   if (m !== "rewind" && m !== "forward" && m !== "seek") sound.setWind(0, 0);
   if (!cur) return;
   const t = m === "play" && tracks[trackAt(pos)];
