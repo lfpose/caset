@@ -1,14 +1,13 @@
 // The 3D deck: scene, materials, cassette model, key mechanics and the animations
-// for load / eject / flip. It knows nothing about tracks or audio; app.js drives it.
-import * as THREE from "./vendor/three.module.min.js";
-import { RoundedBoxGeometry } from "./vendor/RoundedBoxGeometry.js";
-import { RoomEnvironment } from "./vendor/RoomEnvironment.js";
+// for load / eject / flip. It knows nothing about tracks or audio; the player drives it
+// through the contract in docs/ARCHITECTURE.md. Colours, fonts and lights: ./look.js.
+import * as THREE from "../../vendor/three.module.min.js";
+import { RoundedBoxGeometry } from "../../vendor/RoundedBoxGeometry.js";
+import { RoomEnvironment } from "../../vendor/RoomEnvironment.js";
+import { LOOK } from "./look.js";
 
 export const KEY_ORDER = ["rewind", "play", "forward", "stop", "flip", "eject"];
-const STRIPES = ["#e2582b", "#e3b03a", "#8a8b3b", "#3d8d8c", "#33506b"];
-const FONT = `Futura, "Futura PT", "Century Gothic", "Avenir Next", "Trebuchet MS", system-ui, sans-serif`;
-const INK = "#221a15";
-const PAPER = "#efe4cc";
+const { STRIPES, FONT, INK, PAPER } = LOOK;
 
 // ---- dimensions, in centimetres ----
 const DW = 27.4, DD = 20.4;
@@ -47,7 +46,7 @@ export function createDeck({ canvas, slot, reduceMotion, onEvent = () => {} }) {
   renderer.setPixelRatio(pixelRatio());
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 0.92;
+  renderer.toneMappingExposure = LOOK.light.exposure;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFShadowMap;
   // shadows are redrawn only when something that casts one moves (see frame())
@@ -65,7 +64,7 @@ export function createDeck({ canvas, slot, reduceMotion, onEvent = () => {} }) {
   const pmrem = new THREE.PMREMGenerator(renderer);
   const room = new RoomEnvironment();
   scene.environment = pmrem.fromScene(room, 0.035).texture;
-  scene.environmentIntensity = 0.62;
+  scene.environmentIntensity = LOOK.light.environment;
   room.dispose?.();
   pmrem.dispose();
 
@@ -118,7 +117,7 @@ export function createDeck({ canvas, slot, reduceMotion, onEvent = () => {} }) {
   // ---------- textures ----------
   function brushed(light) {
     const [cv, g] = makeCanvas(1024, 1024);
-    g.fillStyle = light ? "#e4e1dc" : "#8c8c8c";
+    g.fillStyle = light ? LOOK.tex.brushedLight : LOOK.tex.brushedDark;
     g.fillRect(0, 0, 1024, 1024);
     for (let i = 0; i < 4200; i++) {
       const y = Math.random() * 1024;
@@ -153,7 +152,7 @@ export function createDeck({ canvas, slot, reduceMotion, onEvent = () => {} }) {
       g.fillRect(24 + w + 34, 88 + i * (bar + gap), 300, bar);
     });
     g.font = `500 44px ${FONT}`;
-    g.fillStyle = "rgba(34,26,21,0.72)";
+    g.fillStyle = LOOK.tex.wordmark;
     g.fillText("stereo cassette deck", 24, 272);
     return canvasTex(cv);
   }
@@ -161,9 +160,9 @@ export function createDeck({ canvas, slot, reduceMotion, onEvent = () => {} }) {
   function digitsTex() {
     // ten cells around the drum; each digit is drawn turned so that it reads upright on top
     const [cv, g] = makeCanvas(1280, 256);
-    g.fillStyle = "#1a1411";
+    g.fillStyle = LOOK.tex.digitsBg;
     g.fillRect(0, 0, 1280, 256);
-    g.fillStyle = "#f1e6cf";
+    g.fillStyle = LOOK.tex.digitsInk;
     g.font = `600 112px ${FONT}`;
     g.textAlign = "center";
     g.textBaseline = "middle";
@@ -180,7 +179,7 @@ export function createDeck({ canvas, slot, reduceMotion, onEvent = () => {} }) {
 
   function ringsTex() {
     const [cv, g] = makeCanvas(512, 512);
-    g.fillStyle = "#3a2619";
+    g.fillStyle = LOOK.tex.tapeRings;
     g.fillRect(0, 0, 512, 512);
     for (let r = 4; r < 256; r += 1.5) {
       const v = 50 + Math.random() * 50;
@@ -312,7 +311,7 @@ export function createDeck({ canvas, slot, reduceMotion, onEvent = () => {} }) {
     g.fillStyle = INK;
     const name = fitText(g, cas.name, LW - 300 - 470, 118, 700);
     g.fillText(name, 290, stripY * 0.52);
-    g.fillStyle = "#6d5f50";
+    g.fillStyle = LOOK.tex.labelDim;
     const sub = fitText(g, sd.label, LW - 300 - 470, 70, 500);
     g.fillText(sub, 292, stripY * 0.52 + 92);
     // maker's corner
@@ -321,7 +320,7 @@ export function createDeck({ canvas, slot, reduceMotion, onEvent = () => {} }) {
     g.font = `700 60px ${FONT}`;
     g.fillText("caset", LW - 70, 112);
     g.font = `500 42px ${FONT}`;
-    g.fillStyle = "#6d5f50";
+    g.fillStyle = LOOK.tex.labelDim;
     const mins = Math.max(1, Math.round(sd.tracks.reduce((s, t) => s + (t.dur || 0), 0) / 60));
     g.fillText(`${sd.tracks.length} tracks · ${mins} min`, LW - 70, 176);
     const bw = 34, bx = LW - 70 - 5 * bw - 4 * 8;
@@ -331,7 +330,7 @@ export function createDeck({ canvas, slot, reduceMotion, onEvent = () => {} }) {
     const ww = 6.9 * PXCM, wh = 2.3 * PXCM;
     const wx = (LW - ww) / 2, wy = wz * PXCM - wh / 2;
     roundRect(g, wx - 16, wy - 16, ww + 32, wh + 32, wh / 2 + 16);
-    g.fillStyle = "rgba(24,17,13,0.9)"; g.fill();
+    g.fillStyle = LOOK.tex.labelWindow; g.fill();
     g.globalCompositeOperation = "destination-out";
     roundRect(g, wx, wy, ww, wh, wh / 2);
     g.fill();
@@ -373,26 +372,26 @@ export function createDeck({ canvas, slot, reduceMotion, onEvent = () => {} }) {
 
   // ---------- materials ----------
   const M = {
-    body: new THREE.MeshStandardMaterial({ color: 0x2a211c, roughness: 0.58, metalness: 0 }),
-    bodyDark: new THREE.MeshStandardMaterial({ color: 0x120e0c, roughness: 0.8, metalness: 0 }),
+    body: new THREE.MeshStandardMaterial({ color: LOOK.mat.body, roughness: 0.58, metalness: 0 }),
+    bodyDark: new THREE.MeshStandardMaterial({ color: LOOK.mat.bodyDark, roughness: 0.8, metalness: 0 }),
     plate: new THREE.MeshPhysicalMaterial({
-      color: 0xc6b69b, metalness: 1, roughness: 0.62,
+      color: LOOK.mat.plate, metalness: 1, roughness: 0.62,
       map: brushed(true), roughnessMap: brushed(false),
       anisotropy: 0.75, anisotropyRotation: 0,
     }),
-    chrome: new THREE.MeshStandardMaterial({ color: 0xd8d2c8, metalness: 1, roughness: 0.18 }),
-    rubber: new THREE.MeshStandardMaterial({ color: 0x151110, roughness: 0.9 }),
-    ivory: new THREE.MeshPhysicalMaterial({ color: 0xe7dcc4, roughness: 0.38, clearcoat: 1, clearcoatRoughness: 0.08 }),
-    orange: new THREE.MeshPhysicalMaterial({ color: 0xe2582b, roughness: 0.36, clearcoat: 1, clearcoatRoughness: 0.08 }),
-    hub: new THREE.MeshStandardMaterial({ color: 0xece3d0, roughness: 0.45 }),
+    chrome: new THREE.MeshStandardMaterial({ color: LOOK.mat.chrome, metalness: 1, roughness: 0.18 }),
+    rubber: new THREE.MeshStandardMaterial({ color: LOOK.mat.rubber, roughness: 0.9 }),
+    ivory: new THREE.MeshPhysicalMaterial({ color: LOOK.mat.key, roughness: 0.38, clearcoat: 1, clearcoatRoughness: 0.08 }),
+    orange: new THREE.MeshPhysicalMaterial({ color: LOOK.mat.playKey, roughness: 0.36, clearcoat: 1, clearcoatRoughness: 0.08 }),
+    hub: new THREE.MeshStandardMaterial({ color: LOOK.mat.hub, roughness: 0.45 }),
     tape: new THREE.MeshStandardMaterial({ color: 0xffffff, map: ringsTex(), roughness: 0.34, metalness: 0.1 }),
-    shell: new THREE.MeshPhysicalMaterial({ color: 0x2b2420, roughness: 0.42, clearcoat: 0.5, clearcoatRoughness: 0.3 }),
-    shellInner: new THREE.MeshStandardMaterial({ color: 0x0c0a09, roughness: 0.9 }),
+    shell: new THREE.MeshPhysicalMaterial({ color: LOOK.mat.shell, roughness: 0.42, clearcoat: 0.5, clearcoatRoughness: 0.3 }),
+    shellInner: new THREE.MeshStandardMaterial({ color: LOOK.mat.shellInner, roughness: 0.9 }),
     glass: new THREE.MeshPhysicalMaterial({
       color: 0x000000, roughness: 0.04, metalness: 0, transparent: true, depthWrite: false,
       blending: THREE.AdditiveBlending, envMapIntensity: 0.9, specularIntensity: 1,
     }),
-    tint: new THREE.MeshBasicMaterial({ color: 0x0c0806, transparent: true, opacity: 0.1, depthWrite: false }),
+    tint: new THREE.MeshBasicMaterial({ color: LOOK.mat.glassTint, transparent: true, opacity: 0.1, depthWrite: false }),
     window: new THREE.MeshPhysicalMaterial({
       color: 0x000000, roughness: 0.08, transparent: true, depthWrite: false,
       blending: THREE.AdditiveBlending, envMapIntensity: 0.6,
@@ -404,8 +403,8 @@ export function createDeck({ canvas, slot, reduceMotion, onEvent = () => {} }) {
   };
 
   // ---------- lights ----------
-  scene.add(new THREE.HemisphereLight(0xffeedd, 0x1a120d, 0.35));
-  const sun = new THREE.DirectionalLight(0xffe6c8, 2.6);
+  scene.add(new THREE.HemisphereLight(LOOK.light.sky, LOOK.light.ground, LOOK.light.hemi));
+  const sun = new THREE.DirectionalLight(LOOK.light.sun, LOOK.light.sunIntensity);
   sun.position.set(-12, 30, 16);
   sun.castShadow = true;
   sun.shadow.mapSize.set(2048, 2048);
@@ -414,7 +413,7 @@ export function createDeck({ canvas, slot, reduceMotion, onEvent = () => {} }) {
   sun.shadow.normalBias = 0.03;
   Object.assign(sun.shadow.camera, { left: -22, right: 22, top: 22, bottom: -22, near: 5, far: 80 });
   scene.add(sun);
-  const rim = new THREE.DirectionalLight(0x9ec3d0, 0.9);
+  const rim = new THREE.DirectionalLight(LOOK.light.rim, LOOK.light.rimIntensity);
   rim.position.set(14, 10, -18);
   scene.add(rim);
 
@@ -565,7 +564,7 @@ export function createDeck({ canvas, slot, reduceMotion, onEvent = () => {} }) {
   front.position.set(0, (SHELL_B + BASE_B) / 2 - 0.1, ZF + 0.002);
 
   // tiny playing lamp
-  const lampMat = new THREE.MeshStandardMaterial({ color: 0x3a1a10, emissive: 0xff5a1f, emissiveIntensity: 0, roughness: 0.3 });
+  const lampMat = new THREE.MeshStandardMaterial({ color: LOOK.mat.lamp, emissive: LOOK.mat.lampGlow, emissiveIntensity: 0, roughness: 0.3 });
   const lamp = mesh(new THREE.CylinderGeometry(0.2, 0.2, 0.12, 20), lampMat, deck, { cast: false });
   lamp.position.set(COUNTER.x + 3.5, 0.06, COUNTER.z);
 
@@ -578,8 +577,8 @@ export function createDeck({ canvas, slot, reduceMotion, onEvent = () => {} }) {
     const body = mesh(new RoundedBoxGeometry(KEY.w, KEY.h, KEY.d, 3, KEY.r), isPlay ? M.orange : M.ivory, group);
     body.userData.action = action;
     const [cv, g] = makeCanvas(512, 512);
-    const colors = isPlay ? ["#e8653a", "#d9542a"] : ["#efe6d2", "#ded2b9"];
-    const ink = isPlay ? "#2a120a" : INK;
+    const colors = isPlay ? LOOK.keyTop.play : LOOK.keyTop.other;
+    const ink = isPlay ? LOOK.keyTop.playInk : INK;
     const label = action === "flip" ? "side B" : action;
     drawKeyTop(g, action, label, colors, ink);
     const tex = canvasTex(cv);
@@ -677,7 +676,7 @@ export function createDeck({ canvas, slot, reduceMotion, onEvent = () => {} }) {
     const N = 2600;
     const pos = new Float32Array(N * 3), col = new Float32Array(N * 3);
     const size = new Float32Array(N), phase = new Float32Array(N);
-    const tints = [new THREE.Color(0xffffff), new THREE.Color(0xfff1d6), new THREE.Color(0xd8e6ff), new THREE.Color(0xe3b03a)];
+    const tints = LOOK.stars.map((c) => new THREE.Color(c));
     for (let i = 0; i < N; i++) {
       const u = Math.random() * 2 - 1, th = Math.random() * Math.PI * 2;
       const r = Math.sqrt(1 - u * u), R = 900;
@@ -784,7 +783,7 @@ export function createDeck({ canvas, slot, reduceMotion, onEvent = () => {} }) {
       labelCache.delete(k);
     }
     const col = new THREE.Color(c.color);
-    shellMat.color.set(0x1d1714).lerp(col, 0.32);
+    shellMat.color.set(LOOK.mat.cassetteShell).lerp(col, LOOK.mat.cassetteTint);
   }
 
   const OUT = { y: -7, z: 24 };

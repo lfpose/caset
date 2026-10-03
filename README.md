@@ -4,6 +4,8 @@ A small cassette player that lives at [caset.cl](https://caset.cl).
 
 Zero build: plain files in `public/`, served as Cloudflare Workers static assets. The 3D scene is [three.js](https://threejs.org) r186, vendored minified in `public/vendor/` (no CDN, no trackers, no external fonts). A small Worker in `src/` runs only for the page, `/audio-status` and `/audio/*` (see `run_worker_first` in `wrangler.jsonc`): it redirects HTTP to HTTPS, answers which audio files exist, and serves byte ranges for audio. Everything else is served as plain static assets. For HTTP requests to other paths, turn on "Always Use HTTPS" for the caset.cl zone in the Cloudflare dashboard.
 
+Code layout, and the contracts for redesigning the UI or replacing the 3D deck: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+
 ```sh
 npm install
 npm run dev      # http://localhost:8787

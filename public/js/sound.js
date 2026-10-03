@@ -1,9 +1,12 @@
-// Deck sounds, synthesised with WebAudio: mechanical clunks, tape hiss, winding whine.
-// Nothing here loads a file.
+// Deck sounds, synthesised with WebAudio: mechanical clunks and the winding whine.
+// Nothing here loads a file. Interface used by the rest of the app:
+//   unlock()               create / resume the AudioContext (call from a user gesture)
+//   clunk(kind)            key | latch | lid | shut | drop | slide
+//   setWind(level, pitch)  winding noise; level 0..1, pitch in reel radians per second
 export function createSound() {
   let ctx = null;
-  let out, noise, hissGain, windGain, windBand, whine, whineGain;
-  let windLevel = 0, windPitch = 0, hissOn = false;
+  let out, noise, windGain, windBand, whine, whineGain;
+  let windLevel = 0, windPitch = 0;
   let idleTimer = 0;
 
   // The looping noise and the whine run for as long as the context does, so the context
@@ -16,10 +19,10 @@ export function createSound() {
   function settle() {
     clearTimeout(idleTimer);
     idleTimer = 0;
-    if (!ctx || hissOn || windLevel > 0) return;
+    if (!ctx || windLevel > 0) return;
     idleTimer = setTimeout(() => {
       idleTimer = 0;
-      if (ctx.state === "running" && !hissOn && windLevel === 0) ctx.suspend().catch(() => {});
+      if (ctx.state === "running" && windLevel === 0) ctx.suspend().catch(() => {});
     }, 2500);
   }
 
@@ -45,15 +48,6 @@ export function createSound() {
       b2 = 0.57 * b2 + w * 1.0526913;
       d[i] = (b0 + b1 + b2 + w * 0.1848) * 0.2;
     }
-
-    // hiss: bright, quiet, only while the tape runs at play speed
-    const hissSrc = loopNoise();
-    const hp = ctx.createBiquadFilter();
-    hp.type = "highpass"; hp.frequency.value = 2400;
-    const shelf = ctx.createBiquadFilter();
-    shelf.type = "highshelf"; shelf.frequency.value = 7000; shelf.gain.value = 4;
-    hissGain = ctx.createGain(); hissGain.gain.value = 0;
-    hissSrc.connect(hp).connect(shelf).connect(hissGain).connect(out);
 
     // wind: band of noise plus a motor whine that follows reel speed
     const windSrc = loopNoise();
@@ -133,13 +127,6 @@ export function createSound() {
       settle();
     },
     clunk,
-    setHiss(on) {
-      if (!ctx || on === hissOn) return;
-      hissOn = on;
-      if (on) wake();
-      hissGain.gain.setTargetAtTime(on ? 0.05 : 0, ctx.currentTime, 0.08);
-      if (!on) settle();
-    },
     // level 0..1 for winding, pitch in reel radians per second
     setWind(level, pitch) {
       if (!ctx) return;
