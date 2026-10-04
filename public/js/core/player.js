@@ -15,7 +15,7 @@
 // The 3D (or any) deck view is optional; see docs/ARCHITECTURE.md for its contract.
 import { createEmitter } from "./events.js";
 
-export const WIND = 16;                 // rewind / fast-forward speed, x real time
+export const WIND = 24;                 // rewind / fast-forward speed, x real time
 const R_MIN = 1.08, R_MAX = 2.28;       // reel pack radii, cm (pitch of the wind whine)
 
 export function createPlayer({ audio, sound, view = null, reduceMotion = false }) {
@@ -202,7 +202,7 @@ export function createPlayer({ audio, sound, view = null, reduceMotion = false }
     }
     sound.clunk("latch");
     seekTarget = target;
-    seekSpeed = Math.max(WIND, Math.abs(target - pos) / 2.2);
+    seekSpeed = Math.max(WIND, Math.abs(target - pos) / 1.47); // a click-to-wind takes at most ~1.5 s
     setMode("seek");
   }
 

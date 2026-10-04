@@ -373,9 +373,5 @@ function glare() {
   lg.addColorStop(0.58, "rgba(255,246,230,0.09)");
   lg.addColorStop(0.63, "rgba(255,246,230,0)");
   g.fillStyle = lg; g.fillRect(0, 0, 512, 264);
-  // top edge catch-light of the cover's bevel
-  const tg = g.createLinearGradient(0, 0, 0, 14);
-  tg.addColorStop(0, "rgba(255,250,240,0.28)"); tg.addColorStop(1, "rgba(255,250,240,0)");
-  g.fillStyle = tg; rrect(g, 6, 0, 500, 14, 4); g.fill();
   return c;
 }

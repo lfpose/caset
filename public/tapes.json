@@ -1,100 +1,9 @@
 [
   {
-    "id": "voices",
-    "name": "Voices",
-    "color": "#e2582b",
-    "cover": "/covers/voices.svg?v=3",
-    "sides": {
-      "A": {
-        "label": "Science",
-        "label_es": "Ciencia",
-        "tracks": [
-          {
-            "id": "a1",
-            "title": "Pale Blue Dot",
-            "who": "Carl Sagan",
-            "date": "1994",
-            "dur": 174.8,
-            "src": "/audio/voices/a1.mp3",
-            "note": "Carl Sagan looks at Voyager 1’s photo of Earth, taken from about six billion kilometers away, where the whole planet is a speck smaller than a single pixel. Everyone who ever lived, he says, lived on that mote of dust in a sunbeam, and for now it is the only place we have.",
-            "note_es": "Carl Sagan mira la foto de la Tierra que tomó la Voyager 1 desde unos seis mil millones de kilómetros, donde el planeta entero es una mota más pequeña que un solo píxel. Todos los que alguna vez vivieron, dice, vivieron en esa mota de polvo suspendida en un rayo de sol, y por ahora es el único lugar que tenemos.",
-            "rights": "permission"
-          },
-          {
-            "id": "a2",
-            "title": "The beauty of a flower",
-            "who": "Richard Feynman",
-            "date": "1981",
-            "dur": 61.2,
-            "src": "/audio/voices/a2.mp3",
-            "note": "Physicist Richard Feynman answers an artist friend who says science takes the beauty out of a flower. He argues that knowing about its cells and why its colors evolved to attract insects only adds to the wonder.",
-            "note_es": "El físico Richard Feynman le responde a un amigo artista que dice que la ciencia le quita la belleza a una flor. Sostiene que saber de sus células, y de por qué sus colores evolucionaron para atraer insectos, solo aumenta el asombro.",
-            "rights": "permission",
-            "place": "BBC Horizon, The Pleasure of Finding Things Out"
-          },
-          {
-            "id": "a3",
-            "title": "Now I am become Death",
-            "who": "J. Robert Oppenheimer",
-            "date": "1965",
-            "dur": 53.9,
-            "src": "/audio/voices/a3.mp3",
-            "note": "The man who led the building of the atomic bomb remembers the silence after the first test, and the line from the Hindu scripture that came into his head. His slow, haunted delivery made this one of the most quoted moments of the nuclear age.",
-            "note_es": "El hombre que dirigió la construcción de la bomba atómica recuerda el silencio que siguió a la primera prueba y el verso de las escrituras hindúes que le vino a la mente. Su voz lenta y atormentada hizo de este uno de los momentos más citados de la era nuclear.",
-            "rights": "permission",
-            "place": "NBC, The Decision to Drop the Bomb"
-          }
-        ]
-      },
-      "B": {
-        "label": "History",
-        "label_es": "Historia",
-        "tracks": [
-          {
-            "id": "b1",
-            "title": "I’ve been to the mountaintop",
-            "who": "Martin Luther King Jr.",
-            "date": "1968",
-            "dur": 96.7,
-            "src": "/audio/voices/b1.mp3",
-            "note": "The night before he was killed, King tells a Memphis crowd that he has seen the Promised Land and may not get there with them. He had come to the city to support striking sanitation workers.",
-            "note_es": "La noche antes de ser asesinado, King le dice a una multitud en Memphis que ha visto la Tierra Prometida y que quizá no llegue allí con ellos. Había ido a la ciudad a apoyar a los recolectores de basura en huelga.",
-            "rights": "permission",
-            "place": "Mason Temple, Memphis"
-          },
-          {
-            "id": "b2",
-            "title": "A date which will live in infamy",
-            "who": "Franklin D. Roosevelt",
-            "date": "1941",
-            "dur": 61.0,
-            "src": "/audio/voices/b2.mp3",
-            "note": "The day after Japan’s attack on Pearl Harbor, Roosevelt opens his address to Congress and tells the nation it was attacked while still talking peace with Japan. Congress voted to declare war less than an hour after he finished.",
-            "note_es": "Al día siguiente del ataque de Japón a Pearl Harbor, Roosevelt abre su discurso ante el Congreso y le dice al país que fue atacado mientras todavía conversaba de paz con Japón. El Congreso votó la declaración de guerra menos de una hora después de que terminara.",
-            "rights": "pd",
-            "place": "Joint session of Congress, U.S. Capitol, Washington"
-          },
-          {
-            "id": "b3",
-            "title": "An ideal for which I am prepared to die",
-            "who": "Nelson Mandela",
-            "date": "1964",
-            "dur": 87.4,
-            "src": "/audio/voices/b3.mp3",
-            "note": "Facing a possible death sentence, Mandela closes his three-hour statement from the dock by saying what he has fought for: a free society where all people live together as equals. He was sentenced to life and spent 27 years in prison before becoming South Africa’s first democratically elected president.",
-            "note_es": "Ante una posible condena a muerte, Mandela cierra su declaración de tres horas desde el banquillo diciendo por qué ha luchado: una sociedad libre en la que todas las personas vivan juntas y en igualdad. Fue condenado a cadena perpetua y pasó 27 años en prisión antes de convertirse en el primer presidente de Sudáfrica elegido democráticamente.",
-            "rights": "murky",
-            "place": "Rivonia trial, Pretoria"
-          }
-        ]
-      }
-    }
-  },
-  {
     "id": "moonshot",
     "name": "Moonshot",
     "color": "#e3b03a",
-    "cover": "/covers/moonshot.svg?v=3",
+    "cover": "/covers/moonshot.svg?v=4",
     "sides": {
       "A": {
         "label": "Going",
@@ -186,7 +95,7 @@
     "id": "other-worlds",
     "name": "Other worlds",
     "color": "#3d8d8c",
-    "cover": "/covers/other-worlds.svg?v=3",
+    "cover": "/covers/other-worlds.svg?v=4",
     "sides": {
       "A": {
         "label": "Mars and Titan",
@@ -284,7 +193,7 @@
     "id": "first-sounds",
     "name": "First sounds",
     "color": "#8a8b3b",
-    "cover": "/covers/first-sounds.svg?v=3",
+    "cover": "/covers/first-sounds.svg?v=4",
     "sides": {
       "A": {
         "label": "Firsts",
@@ -379,7 +288,7 @@
     "id": "living-things",
     "name": "Living things",
     "color": "#6f9a52",
-    "cover": "/covers/living-things.svg?v=3",
+    "cover": "/covers/living-things.svg?v=4",
     "sides": {
       "A": {
         "label": "Animals",
@@ -477,7 +386,7 @@
     "id": "ocean",
     "name": "Ocean",
     "color": "#33506b",
-    "cover": "/covers/ocean.svg?v=3",
+    "cover": "/covers/ocean.svg?v=4",
     "sides": {
       "A": {
         "label": "Whales",
@@ -569,7 +478,7 @@
     "id": "live",
     "name": "Live",
     "color": "#c0392b",
-    "cover": "/covers/live.svg?v=3",
+    "cover": "/covers/live.svg?v=4",
     "sides": {
       "A": {
         "label": "On the air",
@@ -661,7 +570,7 @@
     "id": "now",
     "name": "Now",
     "color": "#d9679a",
-    "cover": "/covers/now.svg?v=3",
+    "cover": "/covers/now.svg?v=4",
     "sides": {
       "A": {
         "label": "Young voices",
@@ -755,7 +664,7 @@
     "id": "words",
     "name": "Words",
     "color": "#7a5c9e",
-    "cover": "/covers/words.svg?v=3",
+    "cover": "/covers/words.svg?v=4",
     "sides": {
       "A": {
         "label": "Poets",
@@ -846,7 +755,7 @@
     "id": "music",
     "name": "Music",
     "color": "#b5651d",
-    "cover": "/covers/music.svg?v=3",
+    "cover": "/covers/music.svg?v=4",
     "sides": {
       "A": {
         "label": "The first records",
@@ -929,6 +838,97 @@
             "note": "A relentless, lopsided beat in five builds under brass fanfares into a march of mechanical menace, written on the eve of the First World War. Film composers have been borrowing from it ever since, all the way to Star Wars.",
             "note_es": "Un ritmo implacable y cojo, en cinco tiempos, crece bajo fanfarrias de metales hasta volverse una marcha de amenaza mecánica, escrita en vísperas de la Primera Guerra Mundial. Los compositores de cine la han tomado prestada desde entonces, hasta llegar a Star Wars.",
             "rights": "pd"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "voices",
+    "name": "Voices",
+    "color": "#e2582b",
+    "cover": "/covers/voices.svg?v=4",
+    "sides": {
+      "A": {
+        "label": "Science",
+        "label_es": "Ciencia",
+        "tracks": [
+          {
+            "id": "a1",
+            "title": "Pale Blue Dot",
+            "who": "Carl Sagan",
+            "date": "1994",
+            "dur": 174.8,
+            "src": "/audio/voices/a1.mp3",
+            "note": "Carl Sagan looks at Voyager 1’s photo of Earth, taken from about six billion kilometers away, where the whole planet is a speck smaller than a single pixel. Everyone who ever lived, he says, lived on that mote of dust in a sunbeam, and for now it is the only place we have.",
+            "note_es": "Carl Sagan mira la foto de la Tierra que tomó la Voyager 1 desde unos seis mil millones de kilómetros, donde el planeta entero es una mota más pequeña que un solo píxel. Todos los que alguna vez vivieron, dice, vivieron en esa mota de polvo suspendida en un rayo de sol, y por ahora es el único lugar que tenemos.",
+            "rights": "permission"
+          },
+          {
+            "id": "a2",
+            "title": "The beauty of a flower",
+            "who": "Richard Feynman",
+            "date": "1981",
+            "dur": 61.2,
+            "src": "/audio/voices/a2.mp3",
+            "note": "Physicist Richard Feynman answers an artist friend who says science takes the beauty out of a flower. He argues that knowing about its cells and why its colors evolved to attract insects only adds to the wonder.",
+            "note_es": "El físico Richard Feynman le responde a un amigo artista que dice que la ciencia le quita la belleza a una flor. Sostiene que saber de sus células, y de por qué sus colores evolucionaron para atraer insectos, solo aumenta el asombro.",
+            "rights": "permission",
+            "place": "BBC Horizon, The Pleasure of Finding Things Out"
+          },
+          {
+            "id": "a3",
+            "title": "Now I am become Death",
+            "who": "J. Robert Oppenheimer",
+            "date": "1965",
+            "dur": 53.9,
+            "src": "/audio/voices/a3.mp3",
+            "note": "The man who led the building of the atomic bomb remembers the silence after the first test, and the line from the Hindu scripture that came into his head. His slow, haunted delivery made this one of the most quoted moments of the nuclear age.",
+            "note_es": "El hombre que dirigió la construcción de la bomba atómica recuerda el silencio que siguió a la primera prueba y el verso de las escrituras hindúes que le vino a la mente. Su voz lenta y atormentada hizo de este uno de los momentos más citados de la era nuclear.",
+            "rights": "permission",
+            "place": "NBC, The Decision to Drop the Bomb"
+          }
+        ]
+      },
+      "B": {
+        "label": "History",
+        "label_es": "Historia",
+        "tracks": [
+          {
+            "id": "b1",
+            "title": "I’ve been to the mountaintop",
+            "who": "Martin Luther King Jr.",
+            "date": "1968",
+            "dur": 96.7,
+            "src": "/audio/voices/b1.mp3",
+            "note": "The night before he was killed, King tells a Memphis crowd that he has seen the Promised Land and may not get there with them. He had come to the city to support striking sanitation workers.",
+            "note_es": "La noche antes de ser asesinado, King le dice a una multitud en Memphis que ha visto la Tierra Prometida y que quizá no llegue allí con ellos. Había ido a la ciudad a apoyar a los recolectores de basura en huelga.",
+            "rights": "permission",
+            "place": "Mason Temple, Memphis"
+          },
+          {
+            "id": "b2",
+            "title": "A date which will live in infamy",
+            "who": "Franklin D. Roosevelt",
+            "date": "1941",
+            "dur": 61.0,
+            "src": "/audio/voices/b2.mp3",
+            "note": "The day after Japan’s attack on Pearl Harbor, Roosevelt opens his address to Congress and tells the nation it was attacked while still talking peace with Japan. Congress voted to declare war less than an hour after he finished.",
+            "note_es": "Al día siguiente del ataque de Japón a Pearl Harbor, Roosevelt abre su discurso ante el Congreso y le dice al país que fue atacado mientras todavía conversaba de paz con Japón. El Congreso votó la declaración de guerra menos de una hora después de que terminara.",
+            "rights": "pd",
+            "place": "Joint session of Congress, U.S. Capitol, Washington"
+          },
+          {
+            "id": "b3",
+            "title": "An ideal for which I am prepared to die",
+            "who": "Nelson Mandela",
+            "date": "1964",
+            "dur": 87.4,
+            "src": "/audio/voices/b3.mp3",
+            "note": "Facing a possible death sentence, Mandela closes his three-hour statement from the dock by saying what he has fought for: a free society where all people live together as equals. He was sentenced to life and spent 27 years in prison before becoming South Africa’s first democratically elected president.",
+            "note_es": "Ante una posible condena a muerte, Mandela cierra su declaración de tres horas desde el banquillo diciendo por qué ha luchado: una sociedad libre en la que todas las personas vivan juntas y en igualdad. Fue condenado a cadena perpetua y pasó 27 años en prisión antes de convertirse en el primer presidente de Sudáfrica elegido democráticamente.",
+            "rights": "murky",
+            "place": "Rivonia trial, Pretoria"
           }
         ]
       }

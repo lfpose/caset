@@ -260,6 +260,60 @@ h1, h2, h3, p, ol, ul, dl, dd, figure { margin: 0; }
 .lang button:hover { color: var(--ink); }
 .lang button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
 
+/* silver | black: the deck's finish (js/ui/finish.js), a twin of the .lang pill beside it.
+   Only with the 3D deck: hidden until body.gl, and for good under body.nogl */
+.finish {
+  display: none;
+  flex: none;
+  padding: 2px;
+  border: 1px solid var(--line-2);
+  border-radius: var(--pill);
+}
+.gl .finish { display: inline-flex; }
+.gl .finish + .lang { margin-left: calc(var(--s2) - var(--s5)); }
+.finish button {
+  appearance: none;
+  border: 0;
+  margin: 0;
+  min-width: 44px;
+  height: calc(var(--hit) - 6px);
+  padding: 0 var(--s3) 0 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border-radius: var(--pill);
+  background: transparent;
+  color: var(--ink-2);
+  font: var(--t-legend);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color var(--t1) var(--ease), background-color var(--t1) var(--ease);
+}
+.finish button:hover { color: var(--ink); }
+.finish button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+/* a swatch of each finish: brushed silver, black anodising */
+.finish-sw {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(240, 230, 210, 0.22);
+}
+button[data-finish="silver"] .finish-sw { background: linear-gradient(160deg, #f6f4f0 0%, #bdb9b2 55%, #e2dfd8 100%); }
+button[data-finish="black"] .finish-sw { background: linear-gradient(160deg, #4a4744 0%, #161514 55%, #2c2a28 100%); }
+@media (pointer: coarse) { .finish button { height: var(--hit); } }
+/* phones and short landscape: swatches only (the words stay for screen readers) */
+@media (max-width: 599px), (max-height: 500px) and (min-width: 600px) {
+  .gl .finish { margin-left: auto; }
+  .gl .finish + .lang { margin-left: calc(var(--s2) - var(--s3)); }
+  .finish button { padding: 0 var(--s2); min-width: 40px; height: max(34px, var(--hit)); }
+  .finish-sw { width: 14px; height: 14px; }
+  .finish-lbl { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
+}
+@media (max-width: 599px) { .finish button { height: max(38px, var(--hit)); } }
+
 /* ======================================================================
    the page. Desk: main column 1-9 (intro, deck, panel), the shelf 10-12 (sticky)
    ====================================================================== */
@@ -1022,6 +1076,9 @@ kbd {
     margin-left: calc(-1 * var(--s4));
     border-left: 1px solid var(--line);
   }
+  /* the shelf stays pinned while the page scrolls, so "How it works" keeps to the left
+     columns beside it instead of running underneath it */
+  .about { grid-column: 1 / 10; }
 }
 
 /* ======================================================================

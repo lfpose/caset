@@ -35,7 +35,7 @@ export function createSound() {
     if (!AC) return null;
     try { ctx = new AC(); } catch { return null; }
     out = ctx.createGain();
-    out.gain.value = 0.8;
+    out.gain.value = 0.35;
     const comp = ctx.createDynamicsCompressor();
     out.connect(comp).connect(ctx.destination);
 

@@ -38,7 +38,8 @@ const CAP = 0.72; // cap height / em for the panel faces
 
 // ---------- text on a cm grid ----------
 // grid: { sx, sy (px per cm), h (height in cm, so y is measured from the bottom) }
-export function printer(g, grid) {
+export function printer(g, grid, ink = {}) {
+  const inkColor = ink.color || LOOK.ink.onAlu, inkAlpha = ink.alpha ?? LOOK.ink.onAluAlpha;
   const X = (x) => x * grid.sx, Y = (y) => (grid.h - y) * grid.sy;
   // panel legends are silkscreened in small tracked capitals (as on 70s/80s Technics fascias)
   function font(cap, weight = 400, family = LOOK.font.panel) {
@@ -46,7 +47,7 @@ export function printer(g, grid) {
   }
   // draws text with its baseline at y (cm); returns the drawn width in cm
   function text(str, x, y, cap, o = {}) {
-    const { weight = 500, family = LOOK.font.panel, align = "left", color = LOOK.ink.onAlu, alpha = LOOK.ink.onAluAlpha,
+    const { weight = 500, family = LOOK.font.panel, align = "left", color = inkColor, alpha = inkAlpha,
       track = 0.02, scaleX = 1, maxW = 0 } = o;
     g.save();
     g.font = font(cap, weight, family);
@@ -319,10 +320,11 @@ export function softEllipseCanvas(W = 256, H = 128, inner = 0.2, invert = false)
 // ---------- the fascia print atlas: 4096 x 1304 for the 44 x 14 cm panel ----------
 // RGB = ink colour, A = ink coverage. The fascia, door and sub-panel shaders mix it over
 // the metal (ink is matte paint: metalness 0, roughness 0.55 where it is).
-export function drawFasciaAtlas(cv, g) {
+// `finish` (LOOK.finishes.*): its ink colour; dark on silver, light grey on black anodising
+export function drawFasciaAtlas(cv, g, finish = null) {
   const grid = { sx: cv.width / 44, sy: cv.height / 14, h: 14 };
-  const P = printer(g, grid);
-  const ink = LOOK.ink.onAlu;
+  const ink = finish?.ink || LOOK.ink.onAlu;
+  const P = printer(g, grid, { color: ink, alpha: finish?.inkAlpha });
   g.clearRect(0, 0, cv.width, cv.height);
   // legends: uppercase, tracked 0.08 em, in the condensed numeric face, 0.24 cm caps for primary
   // ones and 0.2 cm for secondary ones, in full-strength ink
@@ -439,8 +441,9 @@ export function drawBackplate(cv, g) {
 
 // a key legend (per key, redrawn on language change), in tracked capitals. `band`: white on a
 // black anodised strip (the transport keys, as the dark legend strips of the M226), otherwise
-// dark ink on the metal; `rule`: a coloured rule under the text (green over the tape-moving keys)
-export function drawLegend(g, w, h, text, { rule = null, band = false } = {}) {
+// dark ink on the metal; `rule`: a coloured rule under the text (green over the tape-moving keys).
+// `finish` (LOOK.finishes.*): the band, band ink and plain ink colours
+export function drawLegend(g, w, h, text, { rule = null, band = false, finish = null } = {}) {
   g.clearRect(0, 0, w, h);
   text = String(text || "").toUpperCase();
   let fs = h * (band ? 0.5 : 0.62);
@@ -455,17 +458,17 @@ export function drawLegend(g, w, h, text, { rule = null, band = false } = {}) {
   }
   if (band) {
     g.globalAlpha = 1;
-    g.fillStyle = "#121110";
+    g.fillStyle = finish?.band || "#121110";
     const bh = h * (rule ? 0.76 : 0.88);
     g.beginPath();
     if (g.roundRect) g.roundRect(0, 0, w, bh, h * 0.08); else g.rect(0, 0, w, bh);
     g.fill();
-    g.fillStyle = "#ebe6dc";
+    g.fillStyle = finish?.bandInk || "#ebe6dc";
     g.textBaseline = "middle";
     g.fillText(text, pad, bh * 0.54, maxW);
   } else {
     g.globalAlpha = 1;
-    g.fillStyle = LOOK.ink.onAlu;
+    g.fillStyle = finish?.ink || LOOK.ink.onAlu;
     g.textBaseline = "alphabetic";
     g.fillText(text, pad, h * 0.66, maxW);
   }

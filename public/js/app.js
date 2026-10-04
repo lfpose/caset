@@ -15,6 +15,7 @@ import { createFilm } from "./ui/film.js";
 import { createMeter } from "./ui/meter.js";
 import { applyCopy } from "./ui/copy.js";
 import { createMini } from "./ui/mini.js";
+import { createFinish, savedFinish } from "./ui/finish.js";
 
 const motionQuery = matchMedia("(prefers-reduced-motion: reduce)");
 let reduceMotion = motionQuery.matches;
@@ -43,7 +44,7 @@ let deck = null;
 if (!noGL) {
   try {
     deck = createDeck({
-      canvas, slot, reduceMotion,
+      canvas, slot, reduceMotion, finish: savedFinish(),
       onEvent(kind) {
         if (kind === "lid") sound.clunk("lid");
         else if (kind === "lid-shut") sound.clunk("shut");
@@ -120,6 +121,8 @@ const shelf = createShelf({ rail: $("#rail"), player, sound, slot });
 const liner = createLiner({ liner: $("#liner"), body: $("#liner-body"), player, sound });
 const mini = createMini({ el: $("#mini"), cap: $("#cap-r"), slot, player, sound });
 var keys = createKeys({ slot, player, getDeck: () => deck });
+// silver | black: the deck's finish (hidden without the 3D deck)
+createFinish({ el: $(".finish"), getDeck: () => deck });
 
 // the camera's framing (desk, tablet, landscape): the whole deck, or eased in on the meters.
 // The deck goes back to the whole view by itself on load, flip and eject.

@@ -69,7 +69,12 @@ const ease = {
   back: (k) => { const u = k - 1; return 1 + 2 * u * u * u + u * u; },
 };
 
-export function createDeck({ canvas, slot, reduceMotion, onEvent = () => {} }) {
+export const FINISHES = Object.keys(LOOK.finishes);
+
+// finish: "silver" (default) or "black" (LOOK.finishes); switch later with setFinish(name)
+export function createDeck({ canvas, slot, reduceMotion, finish = "silver", onEvent = () => {} }) {
+  let finishName = LOOK.finishes[finish] ? finish : "silver";
+  const FIN = () => LOOK.finishes[finishName];
   let renderer;
   try {
     renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: false, powerPreference: "high-performance" });
@@ -197,7 +202,7 @@ export function createDeck({ canvas, slot, reduceMotion, onEvent = () => {} }) {
   }
   // print atlas for the fascia and the door (uv = panel x / 44, y / 14)
   const [atlasCv, atlasG] = makeCanvas(4096, 1304);
-  drawFasciaAtlas(atlasCv, atlasG);
+  drawFasciaAtlas(atlasCv, atlasG, FIN());
   const atlas = tex(atlasCv);
   // baked ambient occlusion: env light is not shadowed, so contact shade is painted (aoMap)
   const aoTex = tex(drawAO(), { srgb: false });
@@ -272,9 +277,12 @@ export function createDeck({ canvas, slot, reduceMotion, onEvent = () => {} }) {
     { anisotropy: LOOK.pbr.key.aniso });
   // one brushing at world scale for every cap (the texture tile is 22 cm x 1.25 cm, as on the
   // fascia): a cap's face uv spans its own w x h, so the repeat follows its size
+  // every cap material, so setFinish() can recolour them all
+  const keyMats = [];
   function keyMat(w, h) {
     const m = M.key.clone();
     for (const k of ["map", "roughnessMap", "normalMap"]) if (M.key[k]) { m[k] = M.key[k].clone(); m[k].repeat.set(w / 22, h / 1.25); }
+    keyMats.push(m);
     return noBloom(m);
   }
   M.keySmall = keyMat(2.4, 2.2);
@@ -295,13 +303,27 @@ export function createDeck({ canvas, slot, reduceMotion, onEvent = () => {} }) {
   M.pointer = new THREE.MeshStandardMaterial({ color: 0x8e8b86, roughness: 0.6, metalness: 0.2 });
   M.backplate = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.7, metalness: 0 });
   const smudge = tex(smudgeCanvas(LOOK.deck.seed + 4), { srgb: false });
-  M.smoke = phys({
+  // glass never blooms: a specular glint on the acrylic (anisotropic light at grazing angles on a
+  // real GPU) could pass the bloom threshold under the global cap of 24 and show as white dots
+  // along the display windows' edges. Its lit output is held at 1.4 (linear), under the knee.
+  // onBeforeCompile is not copied by clone(): apply it to every clone too.
+  function glassCap(m) {
+    m.onBeforeCompile = (sh) => {
+      sh.fragmentShader = sh.fragmentShader.replace("#include <tonemapping_fragment>",
+        "gl_FragColor.rgb = min(gl_FragColor.rgb, vec3(1.4));\n#include <tonemapping_fragment>");
+    };
+    m.customProgramCacheKey = () => "glass-cap";
+    return m;
+  }
+  // the display bar's acrylic (and its edge rim): a softer specular than the door window
+  M.smoke = glassCap(phys({
     color: LOOK.mat.smoke, metalness: 0, roughness: 1, roughnessMap: smudge,
     transparent: true, opacity: LOOK.pbr.smoke.opacity, depthWrite: false, envMapIntensity: LOOK.pbr.smoke.env,
-  }, { ior: LOOK.pbr.smoke.ior, specularIntensity: 1 });
+  }, { ior: LOOK.pbr.smoke.ior, specularIntensity: 0.6 }));
   M.smoke.envMap = glassEnv;
   // the door window is darker and warmer than the display bar: only the label and hubs read
-  M.smokeDoor = M.smoke.clone();
+  M.smokeDoor = glassCap(M.smoke.clone());
+  if (physical) M.smokeDoor.specularIntensity = 1;
   M.smokeDoor.color.set(LOOK.pbr.smokeDoor.color);
   M.smokeDoor.opacity = LOOK.pbr.smokeDoor.opacity;
   M.smokeDoor.envMapIntensity = LOOK.pbr.smokeDoor.env;
@@ -607,7 +629,7 @@ export function createDeck({ canvas, slot, reduceMotion, onEvent = () => {} }) {
     wg.translate(-22, 0, -1.1);
     add(wg, M.inner, stat, { cast: false });
     const gw = DIAL.x1 - DIAL.x0 - 0.3, gh = DIAL.y1 - DIAL.y0 - 0.3;
-    const gf = add(new THREE.PlaneGeometry(gw, gh), M.smoke.clone(), stat, { cast: false, receive: false });
+    const gf = add(new THREE.PlaneGeometry(gw, gh), glassCap(M.smoke.clone()), stat, { cast: false, receive: false });
     // a darker cover glass: the backlit scale glows against it instead of reading as paper
     gf.material.opacity = 0.26;
     gf.position.set(X((DIAL.x0 + DIAL.x1) / 2), (DIAL.y0 + DIAL.y1) / 2, -0.02); gf.renderOrder = 4;
@@ -764,7 +786,7 @@ export function createDeck({ canvas, slot, reduceMotion, onEvent = () => {} }) {
   function setLegend(k, text) {
     if (k.label === text) return;
     k.label = text;
-    drawLegend(k.lg, k.lcv.width, k.lcv.height, text, { rule: k.rule ? "#" + new THREE.Color(k.rule).getHexString() : null, band: k.band });
+    drawLegend(k.lg, k.lcv.width, k.lcv.height, text, { rule: k.rule ? "#" + new THREE.Color(k.rule).getHexString() : null, band: k.band, finish: FIN() });
     k.ltex.needsUpdate = true;
     dirty = true;
   }
@@ -929,7 +951,7 @@ export function createDeck({ canvas, slot, reduceMotion, onEvent = () => {} }) {
   function updateSpill() {
     const a = displays ? displays.activity : null;
     for (const s of spill) {
-      const k = (0.15 + 0.5 * (a ? a[s.key] || 0 : 0)) * 0.11;
+      const k = (0.15 + 0.5 * (a ? a[s.key] || 0 : 0)) * 0.11 * FIN().spill;
       if (Math.abs(k - s.k) < 1e-4) continue;
       s.k = k;
       s.mat.color.copy(s.base).multiplyScalar(k);
@@ -1015,12 +1037,13 @@ export function createDeck({ canvas, slot, reduceMotion, onEvent = () => {} }) {
     }
   }
 
+  let doorEnv = 1;   // the finish's env level for the door (applyFinish)
   function setDoor(deg) {
     doorDeg = deg;
     door.rotation.x = deg * DEG;
     // tilted toward the floor the silver reflects the floor bounce (look.js env.bounce) and
     // darkens a little by itself; the env is cut by at most 10 %, so it stays the same metal
-    M.door.envMapIntensity = 1 - 0.1 * Math.min(1, Math.abs(deg) / DOOR.open);
+    M.door.envMapIntensity = doorEnv * (1 - 0.1 * Math.min(1, Math.abs(deg) / DOOR.open));
   }
   function openDoor() {
     if (doorDeg >= DOOR.open - 0.01) return Promise.resolve();
@@ -1325,6 +1348,10 @@ export function createDeck({ canvas, slot, reduceMotion, onEvent = () => {} }) {
 
     fit,
     frame,
+    // the cabinet's finish: "silver" (default) or "black". Recolours the existing materials and
+    // reprints the finish-dependent canvases; no rebuild. Returns the finish now applied
+    setFinish(name) { return applyFinish(name); },
+    get finish() { return finishName; },
     // optional extras (docs/ARCHITECTURE.md): the camera's framing, "full" or "meters"
     setFocus(name) { setFocus(name); },
     get focus() { return focus.name; },
@@ -1742,6 +1769,49 @@ export function createDeck({ canvas, slot, reduceMotion, onEvent = () => {} }) {
     const i = renderer.info;
     console.info(`deck: ${preset} views=${views.length} calls=${i.render.calls} tris=${i.render.triangles} tex=${i.memory.textures} geo=${i.memory.geometries}`);
   }
+
+  // ======================================================================
+  // finish (LOOK.finishes): silver or black anodised, applied to the live materials
+  // ======================================================================
+  function applyFinish(name, { reprint = true } = {}) {
+    if (!LOOK.finishes[name]) return finishName;
+    const changed = name !== finishName;
+    finishName = name;
+    const F = FIN();
+    const metal = (m, color, metalness, env, aniso, normal) => {
+      if (!m) return;
+      m.color.set(color);
+      m.metalness = metalness;
+      if (env != null) m.envMapIntensity = env;
+      if (aniso != null && "anisotropy" in m && m.anisotropy > 0) m.anisotropy = aniso;
+      if (normal != null && m.normalScale) m.normalScale.set(normal, normal);
+    };
+    metal(M.alu, F.alu, F.metal, F.env, F.aniso, F.normal);
+    metal(M.door, F.aluDoor, F.metal, null, F.aniso, F.normalDoor);
+    doorEnv = F.env;
+    setDoor(doorDeg);
+    metal(M.sub, F.aluSub, F.metal, F.env, F.anisoSub, F.normalSub);
+    metal(M.top, F.top, F.topMetal, F.topEnv);
+    metal(M.topBend, F.top, F.topMetal, F.topBendEnv);
+    for (const m of keyMats) metal(m, F.key, F.keyMetal, F.keyEnv);
+    // a latched key darkens from its own base colour: re-base, and re-apply the press shade
+    for (const k of keys) { k.base.set(F.key); k.press = -1; }
+    M.knobFace.color.set(F.knobFace);
+    M.knobSkirt.color.set(F.knobSkirt);
+    M.knobChamfer.color.set(F.knobChamfer);
+    M.pointer.color.set(F.pointer);
+    M.screw?.color.set(F.screw);
+    for (const s of spill) s.k = -1;
+    if (reprint && changed) {
+      drawFasciaAtlas(atlasCv, atlasG, F);
+      atlas.needsUpdate = true;
+      for (const k of keys) { const t = k.label; k.label = null; setLegend(k, t); }
+    }
+    updateSpill();
+    dirty = shadowsDirty = true;
+    return finishName;
+  }
+  if (finishName !== "silver") applyFinish(finishName, { reprint: false });
 
   if (DEBUG) window.__deck = { api, renderer, scene, post, dstate, get displays() { return displays; }, get views() { return views; }, frame: () => { dirty = true; } };
   return api;

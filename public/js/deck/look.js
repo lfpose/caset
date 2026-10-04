@@ -82,6 +82,43 @@ export const LOOK = {
     drumBg: "#0c0b0a", drumInk: "#f4ecda", drumGlow: 0.22,
   },
 
+  // ---- finishes: the same deck in silver (the M226, default) or black anodised (the M206) ----
+  // deck3d.js setFinish(name) applies one of these to the existing materials and redraws the
+  // printed canvases (fascia atlas, key legends) whose ink depends on the finish. Displays,
+  // glass, slots and the studio are shared. `silver` mirrors mat / pbr / ink above.
+  finishes: {
+    silver: {
+      // fascia, door and transport sub-panel: bright satin brushed silver
+      alu: 0xdedbd4, aluSub: 0xcdc9c1, aluDoor: 0xe2dfd8, metal: 1, env: 1,
+      aniso: 0.75, anisoSub: 0.6, normal: 0.15, normalSub: 0.15, normalDoor: 0.12,
+      // the top cover (painted satin wrap)
+      top: 0xb4b1ab, topMetal: 0.85, topEnv: 0.9, topBendEnv: 0.55,
+      // key caps: the same brushed silver
+      key: 0xe2dfd8, keyMetal: 1, keyEnv: 1,
+      // knobs: spun face, knurled skirt, bright chamfer, the tape-select pointer
+      knobFace: 0xe4e1da, knobSkirt: 0xc9c5be, knobChamfer: 0xf2efe8, pointer: 0x8e8b86, screw: 0xb9b5ad,
+      // printed ink on the metal (fascia atlas, eject legend), and the transport legend bands
+      ink: "#2a2725", inkAlpha: 0.92, band: "#121110", bandInk: "#ebe6dc",
+      // the displays' light spill on the metal (a dark panel takes much less of it)
+      spill: 1,
+    },
+    black: {
+      // black anodised aluminium: a dyed oxide over brushed metal. The dye eats the diffuse,
+      // the oxide keeps a neutral satin sheen, and the brushing reads as long soft streaks of
+      // reflected soft box rather than as grain
+      alu: 0x232120, aluSub: 0x1d1c1b, aluDoor: 0x252322, metal: 0.55, env: 1.25,
+      aniso: 0.85, anisoSub: 0.7, normal: 0.22, normalSub: 0.2, normalDoor: 0.18,
+      top: 0x1c1b1a, topMetal: 0.5, topEnv: 1.05, topBendEnv: 0.7,
+      // silver-grey keys (the M206 keeps light caps on the black panel), a touch darker than silver
+      key: 0xbab6af, keyMetal: 1, keyEnv: 0.95,
+      // dark knurled skirts, a spun silver-grey face and a bright chamfer ring
+      knobFace: 0xb9b5ae, knobSkirt: 0x2a2826, knobChamfer: 0xd8d4cc, pointer: 0xc9c5bd, screw: 0x2c2a28,
+      // light grey silkscreen
+      ink: "#cfcac1", inkAlpha: 0.95, band: "#0c0b0b", bandInk: "#e2ddd3",
+      spill: 0.18,
+    },
+  },
+
   // ---- deck-only extras (not part of the shared §9.2 contract) ----
   deck: {
     seed: 0xca5e7,
