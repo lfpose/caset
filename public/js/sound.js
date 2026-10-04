@@ -3,11 +3,14 @@
 //   unlock()               create / resume the AudioContext (call from a user gesture)
 //   clunk(kind)            key | latch | lid | shut | drop | slide
 //   setWind(level, pitch)  winding noise; level 0..1, pitch in reel radians per second
+//   context()              the AudioContext, or null before unlock() (never creates one)
+//   hold(on)               keep the context awake while program audio flows through it (levels.js)
 export function createSound() {
   let ctx = null;
   let out, noise, windGain, windBand, whine, whineGain;
   let windLevel = 0, windPitch = 0;
   let idleTimer = 0;
+  let held = false;   // levels.js routes the <audio> element through ctx: never suspend while it plays
 
   // The looping noise and the whine run for as long as the context does, so the context
   // is suspended once the deck has been quiet for a moment and woken on the next sound.
@@ -19,10 +22,10 @@ export function createSound() {
   function settle() {
     clearTimeout(idleTimer);
     idleTimer = 0;
-    if (!ctx || windLevel > 0) return;
+    if (!ctx || windLevel > 0 || held) return;
     idleTimer = setTimeout(() => {
       idleTimer = 0;
-      if (ctx.state === "running" && windLevel === 0) ctx.suspend().catch(() => {});
+      if (ctx.state === "running" && windLevel === 0 && !held) ctx.suspend().catch(() => {});
     }, 2500);
   }
 
@@ -127,6 +130,11 @@ export function createSound() {
       settle();
     },
     clunk,
+    context() { return ctx; },
+    hold(on) {
+      held = !!on;
+      if (held) wake(); else settle();
+    },
     // level 0..1 for winding, pitch in reel radians per second
     setWind(level, pitch) {
       if (!ctx) return;

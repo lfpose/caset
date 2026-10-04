@@ -1,10 +1,18 @@
-// The transport keys as HTML buttons. With a 3D deck they are invisible and laid exactly
-// over the 3D keys (so clicks, focus and screen readers work); without one they are the
-// visible controls. Also the keyboard shortcuts.
+// The transport keys as HTML buttons. With a 3D deck on a desk they are invisible and laid
+// exactly over the 3D keys (so clicks, focus and screen readers work). On phones and touch
+// screens they are docked: a flat bar of 56 px keys under the deck (html.is-dock), because the
+// 3D keys are too small to hit there; the 3D keys still move with them. Without a deck they are
+// the visible controls. Also the keyboard shortcuts.
 import { t as words } from "../core/i18n.js";
 
 export function createKeys({ slot, player, getDeck }) {
   const buttons = new Map([...slot.querySelectorAll(".key")].map((b) => [b.dataset.action, b]));
+  const dockQ = matchMedia("(max-width: 599px), (pointer: coarse)");
+  const docked = () => dockQ.matches;
+  function syncDock() {
+    document.documentElement.classList.toggle("is-dock", docked());
+  }
+  syncDock();
 
   for (const [action, b] of buttons) {
     b.addEventListener("click", (e) => {
@@ -38,27 +46,42 @@ export function createKeys({ slot, player, getDeck }) {
   }
 
   function place() {
+    syncDock();
     const deck = getDeck();
     if (!deck) return;
     deck.fit();
+    sync();
+  }
+  // lay the buttons over the deck's current key rects (also while its camera moves, without
+  // re-fitting). A key out of the camera's view is hidden, so no target sits over the meters
+  function sync() {
+    const deck = getDeck();
+    if (!deck) return;
+    if (docked()) { unplace(); return; }
     const sr = slot.getBoundingClientRect();
-    const root = document.documentElement.style;
-    root.setProperty("--gx", `${Math.round(sr.left + sr.width / 2)}px`);
-    root.setProperty("--gy", `${Math.round(sr.top + sr.height * 0.62)}px`);
     for (const r of deck.keyRects) {
       const b = buttons.get(r.action);
       b.style.left = `${r.x - sr.left}px`;
       b.style.top = `${r.y - sr.top}px`;
       b.style.width = `${r.w}px`;
       b.style.height = `${r.h}px`;
+      b.classList.toggle("is-off", !!r.hidden);
     }
   }
   addEventListener("resize", place);
+  dockQ.addEventListener?.("change", place);
   if ("ResizeObserver" in window) new ResizeObserver(place).observe(slot);
+  // once more after fonts and layout settle (the header and rack can shift the slot)
+  document.fonts?.ready.then(() => requestAnimationFrame(place)).catch(() => {});
+  addEventListener("load", () => requestAnimationFrame(place), { once: true });
 
   // back to the plain HTML keys (the 3D deck went away)
   function unplace() {
-    for (const b of buttons.values()) for (const k of ["left", "top", "width", "height"]) b.style.removeProperty(k);
+    for (const b of buttons.values()) {
+      if (!b.style.length && !b.classList.contains("is-off")) continue;
+      for (const k of ["left", "top", "width", "height"]) b.style.removeProperty(k);
+      b.classList.remove("is-off");
+    }
   }
 
   addEventListener("keydown", (e) => {
@@ -79,5 +102,5 @@ export function createKeys({ slot, player, getDeck }) {
     }
   });
 
-  return { updateLabels, updateFlipLabel, place, unplace };
+  return { updateLabels, updateFlipLabel, place, sync, unplace };
 }

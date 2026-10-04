@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="color-scheme" content="dark">
-  <meta name="theme-color" content="#17120f">
-  <meta name="description" content="A cassette deck and a shelf of tapes: voices, launches, whales and first recordings.">
+  <meta name="theme-color" content="#15110e">
+  <meta name="description" content="A cassette deck in your browser, loaded with ten tapes of recorded history: voices, launches, whales and first recordings.">
   <title>caset</title>
   <link rel="canonical" href="https://caset.cl/">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="caset">
   <meta property="og:title" content="caset">
-  <meta property="og:description" content="A cassette deck and a shelf of tapes: voices, launches, whales and first recordings.">
+  <meta property="og:description" content="A cassette deck in your browser, loaded with ten tapes of recorded history.">
   <meta property="og:url" content="https://caset.cl/">
   <meta name="twitter:card" content="summary">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -20,18 +20,38 @@
   <link rel="modulepreload" href="/vendor/three.core.min.js">
 </head>
 <body>
-  <canvas id="stage" aria-hidden="true"></canvas>
+  <a class="skip" href="#rail" data-copy="skip">Skip to the tapes</a>
   <noscript><p class="noscript">caset is a cassette deck that runs in the browser: it needs JavaScript to play its tapes.</p></noscript>
+  <i class="top-sentinel" aria-hidden="true"></i>
 
-  <div class="app">
-    <header class="brand">
-      <h1><a href="/">caset</a></h1>
-      <span class="stripes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
-    </header>
+  <header class="bar">
+    <div class="bar-in">
+      <a class="brand" href="/">
+        <h1 class="wordmark">caset<span class="sr">: <span data-copy="statement">A cassette deck in your browser, loaded with ten tapes of recorded history.</span></span></h1>
+        <span class="stripes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+      </a>
+      <nav class="bar-nav" aria-label="Page" data-copy-label="pageNav">
+        <a href="#tapes" data-copy="navTapes">The tapes</a>
+        <a href="#about" data-copy="how">How it works</a>
+      </nav>
+      <div class="lang" role="group" aria-label="Language" data-copy-label="language">
+        <button type="button" data-lang="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang="es" aria-pressed="false">ES</button>
+      </div>
+    </div>
+  </header>
 
-    <main class="deck" aria-label="Cassette deck">
+  <main class="page">
+    <section class="intro" aria-labelledby="intro-title">
+      <h2 class="intro-title" id="intro-title" data-copy="heroTitle">A cassette deck in your browser.</h2>
+      <p class="intro-lede" data-copy="heroLede">Ten tapes of recorded history, from the oldest recorded voice to Apollo 11. Pick one and press play.</p>
+    </section>
+
+    <figure class="plate" id="deck">
       <div class="slot" id="slot">
-        <div class="keys" id="keys" role="group" aria-label="Transport keys">
+        <canvas id="stage" aria-hidden="true"></canvas>
+        <div class="loupe" aria-hidden="true"><span class="loupe-cap" data-copy="loupe">VU and peak meters</span></div>
+        <div class="keys" id="keys" role="group" aria-label="Transport keys" data-copy-label="keys">
           <button type="button" class="key" data-action="rewind" aria-pressed="false"><span class="key-ico" aria-hidden="true">◀◀</span><span class="key-lbl">rewind</span></button>
           <button type="button" class="key" data-action="play" aria-pressed="false"><span class="key-ico" aria-hidden="true">▶</span><span class="key-lbl">play</span></button>
           <button type="button" class="key" data-action="forward" aria-pressed="false"><span class="key-ico" aria-hidden="true">▶▶</span><span class="key-lbl">forward</span></button>
@@ -40,28 +60,44 @@
           <button type="button" class="key" data-action="eject"><span class="key-ico" aria-hidden="true">⏏</span><span class="key-lbl">eject</span></button>
         </div>
       </div>
-      <p class="sr" id="status" aria-live="polite"></p>
-    </main>
+      <figcaption class="cap">
+        <span class="cap-l" aria-hidden="true" data-copy="plate">CS-86 · Stereo cassette deck</span>
+        <span class="view" role="group" aria-label="View" data-copy-label="viewGroup">
+          <button type="button" data-view="full" aria-pressed="true"><i class="view-ico" aria-hidden="true"></i><span data-copy="viewDeck">Deck</span></button>
+          <button type="button" data-view="meters" aria-pressed="false" data-copy-title="viewMetersTitle"><i class="view-ico is-meters" aria-hidden="true"></i><span data-copy="viewMeters">Meters</span></button>
+        </span>
+        <span class="cap-r" id="cap-r" aria-hidden="true"></span>
+      </figcaption>
+    </figure>
+    <p class="sr" id="status" aria-live="polite"></p>
 
-    <section class="shelf" aria-labelledby="shelf-title">
-      <h2 class="sr" id="shelf-title">Tapes</h2>
+    <section class="shelf" id="tapes" aria-labelledby="shelf-title">
+      <header class="shelf-head">
+        <h2 class="eyebrow" id="shelf-title" data-copy="shelfEyebrow">The shelf · 10 tapes</h2>
+      </header>
       <ul class="rail" id="rail"></ul>
     </section>
 
-    <aside class="liner" id="liner" aria-label="Liner notes">
+    <section class="liner" id="liner" aria-label="Liner notes" data-copy-label="liner">
       <div class="liner-body" id="liner-body"></div>
-      <div class="lang" role="group" aria-label="Notes language">
-        <button type="button" data-lang="en" aria-pressed="true">EN</button>
-        <button type="button" data-lang="es" aria-pressed="false">ES</button>
-      </div>
-    </aside>
+    </section>
 
-    <footer class="foot">
-      <a href="https://lucaspose.cl" rel="me">lucaspose.cl</a>
-    </footer>
-  </div>
+    <section class="about" id="about" aria-labelledby="about-title">
+      <h2 class="eyebrow" id="about-title" data-copy="how">How it works</h2>
+      <ol class="steps" id="steps"></ol>
+      <p class="sources" data-copy="sources">Public-domain and permitted recordings. Each track lists its credit and license.</p>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <span class="foot-name">caset</span>
+    <a href="https://lucaspose.cl" rel="me">lucaspose.cl</a>
+  </footer>
+
+  <aside class="mini" id="mini" aria-label="Now playing" data-copy-label="nowPlaying"></aside>
 
   <audio id="player" preload="auto"></audio>
+  <div class="film" aria-hidden="true"><i class="grain"></i></div>
   <script type="module" src="/js/app.js"></script>
 </body>
 </html>
