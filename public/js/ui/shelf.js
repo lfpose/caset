@@ -37,9 +37,29 @@ export function createShelf({ rail, player, sound, slot }) {
         h("span", { class: "c-trap" })));
   }
 
+  // tapes.json may put a cassette on another shelf ("shelf": "music"); missing means the
+  // recorded-history shelf. Shelves render as labelled groups in one list, in this order,
+  // numbered within each group
+  const SHELVES = ["history", "music"];
+  const shelfOf = (c) => (SHELVES.includes(c.shelf) ? c.shelf : "history");
+
   function render() {
     const K = copy();
-    rail.replaceChildren(...player.tapes.map((c, n) => {
+    const items = [];
+    let first = true;
+    for (const sh of SHELVES) {
+      const group = player.tapes.filter((c) => shelfOf(c) === sh);
+      if (!group.length) continue;
+      items.push(h("li", { class: "c-group", "data-shelf": sh, role: "presentation" },
+        h("h3", { class: "eyebrow c-group-title", id: `shelf-${sh}`, text: K.shelfName(sh) })));
+      group.forEach((c, n) => { items.push(card(c, n, first)); first = false; });
+    }
+    rail.replaceChildren(...items);
+  }
+
+  function card(c, n, isFirst) {
+    const K = copy();
+    {
       const img = new Image();
       img.alt = "";
       img.decoding = "async";
@@ -59,7 +79,7 @@ export function createShelf({ rail, player, sound, slot }) {
         });
         return b;
       };
-      const b = h("button", { type: "button", class: "case", "data-id": c.id, "aria-pressed": "false", "aria-label": label(c), tabindex: n === 0 ? "0" : "-1" });
+      const b = h("button", { type: "button", class: "case", "data-id": c.id, "aria-pressed": "false", "aria-label": label(c), tabindex: isFirst ? "0" : "-1" });
       b.addEventListener("click", (e) => {
         sound.unlock();
         if (e.detail > 0) b.blur();
@@ -84,7 +104,7 @@ export function createShelf({ rail, player, sound, slot }) {
       img.addEventListener("load", () => li.classList.add("hascover"));
       img.src = c.cover;
       return li;
-    }));
+    }
   }
 
   // load a tape (on a given side, or the one it was last on). A keyboard pick carries focus on

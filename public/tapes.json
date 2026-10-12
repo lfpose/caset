@@ -3,7 +3,7 @@
     "id": "moonshot",
     "name": "Moonshot",
     "color": "#e3b03a",
-    "cover": "/covers/moonshot.svg?v=4",
+    "cover": "/covers/moonshot.svg?v=5",
     "sides": {
       "A": {
         "label": "Going",
@@ -95,7 +95,7 @@
     "id": "other-worlds",
     "name": "Other worlds",
     "color": "#3d8d8c",
-    "cover": "/covers/other-worlds.svg?v=4",
+    "cover": "/covers/other-worlds.svg?v=5",
     "sides": {
       "A": {
         "label": "Mars and Titan",
@@ -193,7 +193,7 @@
     "id": "first-sounds",
     "name": "First sounds",
     "color": "#8a8b3b",
-    "cover": "/covers/first-sounds.svg?v=4",
+    "cover": "/covers/first-sounds.svg?v=5",
     "sides": {
       "A": {
         "label": "Firsts",
@@ -288,7 +288,7 @@
     "id": "living-things",
     "name": "Living things",
     "color": "#6f9a52",
-    "cover": "/covers/living-things.svg?v=4",
+    "cover": "/covers/living-things.svg?v=5",
     "sides": {
       "A": {
         "label": "Animals",
@@ -386,7 +386,7 @@
     "id": "ocean",
     "name": "Ocean",
     "color": "#33506b",
-    "cover": "/covers/ocean.svg?v=4",
+    "cover": "/covers/ocean.svg?v=5",
     "sides": {
       "A": {
         "label": "Whales",
@@ -478,7 +478,7 @@
     "id": "live",
     "name": "Live",
     "color": "#c0392b",
-    "cover": "/covers/live.svg?v=4",
+    "cover": "/covers/live.svg?v=5",
     "sides": {
       "A": {
         "label": "On the air",
@@ -570,7 +570,7 @@
     "id": "now",
     "name": "Now",
     "color": "#d9679a",
-    "cover": "/covers/now.svg?v=4",
+    "cover": "/covers/now.svg?v=5",
     "sides": {
       "A": {
         "label": "Young voices",
@@ -664,7 +664,7 @@
     "id": "words",
     "name": "Words",
     "color": "#7a5c9e",
-    "cover": "/covers/words.svg?v=4",
+    "cover": "/covers/words.svg?v=5",
     "sides": {
       "A": {
         "label": "Poets",
@@ -755,7 +755,7 @@
     "id": "music",
     "name": "Music",
     "color": "#b5651d",
-    "cover": "/covers/music.svg?v=4",
+    "cover": "/covers/music.svg?v=5",
     "sides": {
       "A": {
         "label": "The first records",
@@ -841,13 +841,722 @@
           }
         ]
       }
+    },
+    "shelf": "music"
+  },
+  {
+    "id": "jazz",
+    "name": "Jazz",
+    "color": "#1f6f8b",
+    "shelf": "music",
+    "cover": "/covers/jazz.svg?v=5",
+    "sides": {
+      "A": {
+        "label": "Hot jazz on record",
+        "label_es": "El jazz llega al disco",
+        "tracks": [
+          {
+            "id": "a1",
+            "title": "Dippermouth Blues",
+            "who": "King Oliver’s Creole Jazz Band, with Louis Armstrong",
+            "date": "1923",
+            "place": "Richmond, Indiana",
+            "dur": 134.9,
+            "src": "/audio/jazz/a1.mp3",
+            "note": "King Oliver plays three choruses of growling, muted cornet while a 21-year-old Louis Armstrong sits beside him on second cornet, and a bandmate shouts “Oh, play that thing!” in the break. Trumpeters copied Oliver’s solo note for note for decades, and these sessions are the first great records by a Black New Orleans jazz band.",
+            "note_es": "King Oliver toca tres coros de corneta con sordina, ronca y gruñona, mientras un Louis Armstrong de 21 años lo acompaña en la segunda corneta, y un compañero grita “¡Oh, toca esa cosa!” en el quiebre. Los trompetistas copiaron el solo de Oliver nota por nota durante décadas, y estas sesiones son los primeros grandes discos de una banda de jazz negra de Nueva Orleans.",
+            "rights": "pd",
+            "credit": "Public domain recording, transfer via Internet Archive (78rpm collection)",
+            "license_url": "https://creativecommons.org/publicdomain/zero/1.0/"
+          },
+          {
+            "id": "a2",
+            "title": "King Porter Stomp",
+            "who": "Jelly Roll Morton, piano",
+            "date": "1923",
+            "place": "Richmond, Indiana",
+            "dur": 159.3,
+            "src": "/audio/jazz/a2.mp3",
+            "note": "Morton plays his own stomp alone at the piano, with rolling New Orleans rhythms and a riffing last strain that seems to call for a whole band. A decade later the same tune became an anthem of the swing era in big-band versions by Fletcher Henderson and Benny Goodman.",
+            "note_es": "Morton toca su propio stomp solo al piano, con ritmos ondulantes de Nueva Orleans y una última sección de riffs que parece pedir una banda entera. Una década después, la misma melodía se volvió un himno de la era del swing en versiones de big band de Fletcher Henderson y Benny Goodman.",
+            "rights": "pd",
+            "credit": "Public domain recording, transfer via Internet Archive (78rpm collection)",
+            "license_url": "https://creativecommons.org/publicdomain/zero/1.0/"
+          },
+          {
+            "id": "a3",
+            "title": "Riverboat Shuffle",
+            "who": "The Wolverines, with Bix Beiderbecke",
+            "date": "1924",
+            "place": "Richmond, Indiana",
+            "dur": 150.8,
+            "src": "/audio/jazz/a3.mp3",
+            "note": "A young Midwestern band with Bix Beiderbecke on cornet plays an early tune by his friend Hoagy Carmichael, and Bix’s clear, bell-like tone cuts through the ensemble. It was the first Carmichael song ever recorded, and Bix’s cool, carefully shaped solos opened a different path from Armstrong’s fire that many players would follow.",
+            "note_es": "Una joven banda del Medio Oeste, con Bix Beiderbecke en la corneta, toca una de las primeras melodías de su amigo Hoagy Carmichael, y el sonido claro de Bix, como una campana, atraviesa el conjunto. Fue la primera canción de Carmichael en grabarse, y los solos serenos y bien pensados de Bix abrieron un camino distinto al fuego de Armstrong, que muchos músicos siguieron.",
+            "rights": "pd",
+            "credit": "Public domain recording, transfer via Internet Archive (78rpm collection)",
+            "license_url": "https://creativecommons.org/publicdomain/zero/1.0/"
+          }
+        ]
+      },
+      "B": {
+        "label": "Jazz now",
+        "label_es": "El jazz de hoy",
+        "tracks": [
+          {
+            "id": "b1",
+            "title": "Law Hill",
+            "who": "Fergus McCreadie Trio",
+            "date": "2022",
+            "place": "Scotland",
+            "dur": 352.0,
+            "src": "/audio/jazz/b1.mp3",
+            "note": "A Scottish piano trio grows a tune shaped like a folk melody into a rolling, rising improvisation, with bass and drums moving as one with the piano. Its album, Forest Floor, won the Scottish Album of the Year award and was shortlisted for the Mercury Prize.",
+            "note_es": "Un trío de piano escocés convierte una melodía con forma de canción folclórica en una improvisación que avanza y crece, con el bajo y la batería moviéndose como uno solo con el piano. Su disco, Forest Floor, ganó el premio al Álbum Escocés del Año y fue finalista del Mercury Prize.",
+            "rights": "credit",
+            "credit": "Fergus McCreadie / Edition Records, CC BY 3.0, via YouTube",
+            "license_url": "https://creativecommons.org/licenses/by/3.0/"
+          },
+          {
+            "id": "b2",
+            "title": "Circuits",
+            "who": "Chris Potter, with James Francies, Eric Harland and Linley Marthe",
+            "date": "2019",
+            "dur": 354.2,
+            "src": "/audio/jazz/b2.mp3",
+            "note": "Saxophonist Chris Potter, one of the most admired improvisers of his generation, races over a tight electric groove of keyboards, bass and Eric Harland’s restless drums. It shows how today’s jazz soaks up funk and layered studio sound without losing the thrill of a live solo.",
+            "note_es": "El saxofonista Chris Potter, uno de los improvisadores más admirados de su generación, corre sobre un groove eléctrico y apretado de teclados, bajo y la batería inquieta de Eric Harland. Muestra cómo el jazz de hoy absorbe el funk y el sonido de estudio por capas sin perder la emoción de un solo en vivo.",
+            "rights": "credit",
+            "credit": "Chris Potter / Edition Records, CC BY 3.0, via YouTube",
+            "license_url": "https://creativecommons.org/licenses/by/3.0/"
+          },
+          {
+            "id": "b3",
+            "title": "Home",
+            "who": "Sun-Mi Hong Quintet",
+            "date": "2022",
+            "place": "Amsterdam",
+            "dur": 312.4,
+            "src": "/audio/jazz/b3.mp3",
+            "note": "Drummer Sun-Mi Hong leads her quintet through a piece that drifts from hymn-like warmth to an open, cathartic climax. It shows how far jazz has travelled: written by a Korean-born drummer, played by an international band and recorded in a former church in Amsterdam.",
+            "note_es": "La baterista Sun-Mi Hong guía a su quinteto por una pieza que va de una calidez casi de himno a un clímax abierto y liberador. Muestra lo lejos que ha llegado el jazz: compuesta por una baterista nacida en Corea, tocada por una banda internacional y grabada en una antigua iglesia de Ámsterdam.",
+            "rights": "credit",
+            "credit": "Sun-Mi Hong / Edition Records, CC BY 3.0, via YouTube",
+            "license_url": "https://creativecommons.org/licenses/by/3.0/"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "blues",
+    "name": "Blues & roots",
+    "color": "#3b4f9e",
+    "shelf": "music",
+    "cover": "/covers/blues.svg?v=5",
+    "sides": {
+      "A": {
+        "label": "The first blues",
+        "label_es": "Los primeros blues",
+        "tracks": [
+          {
+            "id": "a1",
+            "title": "Crazy Blues",
+            "who": "Mamie Smith & Her Jazz Hounds",
+            "date": "1920",
+            "place": "New York",
+            "dur": 204.3,
+            "src": "/audio/blues/a1.mp3",
+            "note": "Mamie Smith belts out a tale of heartbreak and revenge over a small band of cornet, trombone, clarinet, violin and piano. It was the first blues recorded by a Black singer, and its huge sales showed the record companies a market they had ignored, opening the door for every blues artist who followed.",
+            "note_es": "Mamie Smith canta a todo pulmón una historia de despecho y venganza sobre una pequeña banda de corneta, trombón, clarinete, violín y piano. Fue el primer blues grabado por una cantante negra, y sus enormes ventas mostraron a los sellos un mercado que habían ignorado, abriendo la puerta a todos los artistas de blues que vinieron después.",
+            "rights": "pd",
+            "credit": "Public domain recording, transfer via Internet Archive (78rpm collection)",
+            "license_url": "https://creativecommons.org/publicdomain/zero/1.0/"
+          },
+          {
+            "id": "a2",
+            "title": "See See Rider Blues",
+            "who": "Ma Rainey & Her Georgia Jazz Band, with Louis Armstrong",
+            "date": "1924",
+            "place": "New York",
+            "dur": 180.3,
+            "src": "/audio/blues/a2.mp3",
+            "note": "The “Mother of the Blues” sings about a faithless lover in her deep, unhurried voice, with Louis Armstrong answering her on cornet. Her version made See See Rider a standard, later recorded by everyone from Big Bill Broonzy to Elvis Presley.",
+            "note_es": "La “Madre del Blues” canta sobre un amante infiel con su voz grave y sin apuro, mientras Louis Armstrong le responde en la corneta. Su versión convirtió See See Rider en un clásico que después grabaron desde Big Bill Broonzy hasta Elvis Presley.",
+            "rights": "pd",
+            "credit": "Public domain recording, transfer via Internet Archive (78rpm collection)",
+            "license_url": "https://creativecommons.org/publicdomain/zero/1.0/"
+          },
+          {
+            "id": "a3",
+            "title": "The St. Louis Blues",
+            "who": "Bessie Smith, with Louis Armstrong and Fred Longshaw",
+            "date": "1925",
+            "place": "New York",
+            "dur": 189.2,
+            "src": "/audio/blues/a3.mp3",
+            "note": "The “Empress of the Blues” sings W. C. Handy’s famous song with only Fred Longshaw’s wheezing reed organ and Louis Armstrong’s cornet, which echoes and answers every line. Many hear it as the definitive version of the best-known blues ever written, and it is in the Grammy Hall of Fame.",
+            "note_es": "La “Emperatriz del Blues” canta la famosa canción de W. C. Handy acompañada solo por el armonio jadeante de Fred Longshaw y la corneta de Louis Armstrong, que repite y responde cada verso. Muchos la consideran la versión definitiva del blues más conocido jamás escrito, y está en el Salón de la Fama de los Grammy.",
+            "rights": "pd",
+            "credit": "Public domain recording, transfer via Internet Archive (78rpm collection)",
+            "license_url": "https://creativecommons.org/publicdomain/zero/1.0/"
+          }
+        ]
+      },
+      "B": {
+        "label": "Blues & roots now",
+        "label_es": "Blues y raíces de hoy",
+        "tracks": [
+          {
+            "id": "b1",
+            "title": "Blues Prisoner",
+            "who": "Tommy Castro & the Painkillers",
+            "date": "2022",
+            "place": "Groesbeek, Netherlands",
+            "dur": 381.6,
+            "src": "/audio/blues/b1.mp3",
+            "note": "California singer and guitarist Tommy Castro, a multiple Blues Music Award winner, stretches out on a slow blues about being locked up in the music for life, live for a Dutch radio show. The twelve-bar form Mamie Smith put on record a century earlier is still here, only louder.",
+            "note_es": "El cantante y guitarrista californiano Tommy Castro, ganador de varios Blues Music Awards, se explaya en un blues lento sobre estar preso de esta música de por vida, en vivo para un programa de radio holandés. La forma de doce compases que Mamie Smith llevó al disco un siglo antes sigue aquí, solo que más fuerte.",
+            "rights": "credit",
+            "credit": "Tommy Castro & the Painkillers, recorded by Bluesmoose Radio, CC BY 3.0, via YouTube",
+            "license_url": "https://creativecommons.org/licenses/by/3.0/"
+          },
+          {
+            "id": "b2",
+            "title": "I Am the Train",
+            "who": "Ian Siegal",
+            "date": "2020",
+            "place": "Groesbeek, Netherlands",
+            "dur": 262.4,
+            "src": "/audio/blues/b2.mp3",
+            "note": "British singer and guitarist Ian Siegal plays his own song alone on acoustic guitar, his gravelly voice riding a rhythm that chugs like a locomotive. Trains have run through the blues since the beginning, and here a modern songwriter makes that old image his own.",
+            "note_es": "El cantante y guitarrista británico Ian Siegal toca su propia canción solo con guitarra acústica, con su voz rasposa montada sobre un ritmo que avanza como una locomotora. Los trenes recorren el blues desde sus inicios, y aquí un compositor actual hace suya esa vieja imagen.",
+            "rights": "credit",
+            "credit": "Ian Siegal, recorded by Bluesmoose Radio, CC BY 3.0, via YouTube",
+            "license_url": "https://creativecommons.org/licenses/by/3.0/"
+          },
+          {
+            "id": "b3",
+            "title": "Diamond Joe",
+            "who": "The Onlies",
+            "date": "2020",
+            "dur": 236.2,
+            "src": "/audio/blues/b3.mp3",
+            "note": "A young string band of fiddles, banjo and guitars sings an old cowboy song about a stingy ranch boss in close, high harmony. They keep alive the old-time sound heard on the very first country records of the 1920s.",
+            "note_es": "Una joven banda de cuerdas, con violines, banjo y guitarras, canta una vieja canción vaquera sobre un patrón de rancho tacaño, en armonías agudas y apretadas. Mantienen vivo el sonido old-time que se oyó en los primeros discos de música country de los años veinte.",
+            "rights": "credit",
+            "credit": "The Onlies, CC BY 3.0, via YouTube",
+            "license_url": "https://creativecommons.org/licenses/by/3.0/"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "classical",
+    "name": "Classical",
+    "color": "#a8956b",
+    "shelf": "music",
+    "cover": "/covers/classical.svg?v=5",
+    "sides": {
+      "A": {
+        "label": "The great performers",
+        "label_es": "Los grandes intérpretes",
+        "tracks": [
+          {
+            "id": "a1",
+            "title": "Prelude in C-sharp minor",
+            "who": "Sergei Rachmaninoff, piano",
+            "date": "1921",
+            "place": "New York",
+            "dur": 209.6,
+            "src": "/audio/classical/a1.mp3",
+            "note": "Rachmaninoff plays the prelude he wrote at nineteen, its three great tolling chords opening onto a stormy middle section. The piece became so famous that audiences demanded it at every concert, and he grew to resent it, yet here he plays it with total command.",
+            "note_es": "Rachmaninoff toca el preludio que escribió a los diecinueve años, con sus tres grandes acordes como campanadas que dan paso a una sección central tormentosa. La pieza se hizo tan famosa que el público la exigía en cada concierto y él terminó por detestarla, pero aquí la toca con un dominio absoluto.",
+            "rights": "pd",
+            "credit": "Victor Talking Machine Co. / Internet Archive, Great 78 Project"
+          },
+          {
+            "id": "a2",
+            "title": "Caprice viennois",
+            "who": "Fritz Kreisler, violin, with George Falkenstein, piano",
+            "date": "1910",
+            "place": "New York",
+            "dur": 216.1,
+            "src": "/audio/classical/a2.mp3",
+            "note": "Kreisler plays his own little Viennese waltz-caprice, all sweet slides and teasing rhythm, with the warm vibrato that became his signature. He was the most loved violinist of his day, and for years he passed off some of his pieces as the work of forgotten old masters.",
+            "note_es": "Kreisler toca su propio pequeño capricho vienés en tiempo de vals, lleno de deslizamientos dulces y ritmo juguetón, con el vibrato cálido que se volvió su sello. Fue el violinista más querido de su época, y durante años hizo pasar algunas de sus piezas como obras de viejos maestros olvidados.",
+            "rights": "pd",
+            "credit": "Victor Talking Machine Co. / Internet Archive, Great 78 Project"
+          },
+          {
+            "id": "a3",
+            "title": "Song of the Flea",
+            "who": "Feodor Chaliapin, bass (music by Modest Mussorgsky)",
+            "date": "1921",
+            "dur": 187.4,
+            "src": "/audio/classical/a3.mp3",
+            "note": "The great Russian bass sings Mussorgsky's setting of Goethe's satire about a king who dresses his pet flea in velvet, bursting into scornful laughter between the verses. Chaliapin was as much an actor as a singer, and this song was one of his most famous party pieces.",
+            "note_es": "El gran bajo ruso canta la versión de Mussorgsky de la sátira de Goethe sobre un rey que viste de terciopelo a su pulga favorita, y estalla en carcajadas burlonas entre las estrofas. Chaliapin era tanto actor como cantante, y esta canción era uno de sus números más célebres.",
+            "rights": "pd",
+            "credit": "Victor Talking Machine Co. / Internet Archive, Great 78 Project"
+          }
+        ]
+      },
+      "B": {
+        "label": "Beloved classics",
+        "label_es": "Clásicos queridos",
+        "tracks": [
+          {
+            "id": "b1",
+            "title": "Spring, first movement (The Four Seasons)",
+            "who": "Antonio Vivaldi, played by John Harrison (violin) and the Wichita State University Chamber Players",
+            "date": "2000",
+            "place": "Wiedemann Recital Hall, Wichita State University, Kansas",
+            "dur": 215.3,
+            "src": "/audio/classical/b1.mp3",
+            "note": "Strings announce the arrival of spring, then the solo violin and its neighbours imitate birdsong, a murmuring stream and a sudden thunderstorm. Vivaldi printed little poems in the score so players would know exactly which picture they were painting.",
+            "note_es": "Las cuerdas anuncian la llegada de la primavera, y luego el violín solista y sus compañeros imitan el canto de los pájaros, un arroyo que murmura y una tormenta repentina. Vivaldi imprimió pequeños poemas en la partitura para que los músicos supieran exactamente qué escena estaban pintando.",
+            "rights": "credit",
+            "credit": "John Harrison, CC BY-SA 4.0",
+            "license_url": "https://creativecommons.org/licenses/by-sa/4.0/"
+          },
+          {
+            "id": "b2",
+            "title": "Nocturne in E-flat major, Op. 9 No. 2",
+            "who": "Frédéric Chopin, played by Frank Lévy (piano)",
+            "date": "2014",
+            "dur": 271.5,
+            "src": "/audio/classical/b2.mp3",
+            "note": "A long, singing melody floats over a gently rocking left hand, and returns each time more richly decorated, the way an opera singer would ornament an aria. It is Chopin's best-known nocturne, written when he was barely twenty.",
+            "note_es": "Una melodía larga y cantabile flota sobre una mano izquierda que se mece suavemente, y vuelve cada vez más adornada, como lo haría una cantante de ópera con un aria. Es el nocturno más conocido de Chopin, escrito cuando apenas tenía veinte años.",
+            "rights": "pd",
+            "credit": "Frank Lévy / Musopen (Set Chopin Free)"
+          },
+          {
+            "id": "b3",
+            "title": "Clair de lune",
+            "who": "Claude Debussy, played by Laurens Goedhart (piano)",
+            "date": "2011",
+            "dur": 304.1,
+            "src": "/audio/classical/b3.mp3",
+            "note": "Soft, hazy chords drift like moonlight before the music opens into a flowing, rippling middle section and settles back into stillness. It is the third movement of Debussy's Suite bergamasque, and probably the most famous piano piece of the twentieth century.",
+            "note_es": "Acordes suaves y difusos flotan como la luz de la luna antes de que la música se abra en una sección central fluida y ondulante, y luego vuelva a la calma. Es el tercer movimiento de la Suite bergamasque de Debussy, y probablemente la pieza para piano más famosa del siglo XX.",
+            "rights": "credit",
+            "credit": "Laurens Goedhart, CC BY 3.0",
+            "license_url": "https://creativecommons.org/licenses/by/3.0/"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "world",
+    "name": "World",
+    "color": "#d07a2e",
+    "shelf": "music",
+    "cover": "/covers/world.svg?v=5",
+    "sides": {
+      "A": {
+        "label": "Around the world on 78",
+        "label_es": "La vuelta al mundo en 78",
+        "tracks": [
+          {
+            "id": "a1",
+            "title": "Mi noche triste",
+            "who": "Carlos Gardel, with José Ricardo (guitar)",
+            "date": "1917",
+            "place": "Buenos Aires",
+            "dur": 186.0,
+            "src": "/audio/world/a1.mp3",
+            "note": "Gardel sings of a man abandoned by his lover, who leaves the lamp burning and the door open in case she comes back, over a single plucked guitar. It was the first tango with lyrics to be recorded as a sung story, and it turned Gardel from a folk duo singer into the voice of tango.",
+            "note_es": "Gardel canta a un hombre abandonado por su amada, que deja la lámpara encendida y la puerta abierta por si ella vuelve, con el acompañamiento de una sola guitarra. Fue el primer tango canción grabado como una historia cantada, y convirtió a Gardel, que cantaba en un dúo de folclore, en la voz del tango.",
+            "rights": "pd",
+            "credit": "Disco Nacional Odeon (Max Glücksmann) / Wikimedia Commons"
+          },
+          {
+            "id": "a2",
+            "title": "Kohala March",
+            "who": "Pale K. Lua and David K. Kaili",
+            "date": "1915",
+            "dur": 158.6,
+            "src": "/audio/world/a2.mp3",
+            "note": "Two Hawaiian guitarists play a brisk march, one picking the tune with a steel bar sliding along the strings while the other keeps the rhythm. Records like this started a nationwide craze for Hawaiian music, and the sliding steel guitar went on to shape country music and the blues.",
+            "note_es": "Dos guitarristas hawaianos tocan una marcha ágil: uno puntea la melodía deslizando una barra de acero sobre las cuerdas mientras el otro lleva el ritmo. Discos como este desataron una fiebre por la música hawaiana en todo Estados Unidos, y la guitarra de acero deslizante terminó marcando el country y el blues.",
+            "rights": "pd",
+            "credit": "Victor Talking Machine Co. / His Master's Voice / Internet Archive, Great 78 Project"
+          },
+          {
+            "id": "a3",
+            "title": "Barse badarva re (Raga Malhar)",
+            "who": "Gauhar Jaan",
+            "date": "1912",
+            "place": "Calcutta",
+            "dur": 118.0,
+            "src": "/audio/world/a3.mp3",
+            "note": "India's first recording star sings a song in the monsoon raga Malhar, which is said to call down the rain, and at the end announces in English: My name is Gauhar Jan. She made hundreds of records and was so famous that her face appeared on matchboxes.",
+            "note_es": "La primera estrella de la grabación de la India canta una canción en el raga monzónico Malhar, del que se dice que hace llover, y al final anuncia en inglés: My name is Gauhar Jan. Grabó cientos de discos y era tan famosa que su cara aparecía en las cajas de fósforos.",
+            "rights": "pd",
+            "credit": "Pathé 46048 / Suresh Chandvankar collection; restoration by Laszlo Hortobagyi"
+          }
+        ]
+      },
+      "B": {
+        "label": "The world today",
+        "label_es": "El mundo de hoy",
+        "tracks": [
+          {
+            "id": "b1",
+            "title": "Eu pisei na pedra",
+            "who": "Chico Correa & Electronic Band",
+            "date": "2006",
+            "place": "João Pessoa, Brazil",
+            "dur": 246.0,
+            "src": "/audio/world/b1.mp3",
+            "note": "A coco, the call-and-response dance song of Brazil's northeast coast, is rebuilt here with live instruments, samples and electronic beats. The band gave the album away under a Creative Commons licence through a small European netlabel, where it became one of the most downloaded releases.",
+            "note_es": "Un coco, la canción bailable de pregunta y respuesta de la costa del nordeste de Brasil, se reconstruye aquí con instrumentos en vivo, samples y ritmos electrónicos. La banda regaló el disco con licencia Creative Commons a través de un pequeño sello en línea europeo, donde se convirtió en uno de los lanzamientos más descargados.",
+            "rights": "credit",
+            "credit": "Chico Correa & Electronic Band (Footprint netlabel, foot018), CC BY-NC-SA 2.5",
+            "license_url": "https://creativecommons.org/licenses/by-nc-sa/2.5/"
+          },
+          {
+            "id": "b2",
+            "title": "Cumbia mía (live)",
+            "who": "Múkura",
+            "date": "2023",
+            "place": "Grandhotel Cosmopolis, Augsburg, Germany",
+            "dur": 405.0,
+            "src": "/audio/world/b2.mp3",
+            "note": "Nine Latin Americans living in the German city of Augsburg play the first song they wrote together, a cumbia with a loping, swaying beat, before a home crowd. Cumbia began on Colombia's Caribbean coast and has travelled further than almost any other Latin rhythm; the recording fades out shortly before the end of the performance.",
+            "note_es": "Nueve latinoamericanos que viven en la ciudad alemana de Augsburgo tocan ante su público la primera canción que compusieron juntos, una cumbia de ritmo cadencioso y bamboleante. La cumbia nació en la costa caribe de Colombia y ha viajado más lejos que casi cualquier otro ritmo latino; la grabación se desvanece poco antes del final de la actuación.",
+            "rights": "credit",
+            "credit": "Múkura, CC BY 3.0",
+            "license_url": "https://creativecommons.org/licenses/by/3.0/"
+          },
+          {
+            "id": "b3",
+            "title": "Underdog (live)",
+            "who": "The Seven Ups",
+            "date": "2013",
+            "place": "The Tote, Melbourne, Australia",
+            "dur": 217.9,
+            "src": "/audio/world/b3.mp3",
+            "note": "An eight-piece band locks into the hypnotic, interlocking guitar and drum patterns of Nigerian Afrobeat while a horn section punches out the riffs. The style Fela Kuti invented in Lagos in the 1970s now has bands playing it in cities all over the world.",
+            "note_es": "Una banda de ocho músicos se engancha en los patrones hipnóticos y entrelazados de guitarra y batería del afrobeat nigeriano, mientras una sección de vientos dispara los riffs. El estilo que Fela Kuti inventó en Lagos en los años setenta hoy tiene bandas que lo tocan en ciudades de todo el mundo.",
+            "rights": "credit",
+            "credit": "The Seven Ups, CC BY 3.0",
+            "license_url": "https://creativecommons.org/licenses/by/3.0/"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "electronic",
+    "name": "Electronic",
+    "color": "#2bb3a3",
+    "shelf": "music",
+    "cover": "/covers/electronic.svg?v=5",
+    "sides": {
+      "A": {
+        "label": "After dark",
+        "label_es": "Al caer la noche",
+        "tracks": [
+          {
+            "id": "a1",
+            "title": "Night Owl",
+            "who": "Broke For Free",
+            "date": "2011",
+            "dur": 194.1,
+            "src": "/audio/electronic/a1.mp3",
+            "note": "A lazy, looping guitar figure drifts over a soft, unhurried beat. It is the most-downloaded track in the history of the Free Music Archive, and it has scored countless videos and podcasts.",
+            "note_es": "Un riff de guitarra perezoso, en bucle, flota sobre un ritmo suave y sin apuro. Es la pista más descargada en la historia del Free Music Archive y ha musicalizado incontables videos y podcasts.",
+            "rights": "credit",
+            "credit": "Broke For Free, CC BY 3.0",
+            "license_url": "https://creativecommons.org/licenses/by/3.0/"
+          },
+          {
+            "id": "a2",
+            "title": "Enthusiast",
+            "who": "Tours",
+            "date": "2012",
+            "dur": 171.0,
+            "src": "/audio/electronic/a2.mp3",
+            "note": "A bright synth hook rides a heavy, half-time electronic beat that keeps building. It sits just behind “Night Owl” on the Free Music Archive’s all-time download chart, with around two and a half million downloads.",
+            "note_es": "Un gancho brillante de sintetizador avanza sobre un ritmo electrónico pesado, a medio tiempo, que no deja de crecer. Está justo detrás de “Night Owl” en el ranking histórico de descargas del Free Music Archive, con cerca de dos millones y medio de descargas.",
+            "rights": "credit",
+            "credit": "Tours, CC BY 3.0",
+            "license_url": "https://creativecommons.org/licenses/by/3.0/"
+          },
+          {
+            "id": "a3",
+            "title": "Is That You or Are You You?",
+            "who": "Chris Zabriskie",
+            "date": "2012",
+            "dur": 301.5,
+            "src": "/audio/electronic/a3.mp3",
+            "note": "A patient electronic piece that grows from a simple pulse into a wide, glowing swell. Zabriskie gives his music away for anyone to use with credit, and this track has turned up behind countless YouTube videos and podcasts.",
+            "note_es": "Una pieza electrónica paciente que crece desde un pulso simple hasta un oleaje amplio y luminoso. Zabriskie regala su música para que cualquiera la use dando crédito, y esta pista ha sonado de fondo en incontables videos de YouTube y podcasts.",
+            "rights": "credit",
+            "credit": "Chris Zabriskie, CC BY 4.0",
+            "license_url": "https://creativecommons.org/licenses/by/4.0/"
+          }
+        ]
+      },
+      "B": {
+        "label": "Ghosts in the machine",
+        "label_es": "Fantasmas en la máquina",
+        "tracks": [
+          {
+            "id": "b1",
+            "title": "Cipher",
+            "who": "Kevin MacLeod",
+            "date": "2011",
+            "dur": 231.3,
+            "src": "/audio/electronic/b1.mp3",
+            "note": "Synths, electric piano and strings circle a hook so catchy that the composer himself warns it is “very sticky.” Kevin MacLeod has put thousands of pieces online free to use with credit, and his music turns up in a huge number of films, games and YouTube videos.",
+            "note_es": "Sintetizadores, piano eléctrico y cuerdas giran alrededor de un gancho tan pegajoso que el propio compositor advierte que “se pega mucho”. Kevin MacLeod ha publicado miles de piezas gratis para usar con crédito, y su música aparece en una enorme cantidad de películas, juegos y videos de YouTube.",
+            "rights": "credit",
+            "credit": "“Cipher” Kevin MacLeod (incompetech.com), licensed under Creative Commons: By Attribution 4.0 License",
+            "license_url": "https://creativecommons.org/licenses/by/4.0/"
+          },
+          {
+            "id": "b2",
+            "title": "I Know You’re Out There",
+            "who": "Chromix",
+            "date": "2009",
+            "place": "Blip Festival, New York",
+            "dur": 166.3,
+            "src": "/audio/electronic/b2.mp3",
+            "note": "Chip music played live: bright, buzzing melodies and drums built from the sound of old game consoles and computers. It was recorded at Blip Festival, the yearly gathering where the chiptune scene met in New York.",
+            "note_es": "Chip music tocada en vivo: melodías brillantes y zumbantes y baterías hechas con el sonido de consolas y computadores antiguos. Se grabó en el Blip Festival, el encuentro anual de la escena chiptune en Nueva York.",
+            "rights": "credit",
+            "credit": "Chromix, CC BY-NC-SA 3.0 US",
+            "license_url": "https://creativecommons.org/licenses/by-nc-sa/3.0/us/"
+          },
+          {
+            "id": "b3",
+            "title": "34 Ghosts IV",
+            "who": "Nine Inch Nails",
+            "date": "2008",
+            "dur": 352.1,
+            "src": "/audio/electronic/b3.mp3",
+            "note": "A lonely piano and a plucked, banjo-like figure repeat over a slowly rising bed of noise and texture. Nine Inch Nails released the whole “Ghosts I–IV” album under a Creative Commons licence, and years later Lil Nas X built “Old Town Road” on a sample of this very track.",
+            "note_es": "Un piano solitario y una figura punteada, parecida a un banjo, se repiten sobre un fondo de ruido y texturas que sube lentamente. Nine Inch Nails publicó todo el álbum “Ghosts I–IV” con licencia Creative Commons, y años después Lil Nas X construyó “Old Town Road” sobre un sample de esta misma pista.",
+            "rights": "credit",
+            "credit": "Nine Inch Nails, CC BY-NC-SA 3.0",
+            "license_url": "https://creativecommons.org/licenses/by-nc-sa/3.0/us/"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "rock",
+    "name": "Rock & pop",
+    "color": "#b8323f",
+    "shelf": "music",
+    "cover": "/covers/rock.svg?v=5",
+    "sides": {
+      "A": {
+        "label": "Made at home",
+        "label_es": "Hecho en casa",
+        "tracks": [
+          {
+            "id": "a1",
+            "title": "Discipline",
+            "who": "Nine Inch Nails",
+            "date": "2008",
+            "dur": 259.2,
+            "src": "/audio/rock/a1.mp3",
+            "note": "Tight drum-machine funk, a pulsing bass and stabbing piano carry Trent Reznor’s voice. It was the first single from “The Slip,” an album the band simply gave away online, with a Creative Commons licence and no catch.",
+            "note_es": "Un funk apretado de caja de ritmos, un bajo que late y un piano punzante acompañan la voz de Trent Reznor. Fue el primer single de “The Slip”, un álbum que la banda simplemente regaló en internet, con licencia Creative Commons y sin letra chica.",
+            "rights": "credit",
+            "credit": "Nine Inch Nails, CC BY-NC-SA 3.0",
+            "license_url": "https://creativecommons.org/licenses/by-nc-sa/3.0/"
+          },
+          {
+            "id": "a2",
+            "title": "Code Monkey",
+            "who": "Jonathan Coulton",
+            "date": "2006",
+            "dur": 189.3,
+            "src": "/audio/rock/a2.mp3",
+            "note": "A jaunty pop song about an office programmer who pines for the receptionist and dreams of a better life. Coulton wrote it during his year of releasing a new song every week, and it became an anthem for programmers everywhere.",
+            "note_es": "Una canción pop alegre sobre un programador de oficina que suspira por la recepcionista y sueña con una vida mejor. Coulton la escribió durante el año en que publicó una canción nueva cada semana, y se volvió un himno de los programadores.",
+            "rights": "credit",
+            "credit": "Jonathan Coulton, CC BY-NC 3.0",
+            "license_url": "https://creativecommons.org/licenses/by-nc/3.0/"
+          },
+          {
+            "id": "a3",
+            "title": "Making Me Nervous",
+            "who": "Brad Sucks",
+            "date": "2003",
+            "dur": 159.2,
+            "src": "/audio/rock/a3.mp3",
+            "note": "Crunchy guitars and a tightly looped beat back an anxious, catchy chorus, all played and recorded by one man at home. Brad Sucks also posted the separate parts of his songs online so fans could remix them, an early model of open-source music.",
+            "note_es": "Guitarras crujientes y un ritmo en bucle sostienen un coro ansioso y pegadizo, todo tocado y grabado por un solo hombre en su casa. Brad Sucks además subió las pistas separadas de sus canciones para que los fans las remezclaran, un modelo temprano de música de código abierto.",
+            "rights": "credit",
+            "credit": "Brad Sucks, CC BY-NC-SA 2.5",
+            "license_url": "https://creativecommons.org/licenses/by-nc-sa/2.5/"
+          }
+        ]
+      },
+      "B": {
+        "label": "Turn it up",
+        "label_es": "Súbele",
+        "tracks": [
+          {
+            "id": "b1",
+            "title": "Echoplex",
+            "who": "Nine Inch Nails",
+            "date": "2008",
+            "dur": 285.2,
+            "src": "/audio/rock/b1.mp3",
+            "note": "A ticking electronic rhythm and swelling synths build a cold, driving groove under Reznor’s vocal. Like the rest of “The Slip,” it was released free for anyone to share and remix, as long as nobody makes money from it.",
+            "note_es": "Un ritmo electrónico que hace tic-tac y sintetizadores que se inflan arman un groove frío y empujado bajo la voz de Reznor. Como todo “The Slip”, se publicó gratis para que cualquiera lo compartiera y remezclara, siempre que nadie gane dinero con él.",
+            "rights": "credit",
+            "credit": "Nine Inch Nails, CC BY-NC-SA 3.0",
+            "license_url": "https://creativecommons.org/licenses/by-nc-sa/3.0/"
+          },
+          {
+            "id": "b2",
+            "title": "I Want to Destroy Something Beautiful",
+            "who": "Josh Woodward",
+            "date": "2007",
+            "dur": 228.5,
+            "src": "/audio/rock/b2.mp3",
+            "note": "A brooding hard-rock song sung by a narrator full of “Canadian whiskey and spite.” Josh Woodward releases all his songs free under a Creative Commons licence, with instrumental versions, and they turn up in countless online videos.",
+            "note_es": "Una canción de hard rock sombría, cantada por un narrador lleno de “whisky canadiense y rencor”. Josh Woodward publica todas sus canciones gratis con licencia Creative Commons, incluso en versión instrumental, y suenan en incontables videos en internet.",
+            "rights": "credit",
+            "credit": "Josh Woodward, CC BY 4.0",
+            "license_url": "https://creativecommons.org/licenses/by/4.0/"
+          },
+          {
+            "id": "b3",
+            "title": "Requiem for a Fish",
+            "who": "The Freak Fandango Orchestra",
+            "date": "2011",
+            "place": "Barcelona",
+            "dur": 220.7,
+            "src": "/audio/rock/b3.mp3",
+            "note": "A fast, swirling mix of Balkan and Romani melodies played with indie-rock energy. It is one of the most downloaded tracks ever on the Free Music Archive.",
+            "note_es": "Una mezcla rápida y arremolinada de melodías balcánicas y gitanas tocadas con energía de rock indie. Es una de las pistas más descargadas de la historia del Free Music Archive.",
+            "rights": "credit",
+            "credit": "The Freak Fandango Orchestra, CC BY-NC 4.0",
+            "license_url": "https://creativecommons.org/licenses/by-nc/4.0/"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "beats",
+    "name": "Hip-hop & beats",
+    "color": "#8e6fd1",
+    "shelf": "music",
+    "cover": "/covers/beats.svg?v=5",
+    "sides": {
+      "A": {
+        "label": "Instrumentals",
+        "label_es": "Instrumentales",
+        "tracks": [
+          {
+            "id": "a1",
+            "title": "Fater Lee",
+            "who": "Black Ant",
+            "date": "2010",
+            "dur": 142.9,
+            "src": "/audio/beats/a1.mp3",
+            "note": "A compact, head-nodding instrumental hip-hop beat, made to be rapped over or simply looped. The “Free Beats” collection it opens has been downloaded close to a million times from the Free Music Archive.",
+            "note_es": "Un beat instrumental de hip-hop compacto, de esos que hacen mover la cabeza, hecho para rapear encima o simplemente dejarlo en bucle. La colección “Free Beats” que abre se ha descargado cerca de un millón de veces desde el Free Music Archive.",
+            "rights": "credit",
+            "credit": "Black Ant, CC BY 3.0",
+            "license_url": "https://creativecommons.org/licenses/by/3.0/"
+          },
+          {
+            "id": "a2",
+            "title": "Thursday & Snow (Reprise)",
+            "who": "Blank & Kytt",
+            "date": "2012",
+            "dur": 116.8,
+            "src": "/audio/beats/a2.mp3",
+            "note": "A loose, warm beat sketch in the style of J Dilla, whose slightly off-grid drums changed how hip-hop producers think about rhythm. Blank & Kytt’s album of short instrumentals has been downloaded hundreds of thousands of times.",
+            "note_es": "Un boceto de beat suelto y cálido al estilo de J Dilla, cuyas baterías levemente desfasadas cambiaron la forma en que los productores de hip-hop piensan el ritmo. El álbum de instrumentales breves de Blank & Kytt se ha descargado cientos de miles de veces.",
+            "rights": "credit",
+            "credit": "Blank & Kytt, CC BY 3.0",
+            "license_url": "https://creativecommons.org/licenses/by/3.0/"
+          },
+          {
+            "id": "a3",
+            "title": "Something Elated",
+            "who": "Broke For Free",
+            "date": "2011",
+            "dur": 234.5,
+            "src": "/audio/beats/a3.mp3",
+            "note": "A bright, upbeat instrumental that sets hip-hop drums under sunny electronic melodies. It is among the ten most-downloaded tracks ever on the Free Music Archive, from the same producer as “Night Owl.”",
+            "note_es": "Un instrumental luminoso y animado que pone baterías de hip-hop bajo melodías electrónicas soleadas. Está entre las diez pistas más descargadas de la historia del Free Music Archive y es del mismo productor de “Night Owl”.",
+            "rights": "credit",
+            "credit": "Broke For Free, CC BY 3.0 US",
+            "license_url": "https://creativecommons.org/licenses/by/3.0/us/"
+          }
+        ]
+      },
+      "B": {
+        "label": "On the mic",
+        "label_es": "Al micrófono",
+        "tracks": [
+          {
+            "id": "b1",
+            "title": "Third Eye",
+            "who": "Kellee Maize",
+            "date": "2010",
+            "place": "Pittsburgh",
+            "dur": 278.6,
+            "src": "/audio/beats/b1.mp3",
+            "note": "Kellee Maize raps and sings over a club-flavoured beat about waking up to a deeper way of seeing. It was the lead single from “Aligned Archetype,” an album she gave away free that became the most-downloaded hip-hop album on Amazon for several weeks.",
+            "note_es": "Kellee Maize rapea y canta sobre un beat con aire de club acerca de despertar a una forma más profunda de ver. Fue el single principal de “Aligned Archetype”, un álbum que regaló y que fue durante varias semanas el disco de hip-hop más descargado de Amazon.",
+            "rights": "credit",
+            "credit": "Kellee Maize, CC BY 3.0",
+            "license_url": "https://creativecommons.org/licenses/by/3.0/"
+          },
+          {
+            "id": "b2",
+            "title": "Get Popular",
+            "who": "Toussaint Morrison",
+            "date": "2012",
+            "place": "Minneapolis",
+            "dur": 180.1,
+            "src": "/audio/beats/b2.mp3",
+            "note": "Slam poet turned rapper Toussaint Morrison rhymes over a production by Dr. Wylie. The album it comes from was paid for by fans on Kickstarter and then released free under a Creative Commons licence.",
+            "note_es": "El poeta de slam convertido en rapero Toussaint Morrison rima sobre una producción de Dr. Wylie. El álbum del que viene lo financiaron sus fans en Kickstarter y luego se publicó gratis con licencia Creative Commons.",
+            "rights": "credit",
+            "credit": "Toussaint Morrison, CC BY-NC 3.0",
+            "license_url": "https://creativecommons.org/licenses/by-nc/3.0/"
+          },
+          {
+            "id": "b3",
+            "title": "Injuries Being Called Suspicious",
+            "who": "Ceschi",
+            "date": "2009",
+            "dur": 194.8,
+            "src": "/audio/beats/b3.mp3",
+            "note": "Ceschi Ramos mixes rapid-fire rap with folk and punk on this song from his album “Forgotten Forever.” He co-founded Fake Four Inc., an independent label known for experimental hip-hop.",
+            "note_es": "Ceschi Ramos mezcla rap veloz con folk y punk en esta canción de su álbum “Forgotten Forever”. Es cofundador de Fake Four Inc., un sello independiente conocido por su hip-hop experimental.",
+            "rights": "credit",
+            "credit": "Ceschi, CC BY-NC-ND 3.0",
+            "license_url": "https://creativecommons.org/licenses/by-nc-nd/3.0/"
+          }
+        ]
+      }
     }
   },
   {
     "id": "voices",
     "name": "Voices",
     "color": "#e2582b",
-    "cover": "/covers/voices.svg?v=4",
+    "cover": "/covers/voices.svg?v=5",
     "sides": {
       "A": {
         "label": "Science",

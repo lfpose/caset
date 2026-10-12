@@ -103,7 +103,7 @@ await page.setViewportSize({ width: 390, height: 844 }); await W(800);
 await op(clickCase("ocean"), /^Ocean, side A loaded/); await snap("phone ocean");
 await page.emulateMedia({ reducedMotion: "reduce" }); await W(300);
 await op(clickCase("moonshot"), /^Moonshot, side A loaded/); await snap("reduced motion load");
-await op(() => key("flip"), /^Side B$/); await snap("reduced motion flip");
+await op(() => key("flip"), /^Side B$/); await W(1500); await snap("reduced motion flip"); // let the tape tick once: at ~3 fps the track index lags the announcement
 await page.evaluate(() => { const gl = document.querySelector("#stage").getContext("webgl2"); gl?.getExtension("WEBGL_lose_context")?.loseContext(); });
 await W(800); await snap("context lost");
 await op(() => key("play"), /^Playing/); await snap("play after context lost");

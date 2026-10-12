@@ -133,8 +133,8 @@ function syncView() {
   html.classList.toggle("is-meters", f === "meters");
 }
 for (const b of viewBtns) b.addEventListener("click", () => { deck?.setFocus?.(b.dataset.view); syncView(); });
-// a click on the deck itself, or Escape, leaves the meters view
-canvas.addEventListener("click", () => { if (deck?.focus === "meters") { deck.setFocus("full"); syncView(); } });
+// only the Deck / Meters switch or Escape leaves the meters view: clicks on the deck itself
+// (keys, the scene) never zoom back
 addEventListener("keydown", (e) => {
   if (e.key === "Escape" && deck?.focus === "meters") { deck.setFocus("full"); syncView(); }
 });

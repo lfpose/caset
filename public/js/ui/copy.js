@@ -11,9 +11,9 @@ const touch = () => matchMedia("(pointer: coarse)").matches;
 
 const C = {
   en: {
-    statement: "A cassette deck in your browser, loaded with ten tapes of recorded history.",
+    statement: "A cassette deck in your browser, loaded with tapes of recorded history and music.",
     heroTitle: "A cassette deck in your browser.",
-    heroLede: "Ten tapes of recorded history, from the oldest recorded voice to Apollo 11. Pick one and press play.",
+    heroLede: "Recorded history from the oldest recorded voice to Apollo 11, and a shelf of music from the 1920s to now. Pick a tape and press play.",
     skip: "Skip to the tapes",
     pageNav: "Page",
     navTapes: "The tapes",
@@ -30,6 +30,7 @@ const C = {
     viewMeters: "Meters",
     viewMetersTitle: "A close-up of the meters, which move with the recording",
     shelfEyebrow: (n) => `The shelf · ${n} tapes`,
+    shelfName: (sh) => (sh === "music" ? "Music" : "Recorded history"),
     inDeck: "In the deck",
     recordings: (n) => `${n} recordings`,
     sideGroup: "Side",
@@ -41,7 +42,7 @@ const C = {
     plateHint: () => touch() ? "Tap a tape, then play" : "Space play/stop · ← → wind",
     how: "How it works",
     steps: () => [
-      { t: "Pick a tape", d: "Ten cassettes, two sides of three recordings each. Pick one, or one of its sides, and it slides into the deck.", k: [] },
+      { t: "Pick a tape", d: "Two shelves, history and music. Every cassette has two sides of three recordings. Pick one, or one of its sides, and it slides into the deck.", k: [] },
       touch()
         ? { t: "Press play", d: "Use the keys under the deck. Flip the tape for the other side.", k: [] }
         : { t: "Press play", d: "Use the keys on the deck or the space bar. Flip the tape for the other side.", k: ["Space"] },
@@ -56,9 +57,9 @@ const C = {
     toDeck: "Show the deck",
   },
   es: {
-    statement: "Una casetera en tu navegador, con diez cintas de historia grabada.",
+    statement: "Una casetera en tu navegador, con cintas de historia grabada y música.",
     heroTitle: "Una casetera en tu navegador.",
-    heroLede: "Diez cintas de historia grabada, de la voz grabada más antigua al Apolo 11. Elige una y dale play.",
+    heroLede: "Historia grabada, de la voz grabada más antigua al Apolo 11, y un estante de música de los años veinte a hoy. Elige una cinta y dale play.",
     skip: "Saltar a las cintas",
     pageNav: "Página",
     navTapes: "Las cintas",
@@ -75,6 +76,7 @@ const C = {
     viewMeters: "Medidores",
     viewMetersTitle: "Un acercamiento a los medidores, que se mueven con la grabación",
     shelfEyebrow: (n) => `El estante · ${n} cintas`,
+    shelfName: (sh) => (sh === "music" ? "Música" : "Historia grabada"),
     inDeck: "En la casetera",
     recordings: (n) => `${n} grabaciones`,
     sideGroup: "Lado",
@@ -86,7 +88,7 @@ const C = {
     plateHint: () => touch() ? "Toca una cinta y dale play" : "Espacio play/stop · ← → bobinar",
     how: "Cómo funciona",
     steps: () => [
-      { t: "Elige una cinta", d: "Diez casetes, con dos lados de tres grabaciones. Elige uno, o uno de sus lados, y entra en la casetera.", k: [] },
+      { t: "Elige una cinta", d: "Dos estantes, historia y música. Cada casete tiene dos lados de tres grabaciones. Elige uno, o uno de sus lados, y entra en la casetera.", k: [] },
       touch()
         ? { t: "Dale play", d: "Usa las teclas bajo la casetera. Da vuelta la cinta para el otro lado.", k: [] }
         : { t: "Dale play", d: "Usa las teclas de la casetera o la barra espaciadora. Da vuelta la cinta para el otro lado.", k: ["Espacio"] },

@@ -588,6 +588,16 @@ button[data-finish="black"] .finish-sw { background: linear-gradient(160deg, #4a
   display: grid;
   gap: var(--s1);
 }
+/* a shelf's name: a legend row above its tapes (desk), a narrow vertical tab in the rail (phone) */
+.c-group { padding: var(--s5) var(--s2) var(--s2); }
+.c-group:first-child { padding-top: 0; }
+.c-group-title { color: var(--ink-2); }
+@media (max-width: 1099px) {
+  .rail > .c-li { width: var(--card-w); }
+  .c-group { padding: var(--s2) 0; align-self: stretch; display: flex; align-items: flex-end; }
+  .c-group:first-child { padding-top: var(--s2); }
+  .c-group-title { writing-mode: vertical-rl; transform: rotate(180deg); white-space: nowrap; }
+}
 .c-li {
   position: relative;
   display: grid;
@@ -1075,7 +1085,15 @@ kbd {
     padding-left: var(--s4);
     margin-left: calc(-1 * var(--s4));
     border-left: 1px solid var(--line);
+    /* two shelves no longer fit one screen: the index scrolls inside itself */
+    max-height: calc(100vh - var(--bar-h) - var(--s4));
+    max-height: calc(100dvh - var(--bar-h) - var(--s4));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-2) transparent;
   }
+  .shelf-head { position: sticky; top: 0; z-index: 2; background: var(--bg); }
   /* the shelf stays pinned while the page scrolls, so "How it works" keeps to the left
      columns beside it instead of running underneath it */
   .about { grid-column: 1 / 10; }
@@ -1094,7 +1112,8 @@ kbd {
   /* the rail: horizontal, snapping, bleeding to the screen edges so the next card peeks */
   .rail {
     grid-auto-flow: column;
-    grid-auto-columns: 216px;
+    grid-auto-columns: auto;
+    --card-w: 216px;
     gap: var(--s3);
     margin: 0 calc(-1 * var(--margin));
     padding: 0 var(--margin) var(--s2);
@@ -1163,7 +1182,7 @@ kbd {
   .nogl .cap { display: grid; grid-template-columns: minmax(0, 1fr); }
   .nogl .cap-l, .nogl .view { display: none; }
   .nogl .cap-r { justify-self: start; }
-  .rail { grid-auto-columns: min(62vw, 240px); }
+  .rail { --card-w: min(62vw, 240px); }
   .spine-name { font-size: 20px; }
   .now-title { font-size: 26px; line-height: 32px; }
   .now-note { font-size: 16px; line-height: 24px; }
@@ -1195,7 +1214,7 @@ kbd {
   .cap-l { display: none; }
   .cap { grid-template-columns: auto minmax(0, 1fr); padding: 0 var(--s2); }
   .shelf { margin-top: 0; }
-  .rail { margin: 0; padding: 0 0 var(--s2); grid-auto-columns: 176px; scroll-padding-inline: 0; }
+  .rail { margin: 0; padding: 0 0 var(--s2); --card-w: 176px; scroll-padding-inline: 0; }
   .c-state-lbl { display: none; }
   .liner-body { grid-template-columns: minmax(0, 1fr); grid-template-areas: "spine" "now" "sides" "notes"; }
   .sides { margin-top: var(--s5); }
